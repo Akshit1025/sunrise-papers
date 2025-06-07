@@ -1,159 +1,191 @@
 /* src/App.css */
 
-/* Global Styles */
+/* --- Custom CSS Variables (Optional but good practice for color scheme) --- */
+:root {
+  --sp-dark-gray: #212529;   /* Almost black, from logo text */
+  --sp-medium-gray: #495057; /* Dark gray for body text */
+  --sp-light-gray: #f8f9fa;  /* Very light gray, page background (top bar background) */
+  --sp-white: #ffffff;      /* Pure white for elements on dark background (main navbar background) */
+}
+
+/* --- Bootstrap Overrides & Global Styles --- */
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f4f7f6; /* Light background */
-  color: #333;
+  background-color: var(--sp-light-gray); /* Overall page background */
+  color: var(--sp-medium-gray); /* Default text color */
 }
 
-.container { /* This class will now often be used alongside Bootstrap's .container or .container-fluid */
+/* Overall container for the app - Designed for a seamless, professional look */
+.container.custom-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: 20px;
+  padding: 0; /* Remove padding from the outer container */
   box-sizing: border-box;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  max-width: 1200px; /* Keep max-width for overall layout */
-  margin: 20px auto;
+  max-width: 100% !important; /* Force full width for the outermost container */
+  margin: 0 auto; /* Center the entire layout */
 }
 
-.header {
-  background-color: #ffffff;
-  padding: 20px 30px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-  display: flex; /* Kept flex properties */
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
+/* Specific styling for the top bar */
+.top-bar {
+  background-color: var(--sp-light-gray); /* Light gray background for top bar */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Subtle bottom border */
 }
 
-.logo {
-  font-size: 2em;
-  font-weight: bold;
-  color: #3498db; /* Blue logo */
-  margin-right: 20px;
+.top-bar .container {
+  max-width: 1200px; /* Constrain content width within the top bar */
 }
 
-.nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px; /* Gap is a useful property not directly in Bootstrap's nav-items */
+.contact-info {
+  color: var(--sp-medium-gray); /* Text color for contact info */
+  font-size: 0.9em;
 }
 
-.nav-button { /* Custom button style, will override Bootstrap's .btn defaults */
-  background-color: #3498db;
-  color: white;
+.contact-info i {
+  color: var(--sp-dark-gray); /* Icon color */
+  margin-right: 5px;
+}
+
+.social-icons .social-icon-link {
+  color: var(--sp-medium-gray) !important; /* Default icon color */
+  font-size: 1.1em;
+  transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition for color and transform */
+  display: inline-block; /* Required for transform to work correctly */
+}
+
+.social-icons .social-icon-link:hover {
+  color: var(--sp-dark-gray) !important; /* Darker on hover */
+  transform: translateY(-3px) scale(1.1); /* Subtle popup effect */
+}
+
+/* Main Navigation Bar custom styles */
+.custom-main-navbar {
+  border-radius: 0 !important; /* Ensure sharp corners for a full-width bar */
+  /* shadow-sm from Navbar.js gives a subtle lift */
+}
+
+.navbar-brand img {
+  height: 50px; /* Ensure logo height is consistent */
+  margin-right: 10px; /* Space between logo and any optional text */
+  transition: transform 0.2s ease-in-out; /* Subtle hover animation for logo */
+}
+
+.navbar-brand img:hover {
+  transform: scale(1.05); /* Slightly enlarge logo on hover */
+}
+
+.main-nav-links .nav-item {
+  position: relative; /* Needed for underline animation */
+  margin: 0 15px; /* Spacing between main nav items */
+}
+
+.main-nav-links .nav-button {
+  color: var(--sp-dark-gray) !important; /* Dark gray text for links on light navbar */
+  background-color: transparent;
   border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  padding: 0.5rem 0; /* Adjust padding for underline space, no side padding */
+  font-size: 1.05em;
+  font-weight: 500;
+  transition: color 0.3s ease; /* Only color transition initially */
+  position: relative;
+  overflow: hidden; /* Hide overflow for the pseudo-element */
 }
 
-.nav-button:hover {
-  background-color: #2980b9;
-  transform: translateY(-2px);
-}
-
-.auth-info {
-  font-size: 0.8em;
-  color: #666;
-  margin-top: 10px;
+/* Underline animation using pseudo-element */
+.main-nav-links .nav-button::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  text-align: right;
-  word-break: break-all; /* Ensure long user IDs wrap */
+  height: 2px; /* Thickness of the underline */
+  background-color: var(--sp-dark-gray); /* Underline color */
+  transform: scaleX(0); /* Start hidden */
+  transform-origin: bottom right; /* Animate from right to left */
+  transition: transform 0.3s ease-out; /* Smooth transition */
 }
 
-.auth-info strong {
-    font-weight: bold;
+.main-nav-links .nav-button:hover::before {
+  transform: scaleX(1); /* Expand on hover */
+  transform-origin: bottom left; /* Animate from left to right on hover */
 }
 
+.main-nav-links .nav-button:hover {
+  color: #007bff !important; /* Example hover color (Bootstrap primary blue), adjust if needed */
+}
+
+
+/* Main content area - Seamless with page background */
 .main-content {
   flex-grow: 1;
-  background-color: #ffffff;
+  background-color: var(--sp-white); /* White background for content area */
   padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  border-radius: 0; /* Ensure sharp corners */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03); /* Very subtle shadow for depth */
 }
 
+/* Headings and paragraphs - Using color scheme variables */
 .page-title {
-  color: #34495e;
+  color: var(--sp-dark-gray); /* Dark gray for headings */
   font-size: 2.2em;
   margin-bottom: 25px;
-  border-bottom: 2px solid #ecf0f1;
+  border-bottom: 2px solid #ecf0f1; /* Light border */
   padding-bottom: 10px;
 }
 
 .paragraph {
   line-height: 1.7;
   margin-bottom: 15px;
-  color: #555;
+  color: var(--sp-medium-gray); /* Medium gray for paragraphs */
 }
 
-/* Changed service-card-container to use Bootstrap's grid system classes in components */
-/* Retaining these styles just in case for elements not covered by Bootstrap */
-.service-card-container {
-  display: grid; /* Keeping this for fallback, but components will use Bootstrap row/col */
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  margin-top: 25px;
-}
-
+/* Product Card styles (kept card format as it's a good modern pattern for items) */
 .service-card {
-  background-color: #fdfdfd;
+  background-color: var(--sp-white); /* White background for product cards */
   padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-radius: 10px; /* Keep rounded corners for individual product cards */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* More pronounced shadow for cards */
   border: 1px solid #eee;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .service-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15); /* Enhanced shadow on hover */
 }
 
 .service-title {
-  color: #3498db;
+  color: var(--sp-dark-gray); /* Dark gray for product titles */
   font-size: 1.5em;
   margin-bottom: 10px;
 }
 
 .service-description {
-  color: #666;
+  color: var(--sp-medium-gray); /* Medium gray for product descriptions */
   line-height: 1.6;
 }
 
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
-}
-
+/* Form styles - Using color scheme variables */
 .input-field,
 .text-area-field {
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 1em;
+  color: var(--sp-dark-gray); /* Input text color */
 }
 
-.text-area-field {
-  min-height: 100px;
-  resize: vertical;
+.input-field::placeholder,
+.text-area-field::placeholder {
+  color: var(--sp-medium-gray); /* Placeholder color */
 }
 
-.submit-button { /* Custom button style, will override Bootstrap's .btn defaults */
-  background-color: #27ae60; /* Green for submit */
-  color: white;
+.submit-button {
+  background-color: var(--sp-dark-gray); /* Dark gray submit button */
+  color: var(--sp-white);
   border: none;
   padding: 12px 25px;
   border-radius: 8px;
@@ -164,10 +196,11 @@ body {
 }
 
 .submit-button:hover {
-  background-color: #229a56;
+  background-color: var(--sp-medium-gray); /* Lighter gray on hover */
   transform: translateY(-2px);
 }
 
+/* Message boxes (alerts) - Adjusted for new scheme */
 .message-box {
   margin-top: 20px;
   padding: 15px;
@@ -177,79 +210,57 @@ body {
 }
 
 .success-message {
-  background-color: #e6ffe6;
+  background-color: #e6ffe6; /* Keep standard green for success */
   color: #27ae60;
   border: 1px solid #27ae60;
 }
 
 .error-message {
-  background-color: #ffe6e6;
+  background-color: #ffe6e6; /* Keep standard red for error */
   color: #e74c3c;
   border: 1px solid #e74c3c;
 }
 
+/* Footer styles - Seamless with page background */
 .footer {
   margin-top: 30px;
   padding: 20px;
-  background-color: #34495e; /* Dark footer */
-  color: #ecf0f1;
+  background-color: var(--sp-dark-gray); /* Dark gray footer */
+  color: var(--sp-white);
   text-align: center;
-  border-radius: 12px;
-  box-shadow: 0 -2px 8px rgba(0,0,0,0.03);
+  border-radius: 0; /* Ensure sharp corners */
+  box-shadow: none; /* No shadow */
 }
 
 .loading-text {
   text-align: center;
   font-size: 1.2em;
-  color: #666;
+  color: var(--sp-medium-gray);
   padding: 50px;
 }
 
 /* Responsive adjustments */
+/* Global container takes full width, and internal content is contained by Bootstrap's .container */
 @media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
+  .top-bar {
+    display: none !important; /* Hide top bar completely on small screens */
   }
-  .nav {
-    margin-top: 15px;
-    justify-content: center;
+  .custom-main-navbar .navbar-collapse {
+    text-align: center;
+  }
+  .main-nav-links {
+    margin-left: 0 !important; /* Override ms-auto */
+    margin-right: 0 !important; /* Override me-auto */
     width: 100%;
+    justify-content: center; /* Center items in collapsed menu */
   }
-  .auth-info {
-    text-align: left;
-    margin-top: 15px;
-  }
-  .logo {
-    margin-right: 0;
+  .main-nav-links .nav-item {
+    margin: 5px 0; /* Adjust vertical spacing for collapsed menu */
   }
 }
 
 @media (max-width: 480px) {
-  .container {
-    margin: 10px;
-    padding: 15px;
-  }
-  .header {
-    padding: 15px;
-  }
-  .logo {
-    font-size: 1.8em;
-  }
-  .nav-button {
-    padding: 8px 15px;
-    font-size: 0.9em;
-  }
-  .main-content {
-    padding: 20px;
-  }
-  .page-title {
-    font-size: 1.8em;
-  }
-  .service-card {
-    padding: 20px;
-  }
-  .service-title {
-    font-size: 1.3em;
+  .custom-main-navbar .navbar-brand img {
+    height: 40px; /* Smaller logo on very small screens */
   }
 }

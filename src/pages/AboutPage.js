@@ -1,11 +1,11 @@
 // src/pages/AboutPage.js
 
 import React from 'react';
-// No need to import styles.js, as styles are now in App.css
 
 const AboutPage = () => (
-  <div className="my-4"> {/* Add some vertical margin */}
-    <h2 className="page-title text-secondary">About Us</h2> {/* Use Bootstrap text-secondary for color */}
+  <div className="my-4">
+    {/* Using custom CSS variables for color */}
+    <h2 className="page-title" style={{ color: 'var(--sp-dark-gray)' }}>About Us</h2>
     <p className="paragraph">
       Founded in 20XX, our company started with a vision to revolutionize the industry by combining cutting-edge technology with unparalleled customer service. We believe in continuous innovation, ethical practices, and fostering a collaborative environment.
     </p>

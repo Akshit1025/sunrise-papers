@@ -1,58 +1,92 @@
 // src/components/Navbar.js
 
 import React from 'react';
-// No need to import styles.js, as styles are now in App.css
 
-const Navbar = ({ setCurrentPage, userId }) => {
+const Navbar = ({ setCurrentPage }) => {
   return (
-    // Use Bootstrap navbar classes, and combine with custom 'header' class for specific styling
-    <nav className="navbar navbar-expand-lg navbar-light bg-light rounded-3 mb-4 header">
-      <div className="container-fluid">
-        <a className="navbar-brand logo" href="#" onClick={() => setCurrentPage('home')}>
-          Company Name
-        </a>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0 nav"> {/* Use me-auto for left alignment */}
-            <li className="nav-item">
-              <button className="nav-link nav-button" onClick={() => setCurrentPage('home')}>
-                Home
-              </button>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link nav-button" onClick={() => setCurrentPage('about')}>
-                About
-              </button>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link nav-button" onClick={() => setCurrentPage('products')}>
-                Products
-              </button>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link nav-button" onClick={() => setCurrentPage('contact')}>
-                Contact
-              </button>
-            </li>
-          </ul>
-          {userId && (
-            <div className="auth-info text-muted small mt-2 mt-lg-0 ms-lg-auto"> {/* Use ms-lg-auto for right alignment on large screens */}
-              Signed in as: <strong>{userId}</strong>
-            </div>
-          )}
+    <>
+      {/* Top Bar */}
+      <div className="top-bar bg-light py-2 d-none d-lg-block"> {/* Hidden on small screens */}
+        <div className="container d-flex justify-content-between align-items-center">
+          <div className="contact-info text-muted small">
+            <i className="fas fa-envelope me-2"></i>info@sunrisepapers.com
+            <i className="fas fa-phone-alt ms-4 me-2"></i>+1 (234) 5678 9101
+          </div>
+          <div className="social-icons">
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-icon-link text-muted me-3">
+              <i className="fab fa-twitter"></i>
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon-link text-muted me-3">
+              <i className="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-icon-link text-muted me-3">
+              <i className="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon-link text-muted">
+              <i className="fab fa-instagram"></i>
+            </a>
+          </div>
         </div>
       </div>
-    </nav>
+
+      {/* Main Navigation Bar */}
+      <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm custom-main-navbar">
+        <div className="container-fluid">
+          {/* Company logo */}
+          <button
+            className="navbar-brand p-0 border-0 bg-transparent d-flex align-items-center"
+            onClick={() => setCurrentPage('home')}
+          >
+            <img
+              src="/images/logo.png" // Path to your logo image in public/images/
+              alt="Sunrise Papers Logo"
+              style={{ height: '50px', marginRight: '10px' }} // Adjusted height
+            />
+            {/* You can add text 'Sunrise Papers' here if your logo is icon-only and you want the name to appear beside it */}
+            <span className="logo-text">Sunrise Papers</span>
+          </button>
+
+          {/* Toggler for mobile navigation */}
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavbarContent"
+            aria-controls="mainNavbarContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+
+          {/* Navbar links */}
+          <div className="collapse navbar-collapse" id="mainNavbarContent">
+            <ul className="navbar-nav ms-auto mb-2 mb-lg-0 main-nav-links"> {/* ms-auto pushes links to the right */}
+              <li className="nav-item">
+                <button className="nav-link nav-button" onClick={() => setCurrentPage('home')}>
+                  Home
+                </button>
+              </li>
+              <li className="nav-item">
+                <button className="nav-link nav-button" onClick={() => setCurrentPage('about')}>
+                  About
+                </button>
+              </li>
+              <li className="nav-item">
+                <button className="nav-link nav-button" onClick={() => setCurrentPage('products')}>
+                  Products
+                </button>
+              </li>
+              <li className="nav-item">
+                <button className="nav-link nav-button" onClick={() => setCurrentPage('contact')}>
+                  Contact
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </>
   );
 };
 

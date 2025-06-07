@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../firebaseConfig.js';
+import { db } from '../firebaseConfig';
 
 const ContactPage = ({ userId, authReady }) => {
   const [name, setName] = useState('');
@@ -50,17 +50,18 @@ const ContactPage = ({ userId, authReady }) => {
   };
 
   return (
-    <div className="my-4"> {/* Add some vertical margin */}
-      <h2 className="page-title text-success">Contact Us</h2> {/* Use Bootstrap text-success for color */}
+    <div className="my-4">
+      {/* Using custom CSS variables for color */}
+      <h2 className="page-title" style={{ color: 'var(--sp-dark-gray)' }}>Contact Us</h2>
       <p className="paragraph">
         Have a question or want to discuss a project? Feel free to reach out to us using the form below.
       </p>
-      <form className="form p-4 border rounded shadow-sm" onSubmit={handleSubmit}> {/* Add Bootstrap form styling */}
+      <form className="form p-4 border rounded shadow-sm" onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="contactName" className="form-label">Your Name</label>
+          <label htmlFor="contactName" className="form-label" style={{ color: 'var(--sp-medium-gray)' }}>Your Name</label>
           <input
             type="text"
-            className="form-control input-field rounded-pill" // Combine Bootstrap form-control with custom
+            className="form-control input-field rounded-pill"
             id="contactName"
             placeholder="Your Name"
             value={name}
@@ -69,10 +70,10 @@ const ContactPage = ({ userId, authReady }) => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="contactEmail" className="form-label">Your Email</label>
+          <label htmlFor="contactEmail" className="form-label" style={{ color: 'var(--sp-medium-gray)' }}>Your Email</label>
           <input
             type="email"
-            className="form-control input-field rounded-pill" // Combine Bootstrap form-control with custom
+            className="form-control input-field rounded-pill"
             id="contactEmail"
             placeholder="Your Email"
             value={email}
@@ -81,18 +82,19 @@ const ContactPage = ({ userId, authReady }) => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="contactMessage" className="form-label">Your Message</label>
+          <label htmlFor="contactMessage" className="form-label" style={{ color: 'var(--sp-medium-gray)' }}>Your Message</label>
           <textarea
-            className="form-control text-area-field rounded-3" // Combine Bootstrap form-control with custom
+            className="form-control text-area-field rounded-3"
             id="contactMessage"
             placeholder="Your Message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            rows="5" // Set initial rows for textarea
+            rows="5"
             required
           />
         </div>
-        <button type="submit" className="btn btn-success btn-lg submit-button rounded-pill mt-3"> {/* Bootstrap button classes */}
+        {/* Use custom button class for color scheme */}
+        <button type="submit" className="btn btn-lg submit-button rounded-pill mt-3">
           Send Message
         </button>
       </form>
@@ -100,7 +102,7 @@ const ContactPage = ({ userId, authReady }) => {
         <div
           className={`alert ${
             submissionStatus === 'success' ? 'alert-success' : 'alert-danger'
-          } text-center mt-3 message-box`} // Bootstrap alert classes
+          } text-center mt-3 message-box`}
         >
           {statusMessage}
         </div>
