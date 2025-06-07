@@ -1,38 +1,253 @@
-.App {
+/* src/App.css */
+
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f4f7f6; /* Light background */
+  color: #333;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  max-width: 1200px;
+  margin: 20px auto;
+}
+
+.header {
+  background-color: #ffffff;
+  padding: 20px 30px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 2em;
+  font-weight: bold;
+  color: #3498db; /* Blue logo */
+  margin-right: 20px;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.nav-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.nav-button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.auth-info {
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 10px;
+  width: 100%;
+  text-align: right;
+  word-break: break-all; /* Ensure long user IDs wrap */
+}
+
+.auth-info strong {
+    font-weight: bold;
+}
+
+.main-content {
+  flex-grow: 1;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.page-title {
+  color: #34495e;
+  font-size: 2.2em;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 10px;
+}
+
+.paragraph {
+  line-height: 1.7;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+.service-card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.service-card {
+  background-color: #fdfdfd;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #eee;
+  transition: transform 0.2s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+}
+
+.service-title {
+  color: #3498db;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.service-description {
+  color: #666;
+  line-height: 1.6;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.input-field,
+.text-area-field {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1em;
+}
+
+.text-area-field {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.submit-button {
+  background-color: #27ae60; /* Green for submit */
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: #229a56;
+  transform: translateY(-2px);
+}
+
+.message-box {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 0.95em;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.success-message {
+  background-color: #e6ffe6;
+  color: #27ae60;
+  border: 1px solid #27ae60;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.error-message {
+  background-color: #ffe6e6;
+  color: #e74c3c;
+  border: 1px solid #e74c3c;
+}
+
+.footer {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #34495e; /* Dark footer */
+  color: #ecf0f1;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.03);
+}
+
+.loading-text {
+  text-align: center;
+  font-size: 1.2em;
+  color: #666;
+  padding: 50px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .nav {
+    margin-top: 15px;
+    justify-content: center;
+    width: 100%;
+  }
+  .auth-info {
+    text-align: left;
+    margin-top: 15px;
+  }
+  .logo {
+    margin-right: 0;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@media (max-width: 480px) {
+  .container {
+    margin: 10px;
+    padding: 15px;
   }
-  to {
-    transform: rotate(360deg);
+  .header {
+    padding: 15px;
+  }
+  .logo {
+    font-size: 1.8em;
+  }
+  .nav-button {
+    padding: 8px 15px;
+    font-size: 0.9em;
+  }
+  .main-content {
+    padding: 20px;
+  }
+  .page-title {
+    font-size: 1.8em;
+  }
+  .service-card {
+    padding: 20px;
+  }
+  .service-title {
+    font-size: 1.3em;
   }
 }
