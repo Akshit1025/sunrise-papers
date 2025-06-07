@@ -2,16 +2,16 @@
 
 /* --- Custom CSS Variables (Optional but good practice for color scheme) --- */
 :root {
-  --sp-dark-gray: #212529;   /* Almost black, from logo text */
+  --sp-dark-gray: #212529; /* Almost black, from logo text */
   --sp-medium-gray: #495057; /* Dark gray for body text */
-  --sp-light-gray: #f8f9fa;  /* Very light gray, page background (top bar background) */
-  --sp-white: #ffffff;      /* Pure white for elements on dark background (main navbar background) */
+  --sp-light-gray: #f8f9fa; /* Very light gray, page background (top bar background) */
+  --sp-white: #ffffff; /* Pure white for elements on dark background (main navbar background) */
 }
 
 /* --- Bootstrap Overrides & Global Styles --- */
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--sp-light-gray); /* Overall page background */
@@ -31,7 +31,9 @@ body {
 
 /* Specific styling for the top bar */
 .top-bar {
-  background-color: var(--sp-light-gray); /* Light gray background for top bar */
+  background-color: var(
+    --sp-light-gray
+  ); /* Light gray background for top bar */
   border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Subtle bottom border */
 }
 
@@ -83,7 +85,9 @@ body {
 }
 
 .main-nav-links .nav-button {
-  color: var(--sp-dark-gray) !important; /* Dark gray text for links on light navbar */
+  color: var(
+    --sp-dark-gray
+  ) !important; /* Dark gray text for links on light navbar */
   background-color: transparent;
   border: none;
   padding: 0.5rem 0; /* Adjust padding for underline space, no side padding */
@@ -96,7 +100,7 @@ body {
 
 /* Underline animation using pseudo-element */
 .main-nav-links .nav-button::before {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -117,14 +121,13 @@ body {
   color: #007bff !important; /* Example hover color (Bootstrap primary blue), adjust if needed */
 }
 
-
 /* Main content area - Seamless with page background */
 .main-content {
   flex-grow: 1;
   background-color: var(--sp-white); /* White background for content area */
   padding: 30px;
   border-radius: 0; /* Ensure sharp corners */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.03); /* Very subtle shadow for depth */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03); /* Very subtle shadow for depth */
 }
 
 /* Headings and paragraphs - Using color scheme variables */
@@ -147,14 +150,14 @@ body {
   background-color: var(--sp-white); /* White background for product cards */
   padding: 25px;
   border-radius: 10px; /* Keep rounded corners for individual product cards */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* More pronounced shadow for cards */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* More pronounced shadow for cards */
   border: 1px solid #eee;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .service-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15); /* Enhanced shadow on hover */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
 }
 
 .service-title {

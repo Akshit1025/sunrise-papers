@@ -1,6 +1,6 @@
 // src/components/Footer.js
 
-import React from 'react';
+import React from "react";
 // No need to import styles.js, as styles are now in App.css
 
 const Footer = () => (

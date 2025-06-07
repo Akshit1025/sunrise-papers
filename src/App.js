@@ -1,23 +1,23 @@
 // src/App.js
 
-import React, { useState, useEffect } from 'react';
-import { signInAnonymously, onAuthStateChanged } from 'firebase/auth'; // Removed signInWithCustomToken
+import React, { useState, useEffect } from "react";
+import { signInAnonymously, onAuthStateChanged } from "firebase/auth"; // Removed signInWithCustomToken
 
 // Import Firebase config and instances
-import { auth } from './firebaseConfig'; // Removed .js extension
+import { auth } from "./firebaseConfig"; // Removed .js extension
 // Import main CSS file
-import './App.css'; // App.css will be loaded after Bootstrap
+import "./App.css"; // App.css will be loaded after Bootstrap
 
 // Import components and pages (no .js extension)
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import HomePage from './pages/HomePage';
-import AboutPage from './pages/AboutPage';
-import ProductsPage from './pages/ProductsPage';
-import ContactPage from './pages/ContactPage';
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import HomePage from "./pages/HomePage";
+import AboutPage from "./pages/AboutPage";
+import ProductsPage from "./pages/ProductsPage";
+import ContactPage from "./pages/ContactPage";
 
 const App = () => {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState("home");
   const [userId, setUserId] = useState(null);
   const [authReady, setAuthReady] = useState(false);
 
@@ -57,13 +57,13 @@ const App = () => {
       <div className="main-content flex-grow-1 p-3 p-md-4">
         {(() => {
           switch (currentPage) {
-            case 'home':
+            case "home":
               return <HomePage />;
-            case 'about':
+            case "about":
               return <AboutPage />;
-            case 'products':
+            case "products":
               return <ProductsPage authReady={authReady} />;
-            case 'contact':
+            case "contact":
               return <ContactPage userId={userId} authReady={authReady} />;
             default:
               return <HomePage />; // Default to HomePage if currentPage is unrecognized
