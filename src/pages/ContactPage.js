@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../firebaseConfig.js'; // Added .js extension back
+import { db } from '../firebaseConfig.js';
 
 const ContactPage = ({ userId, authReady }) => {
   const [name, setName] = useState('');
@@ -29,14 +29,13 @@ const ContactPage = ({ userId, authReady }) => {
     }
 
     try {
-      // Collection path now directly points to 'contact_messages' at the root
       const messagesCollectionPath = 'contact_messages';
       await addDoc(collection(db, messagesCollectionPath), {
         name,
         email,
         message,
         timestamp: new Date(),
-        userId: userId, // Still store the user ID for reference
+        userId: userId,
       });
       setStatusMessage("Your message has been sent successfully!");
       setSubmissionStatus('success');
@@ -51,44 +50,57 @@ const ContactPage = ({ userId, authReady }) => {
   };
 
   return (
-    <div>
-      <h2 className="page-title">Contact Us</h2>
+    <div className="my-4"> {/* Add some vertical margin */}
+      <h2 className="page-title text-success">Contact Us</h2> {/* Use Bootstrap text-success for color */}
       <p className="paragraph">
         Have a question or want to discuss a project? Feel free to reach out to us using the form below.
       </p>
-      <form className="form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Your Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="input-field"
-          required
-        />
-        <input
-          type="email"
-          placeholder="Your Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="input-field"
-          required
-        />
-        <textarea
-          placeholder="Your Message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="text-area-field"
-          required
-        />
-        <button type="submit" className="submit-button">
+      <form className="form p-4 border rounded shadow-sm" onSubmit={handleSubmit}> {/* Add Bootstrap form styling */}
+        <div className="mb-3">
+          <label htmlFor="contactName" className="form-label">Your Name</label>
+          <input
+            type="text"
+            className="form-control input-field rounded-pill" // Combine Bootstrap form-control with custom
+            id="contactName"
+            placeholder="Your Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="contactEmail" className="form-label">Your Email</label>
+          <input
+            type="email"
+            className="form-control input-field rounded-pill" // Combine Bootstrap form-control with custom
+            id="contactEmail"
+            placeholder="Your Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="contactMessage" className="form-label">Your Message</label>
+          <textarea
+            className="form-control text-area-field rounded-3" // Combine Bootstrap form-control with custom
+            id="contactMessage"
+            placeholder="Your Message"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            rows="5" // Set initial rows for textarea
+            required
+          />
+        </div>
+        <button type="submit" className="btn btn-success btn-lg submit-button rounded-pill mt-3"> {/* Bootstrap button classes */}
           Send Message
         </button>
       </form>
       {submissionStatus && (
         <div
-          className={`message-box ${
-            submissionStatus === 'success' ? 'success-message' : 'error-message'
-          }`}
+          className={`alert ${
+            submissionStatus === 'success' ? 'alert-success' : 'alert-danger'
+          } text-center mt-3 message-box`} // Bootstrap alert classes
         >
           {statusMessage}
         </div>

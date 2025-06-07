@@ -1,20 +1,20 @@
 // src/App.js
 
 import React, { useState, useEffect } from 'react';
-import { signInAnonymously, onAuthStateChanged } from 'firebase/auth';
+import { signInAnonymously, onAuthStateChanged } from 'firebase/auth'; // Removed signInWithCustomToken
 
 // Import Firebase config and instances
-import { auth } from './firebaseConfig.js'; // Added .js extension back
+import { auth } from './firebaseConfig'; // Removed .js extension
 // Import main CSS file
-import './App.css';
+import './App.css'; // App.css will be loaded after Bootstrap
 
-// Import components and pages (added .js extension back for local JS files)
-import Navbar from './components/Navbar.js';
-import Footer from './components/Footer.js';
-import HomePage from './pages/HomePage.js';
-import AboutPage from './pages/AboutPage.js';
-import ProductsPage from './pages/ProductsPage.js';
-import ContactPage from './pages/ContactPage.js';
+// Import components and pages (no .js extension)
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
+import ProductsPage from './pages/ProductsPage';
+import ContactPage from './pages/ContactPage';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
@@ -50,9 +50,11 @@ const App = () => {
   }, []); // The empty dependency array ensures this effect runs only once on component mount
 
   return (
-    <div className="container">
+    // Use Bootstrap container for overall layout, combined with custom 'container' class for specific styling
+    <div className="container custom-container d-flex flex-column min-vh-100">
       <Navbar setCurrentPage={setCurrentPage} userId={userId} />
-      <div className="main-content">
+      {/* Bootstrap padding classes, and custom 'main-content' for specific styling */}
+      <div className="main-content flex-grow-1 p-3 p-md-4">
         {(() => {
           switch (currentPage) {
             case 'home':

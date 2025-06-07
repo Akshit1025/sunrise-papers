@@ -10,7 +10,7 @@ body {
   color: #333;
 }
 
-.container {
+.container { /* This class will now often be used alongside Bootstrap's .container or .container-fluid */
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -18,7 +18,7 @@ body {
   box-sizing: border-box;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  max-width: 1200px;
+  max-width: 1200px; /* Keep max-width for overall layout */
   margin: 20px auto;
 }
 
@@ -28,7 +28,7 @@ body {
   border-radius: 12px;
   margin-bottom: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-  display: flex;
+  display: flex; /* Kept flex properties */
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
@@ -44,10 +44,10 @@ body {
 .nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 15px; /* Gap is a useful property not directly in Bootstrap's nav-items */
 }
 
-.nav-button {
+.nav-button { /* Custom button style, will override Bootstrap's .btn defaults */
   background-color: #3498db;
   color: white;
   border: none;
@@ -98,8 +98,10 @@ body {
   color: #555;
 }
 
+/* Changed service-card-container to use Bootstrap's grid system classes in components */
+/* Retaining these styles just in case for elements not covered by Bootstrap */
 .service-card-container {
-  display: grid;
+  display: grid; /* Keeping this for fallback, but components will use Bootstrap row/col */
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
   margin-top: 25px;
@@ -149,7 +151,7 @@ body {
   resize: vertical;
 }
 
-.submit-button {
+.submit-button { /* Custom button style, will override Bootstrap's .btn defaults */
   background-color: #27ae60; /* Green for submit */
   color: white;
   border: none;
