@@ -34,7 +34,7 @@ const Navbar = ({ setCurrentPage }) => {
         <div className="container-fluid">
           {/* Company logo */}
           <button
-            className="navbar-brand p-0 border-0 bg-transparent d-flex align-items-center"
+            className="navbar-brand p-0 border-0 bg-transparent d-flex align-items-center ps-3 ps-md-4 ps-lg-5"
             onClick={() => setCurrentPage('home')}
           >
             <img
@@ -43,7 +43,7 @@ const Navbar = ({ setCurrentPage }) => {
               style={{ height: '50px', marginRight: '10px' }} // Adjusted height
             />
             {/* You can add text 'Sunrise Papers' here if your logo is icon-only and you want the name to appear beside it */}
-            <span className="logo-text">Sunrise Papers</span>
+            <span className="logo-text fw-bold">Sunrise Papers</span>
           </button>
 
           {/* Toggler for mobile navigation */}
