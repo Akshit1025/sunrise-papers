@@ -1,8 +1,20 @@
 // src/components/Navbar.js
 
 import React from "react";
+import { Link } from "react-router-dom"; // Import Link for navigation
 
-const Navbar = ({ setCurrentPage }) => {
+const Navbar = () => {
+  const handleNavLinkClick = () => {
+    const navbarToggler = document.querySelector(".navbar-toggler");
+    const navbarCollapse = document.querySelector("#mainNavbarContent");
+    if (
+      navbarToggler &&
+      navbarCollapse &&
+      navbarCollapse.classList.contains("show")
+    ) {
+      navbarToggler.click(); // Close the navbar if it's open
+    }
+  };
   return (
     <>
       {/* Top Bar */}
@@ -11,8 +23,18 @@ const Navbar = ({ setCurrentPage }) => {
         {/* Hidden on small screens */}
         <div className="container d-flex justify-content-between align-items-center">
           <div className="contact-info text-muted small">
-            <i className="fas fa-envelope me-2"></i>info@sunrisepapers.com
-            <i className="fas fa-phone-alt ms-4 me-2"></i>+1 (234) 5678 9101
+            <a
+              href="mailto:info@sunrisepapers.com"
+              className="text-muted text-decoration-none"
+            >
+              <i className="fas fa-envelope me-2"></i>info@sunrisepapers.com
+            </a>
+            <a
+              href="tel:+919810087126"
+              className="text-muted text-decoration-none ms-4"
+            >
+              <i className="fas fa-phone-alt ms-4 me-2"></i>+91 98100 87126
+            </a>
           </div>
           <div className="social-icons">
             <a
@@ -55,9 +77,10 @@ const Navbar = ({ setCurrentPage }) => {
       <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm custom-main-navbar">
         <div className="container-fluid">
           {/* Company logo */}
-          <button
+          <Link
             className="navbar-brand p-0 border-0 bg-transparent d-flex align-items-center ps-3 ps-md-4 ps-lg-5"
-            onClick={() => setCurrentPage("home")}
+            onClick={handleNavLinkClick} // Close navbar on link click
+            to="/" // Navigate to home page
           >
             <img
               src="/images/logo.png" // Path to your logo image in public/images/
@@ -66,7 +89,7 @@ const Navbar = ({ setCurrentPage }) => {
             />
             {/* You can add text 'Sunrise Papers' here if your logo is icon-only and you want the name to appear beside it */}
             <span className="logo-text fw-bold">Sunrise Papers</span>
-          </button>
+          </Link>
 
           {/* Toggler for mobile navigation */}
           <button
@@ -87,36 +110,40 @@ const Navbar = ({ setCurrentPage }) => {
               {" "}
               {/* ms-auto pushes links to the right */}
               <li className="nav-item">
-                <button
+                <Link
                   className="nav-link nav-button"
-                  onClick={() => setCurrentPage("home")}
+                  onClick={handleNavLinkClick} // Close navbar on link click
+                  to="/" // Navigate to home page
                 >
-                  Home
-                </button>
+                  <i className="fas fa-home me-2"></i>Home
+                </Link>
               </li>
               <li className="nav-item">
-                <button
+                <Link
                   className="nav-link nav-button"
-                  onClick={() => setCurrentPage("about")}
+                  onClick={handleNavLinkClick} // Close navbar on link click
+                  to="/about" // Navigate to about page
                 >
-                  About
-                </button>
+                  <i className="fas fa-info-circle me-2"></i>About
+                </Link>
               </li>
               <li className="nav-item">
-                <button
+                <Link
                   className="nav-link nav-button"
-                  onClick={() => setCurrentPage("products")}
+                  onClick={handleNavLinkClick} // Close navbar on link click
+                  to="/products" // Navigate to products page
                 >
-                  Products
-                </button>
+                  <i className="fas fa-box me-2"></i>Products
+                </Link>
               </li>
               <li className="nav-item">
-                <button
+                <Link
                   className="nav-link nav-button"
-                  onClick={() => setCurrentPage("contact")}
+                  to="/contact" // Navigate to contact page
+                  onClick={handleNavLinkClick} // Close navbar on link click
                 >
-                  Contact
-                </button>
+                  <i className="fas fa-envelope me-2"></i>Contact
+                </Link>
               </li>
             </ul>
           </div>

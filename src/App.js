@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { signInAnonymously, onAuthStateChanged } from "firebase/auth"; // Removed signInWithCustomToken
+import { Routes, Route } from "react-router-dom"; // Import Routes and Route for routing
 
 // Import Firebase config and instances
 import { auth } from "./firebaseConfig"; // Removed .js extension
@@ -17,7 +18,6 @@ import ProductsPage from "./pages/ProductsPage";
 import ContactPage from "./pages/ContactPage";
 
 const App = () => {
-  const [currentPage, setCurrentPage] = useState("home");
   const [userId, setUserId] = useState(null);
   const [authReady, setAuthReady] = useState(false);
 
@@ -52,23 +52,15 @@ const App = () => {
   return (
     // Use Bootstrap container for overall layout, combined with custom 'container' class for specific styling
     <div className="container custom-container d-flex flex-column min-vh-100">
-      <Navbar setCurrentPage={setCurrentPage} userId={userId} />
+      <Navbar />
       {/* Bootstrap padding classes, and custom 'main-content' for specific styling */}
       <div className="main-content flex-grow-1 p-3 p-md-4">
-        {(() => {
-          switch (currentPage) {
-            case "home":
-              return <HomePage />;
-            case "about":
-              return <AboutPage />;
-            case "products":
-              return <ProductsPage authReady={authReady} />;
-            case "contact":
-              return <ContactPage userId={userId} authReady={authReady} />;
-            default:
-              return <HomePage />; // Default to HomePage if currentPage is unrecognized
-          }
-        })()}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/products" element={<ProductsPage authReady={authReady} />} />
+          <Route path="/contact" element={<ContactPage userId={userId} authReady={authReady} />} />
+        </Routes>
       </div>
       <Footer />
     </div>
