@@ -27,13 +27,22 @@ const Navbar = () => {
               href="mailto:info@sunrisepapers.com"
               className="text-muted text-decoration-none"
             >
-              <i className="fas fa-envelope me-2"></i>info@sunrisepapers.com
+              <i className="fas fa-envelope me-2"></i>
+              dineshgupta@sunrisepapers.co.in
             </a>
+            <i className="fas fa-phone-alt ms-4 me-2"></i>
+            <a
+              href="tel:+919555509507"
+              className="text-muted text-decoration-none"
+            >
+              +91 95555 09507
+            </a>
+            <span className="text-muted mx-1">/</span>
             <a
               href="tel:+919810087126"
-              className="text-muted text-decoration-none ms-4"
+              className="text-muted text-decoration-none"
             >
-              <i className="fas fa-phone-alt ms-4 me-2"></i>+91 98100 87126
+              +91 98100 87126
             </a>
           </div>
           <div className="social-icons">
@@ -46,20 +55,20 @@ const Navbar = () => {
               <i className="fab fa-twitter"></i>
             </a>
             <a
-              href="https://facebook.com"
+              href="https://github.com/Akshit1025/sunrise-papers"
               target="_blank"
               rel="noopener noreferrer"
               className="social-icon-link text-muted me-3"
             >
-              <i className="fab fa-facebook-f"></i>
+              <i className="fab fa-github"></i>
             </a>
             <a
-              href="https://linkedin.com"
+              href="https://wa.me/919555509507"
               target="_blank"
               rel="noopener noreferrer"
               className="social-icon-link text-muted me-3"
             >
-              <i className="fab fa-linkedin-in"></i>
+              <i className="fab fa-whatsapp"></i>
             </a>
             <a
               href="https://instagram.com"
