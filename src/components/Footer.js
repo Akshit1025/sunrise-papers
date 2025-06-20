@@ -71,12 +71,12 @@ const Footer = () => {
             </div>
             <div className="col-lg-7">
               <form
-                className="d-flex newsletter-form"
+                className="d-flex flex-column flex-sm-row newsletter-form"
                 onSubmit={handleNewsletterSubmit}
               >
                 <input
                   type="email"
-                  className="form-control newsletter-input"
+                  className="form-control newsletter-input mb-2 mb-sm-0"
                   placeholder="Enter your email address"
                   value={newsletterEmail}
                   onChange={(e) => setNewsletterEmail(e.target.value)}
@@ -85,7 +85,7 @@ const Footer = () => {
                 />
                 <button
                   type="submit"
-                  className="btn btn-primary newsletter-button ms-2"
+                  className="btn btn-primary newsletter-button ms-sm-2"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Subscribing..." : "Subscribe"}
@@ -95,8 +95,8 @@ const Footer = () => {
                 <div
                   className={`newsletter-message mt-3 text-center text-lg-start ${
                     newsletterStatus === "success"
-                      ? "text-success"
-                      : "text-danger"
+                      ? "alert-success"
+                      : "alert-danger"
                   }`}
                 >
                   {newsletterMessage}
@@ -127,6 +127,40 @@ const Footer = () => {
                 Delivering execellence in paper products since 1990. Committed
                 to quality and sustainability.
               </p>
+              <div className="footer-social-icons mt-4">
+                <a
+                  href="https://twitter.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-link text-white-50 me-3"
+                >
+                  <i className="fab fa-twitter"></i>
+                </a>
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-link text-white-50 me-3"
+                >
+                  <i className="fab fa-facebook"></i>
+                </a>
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-link text-white-50 me-3"
+                >
+                  <i className="fab fa-linkedin-in"></i>
+                </a>
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-link text-white-50"
+                >
+                  <i className="fab fa-instagram"></i>
+                </a>
+              </div>
             </div>
             {/* Column 2: Quick Links */}
             <div className="col-md-4 mb-4 mb-md-0">
@@ -161,22 +195,6 @@ const Footer = () => {
                     Contact Us
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    to="/privacy-policy"
-                    className="footer-link text-decoration-none"
-                  >
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/terms-of-service"
-                    className="footer-link text-decoration-none"
-                  >
-                    Terms of Service
-                  </Link>
-                </li>
               </ul>
             </div>
             {/* Column 3: Contact Information */}
@@ -185,8 +203,15 @@ const Footer = () => {
               <address className="mb-0">
                 <p className="footer-contact-item">
                   <i className="fas fa-map-marker-alt me-2 footer-icon"></i>
-                  Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka, New
-                  Delhi, 110078, India
+                  <a
+                    href="https://maps.app.goo.gl/zFrzmgSPvqrrL79Z9"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-decoration-none footer-link"
+                  >
+                    Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka, New
+                    Delhi, 110078, India
+                  </a>
                 </p>
                 <p className="footer-contact-item">
                   <i className="fas fa-envelope me-2 footer-icon"></i>
@@ -194,11 +219,18 @@ const Footer = () => {
                     href="mailto:info@sunrisepapers.com"
                     className="text-decoration-none footer-link"
                   >
-                    info@sunrisepapers.com
+                    dineshgupta@sunrisepapers.co.in
                   </a>
                 </p>
                 <p className="footer-contact-item">
                   <i className="fas fa-phone-alt me-2 footer-icon"></i>
+                  <a
+                    href="tel:+919555509507"
+                    className="text-decoration-none footer-link"
+                  >
+                    +91 95555 09507
+                  </a>
+                  &nbsp;|&nbsp;
                   <a
                     href="tel:+919810087126"
                     className="text-decoration-none footer-link"
@@ -213,8 +245,33 @@ const Footer = () => {
       </footer>
       {/* Bottom Copyright Bar */}
       <div className="bottom-bar bg-dark py-3 text-center text-white-50 border-top border-secondary opacity-75">
-        <div className="container">
-          <small>&copy; {new Date().getFullYear()} Sunrise Papers. All Rights Reserved.</small>
+        <div className="container d-md-flex justify-content-between align-items-center">
+          <small className="mb-2 mb-md-0">
+            &copy; {new Date().getFullYear()} Sunrise Papers. All Rights
+            Reserved.
+          </small>
+          <ul className="list-inline mb-0 footer-policy-links">
+            <li className="list-inline-item me-3">
+              <a
+                href="/pdf/privacy-policy.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-decoration-none footer-bottom-link"
+              >
+                Privacy Policy
+              </a>
+            </li>
+            <li className="list-inline-item">
+              <a
+                href="/pdf/terms-and-conditions.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-decoration-none footer-bottom-link"
+              >
+                Terms & Conditions
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </>

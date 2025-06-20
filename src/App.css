@@ -4,7 +4,7 @@
 :root {
   --sp-dark-gray: #212529;   /* Almost black, from logo text, used for dark backgrounds */
   --sp-medium-gray: #495057; /* Dark gray for body text, secondary elements */
-  --sp-light-gray: #f8f9fa;  /* Very light gray, page background */
+  --sp-light-gray: #f8f9fa;  /* Very light gray, page background (top bar background) */
   --sp-white: #ffffff;      /* Pure white for elements on dark background, main content background */
   --sp-accent-blue: #007bff; /* A subtle blue for hover effects/accents, derived from Bootstrap primary */
 }
@@ -72,7 +72,6 @@ body {
 
 .custom-main-navbar {
   border-radius: 0 !important;
-  /* shadow-sm from Navbar.js gives a subtle lift */
 }
 
 .navbar-brand img {
@@ -121,7 +120,7 @@ body {
 }
 
 .main-nav-links .nav-button:hover {
-  color: var(--sp-accent-blue) !important; /* Change text color on hover */
+  color: var(--sp-accent-blue) !important;
 }
 
 
@@ -149,7 +148,7 @@ body {
 }
 
 /* --- Product Card Styles --- */
-.service-card { /* Renamed from .service-card to .product-card internally for clarity */
+.service-card {
   background-color: var(--sp-white);
   padding: 25px;
   border-radius: 10px;
@@ -163,13 +162,13 @@ body {
   box-shadow: 0 6px 16px rgba(0,0,0,0.15);
 }
 
-.service-title { /* Used for product title now */
+.service-title {
   color: var(--sp-dark-gray);
   font-size: 1.5em;
   margin-bottom: 10px;
 }
 
-.service-description { /* Used for product description now */
+.service-description {
   color: var(--sp-medium-gray);
   line-height: 1.6;
 }
@@ -236,9 +235,9 @@ body {
 
 /* --- Footer & Newsletter Styles --- */
 .newsletter-section {
-  background-color: var(--sp-dark-gray); /* Dark background for newsletter */
+  background-color: var(--sp-dark-gray);
   color: var(--sp-white);
-  padding: 50px 0; /* Vertical padding */
+  padding: 50px 0;
 }
 
 .newsletter-heading {
@@ -250,15 +249,24 @@ body {
   max-width: 500px;
   margin-left: auto;
   margin-right: auto;
+  /* Ensure form elements stack on small screens and then go side-by-side */
+  flex-direction: column; /* Default to column for mobile */
+}
+
+/* For small screens and up, make it a row */
+@media (min-width: 576px) { /* Bootstrap's 'sm' breakpoint */
+  .newsletter-form {
+    flex-direction: row;
+  }
 }
 
 .newsletter-input {
-  background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent white input */
+  background-color: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: var(--sp-white) !important;
-  border-radius: 0.375rem; /* Bootstrap default border-radius */
+  border-radius: 0.375rem;
   padding: 0.75rem 1rem;
-  flex-grow: 1; /* Allow input to take available space */
+  flex-grow: 1;
 }
 
 .newsletter-input::placeholder {
@@ -272,18 +280,28 @@ body {
 }
 
 .newsletter-button {
-  background-color: var(--sp-white); /* White button */
-  color: var(--sp-dark-gray) !important; /* Dark text */
+  background-color: var(--sp-white);
+  color: var(--sp-dark-gray) !important;
   border: none;
   padding: 0.75rem 1.5rem;
   font-weight: bold;
   border-radius: 0.375rem;
   transition: all 0.3s ease;
+  width: 100%; /* Make button full width on mobile */
+}
+
+/* For small screens and up, button aligns to content */
+@media (min-width: 576px) {
+  .newsletter-button {
+    width: auto; /* Revert to auto width on sm+ */
+    margin-left: 0.5rem; /* Re-add margin to the left for side-by-side */
+    margin-top: 0; /* Remove top margin */
+  }
 }
 
 .newsletter-button:hover {
-  background-color: var(--sp-light-gray); /* Lighter white on hover */
-  transform: translateY(-2px); /* Slight lift */
+  background-color: var(--sp-light-gray);
+  transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
@@ -294,8 +312,8 @@ body {
 
 
 .footer {
-  background-color: var(--sp-dark-gray); /* Dark background for main footer */
-  color: var(--sp-white); /* Default text color */
+  background-color: var(--sp-dark-gray);
+  color: var(--sp-white);
   padding: 50px 0;
   border-radius: 0;
   box-shadow: none;
@@ -306,14 +324,28 @@ body {
 }
 
 .footer-logo {
-  height: 60px; /* Slightly larger logo in footer */
+  height: 60px;
   width: auto;
 }
 
 .footer-company-name {
   font-size: 1.8em;
-  line-height: 1; /* Adjust line height to align with logo */
+  line-height: 1;
 }
+
+.footer-social-icons .social-icon-link {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 1.4em;
+  margin-right: 15px;
+  transition: color 0.3s ease, transform 0.3s ease;
+  display: inline-block;
+}
+
+.footer-social-icons .social-icon-link:hover {
+  color: var(--sp-white) !important;
+  transform: translateY(-3px) scale(1.1);
+}
+
 
 .footer-description {
   font-size: 0.9em;
@@ -326,8 +358,8 @@ body {
   font-weight: bold;
   margin-bottom: 1.5rem;
   color: var(--sp-white);
-  position: relative; /* For underline effect */
-  padding-bottom: 8px; /* Space for underline */
+  position: relative;
+  padding-bottom: 8px;
 }
 
 .footer-heading::after {
@@ -335,9 +367,9 @@ body {
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 50px; /* Width of the underline */
+  width: 50px;
   height: 2px;
-  background-color: var(--sp-white); /* White underline */
+  background-color: var(--sp-white);
 }
 
 .footer-links li {
@@ -353,11 +385,11 @@ body {
 
 .footer-link:hover {
   color: var(--sp-white) !important;
-  padding-left: 5px; /* Slight indent on hover */
+  padding-left: 5px;
 }
 
-.footer-link::before { /* Animated arrow for quick links */
-  content: '\203A'; /* Unicode for single right angle quote */
+.footer-link::before {
+  content: '\203A';
   position: absolute;
   left: -15px;
   opacity: 0;
@@ -366,7 +398,7 @@ body {
 
 .footer-link:hover::before {
   opacity: 1;
-  left: -5px; /* Move arrow to visible position */
+  left: -5px;
 }
 
 
@@ -379,7 +411,7 @@ body {
 .footer-contact-item i {
   color: var(--sp-white);
   font-size: 1em;
-  width: 20px; /* Align icons */
+  width: 20px;
 }
 
 .footer-contact-item a {
@@ -395,10 +427,24 @@ body {
 /* Bottom Copyright Bar */
 .bottom-bar {
   background-color: var(--sp-dark-gray);
-  opacity: 1; /* Ensure full opacity */
-  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Lighter border for contrast */
+  opacity: 1;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.85em;
+}
+
+.footer-policy-links .list-inline-item {
+  margin-right: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-bottom-link {
+  color: rgba(255, 255, 255, 0.6) !important;
+  transition: color 0.3s ease;
+}
+
+.footer-bottom-link:hover {
+  color: var(--sp-white) !important;
 }
 
 
@@ -409,14 +455,15 @@ body {
   }
   .newsletter-form {
     max-width: 100%;
-    justify-content: center;
+    /* flex-direction: column; This is now set as default for .newsletter-form */
+    justify-content: center; /* Center form elements horizontally when stacked */
   }
   .footer .col-md-4 {
-    text-align: center; /* Center footer columns on tablet */
+    text-align: center;
   }
   .footer-heading::after {
     left: 50%;
-    transform: translateX(-50%); /* Center underline */
+    transform: translateX(-50%);
   }
   .footer-links, .footer-contact-item {
     padding-left: 0;
@@ -424,11 +471,14 @@ body {
   .footer-links li {
     text-align: center;
   }
-  .footer-link::before { /* Hide arrow on mobile for centered list */
-    display: none;
+  .footer-link::before {
+    display: none; /* Hide arrow on mobile for centered list */
   }
   .footer-brand {
     justify-content: center;
+  }
+  .footer-social-icons {
+    text-align: center;
   }
 }
 
@@ -466,5 +516,14 @@ body {
   }
   .footer-heading {
     font-size: 1.1em;
+  }
+  .footer-policy-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .footer-policy-links .list-inline-item {
+    margin: 0.25rem 0.75rem;
   }
 }
