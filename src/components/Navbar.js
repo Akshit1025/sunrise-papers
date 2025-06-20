@@ -92,7 +92,7 @@ const Navbar = () => {
             to="/" // Navigate to home page
           >
             <img
-              src="/images/logo.png" // Path to your logo image in public/images/
+              src="/images/logo-no-bg.png" // Path to your logo image in public/images/
               alt="Sunrise Papers Logo"
               style={{ height: "50px", marginRight: "10px" }} // Adjusted height
             />
