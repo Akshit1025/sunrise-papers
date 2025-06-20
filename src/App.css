@@ -1,193 +1,203 @@
 /* src/App.css */
 
-/* --- Custom CSS Variables (Optional but good practice for color scheme) --- */
+/* --- Custom CSS Variables (Primary Color Scheme) --- */
 :root {
-  --sp-dark-gray: #212529; /* Almost black, from logo text */
-  --sp-medium-gray: #495057; /* Dark gray for body text */
-  --sp-light-gray: #f8f9fa; /* Very light gray, page background (top bar background) */
-  --sp-white: #ffffff; /* Pure white for elements on dark background (main navbar background) */
+  --sp-dark-gray: #212529;   /* Almost black, from logo text, used for dark backgrounds */
+  --sp-medium-gray: #495057; /* Dark gray for body text, secondary elements */
+  --sp-light-gray: #f8f9fa;  /* Very light gray, page background */
+  --sp-white: #ffffff;      /* Pure white for elements on dark background, main content background */
+  --sp-accent-blue: #007bff; /* A subtle blue for hover effects/accents, derived from Bootstrap primary */
 }
 
-/* --- Bootstrap Overrides & Global Styles --- */
+/* --- Global Styles & Layout --- */
 body {
   margin: 0;
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--sp-light-gray); /* Overall page background */
-  color: var(--sp-medium-gray); /* Default text color */
+  background-color: var(--sp-light-gray);
+  color: var(--sp-medium-gray);
 }
 
-/* Overall container for the app - Designed for a seamless, professional look */
 .container.custom-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: 0; /* Remove padding from the outer container */
+  padding: 0;
   box-sizing: border-box;
   max-width: 100% !important; /* Force full width for the outermost container */
-  margin: 0 auto; /* Center the entire layout */
+  margin: 0 auto;
 }
 
-/* Specific styling for the top bar */
+/* --- Navbar Styles --- */
 .top-bar {
-  background-color: var(
-    --sp-light-gray
-  ); /* Light gray background for top bar */
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Subtle bottom border */
+  background-color: var(--sp-light-gray);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .top-bar .container {
-  max-width: 1200px; /* Constrain content width within the top bar */
+  max-width: 1200px;
 }
 
 .contact-info {
-  color: var(--sp-medium-gray); /* Text color for contact info */
+  color: var(--sp-medium-gray);
   font-size: 0.9em;
 }
 
+.contact-info a {
+  color: var(--sp-medium-gray) !important;
+  transition: color 0.3s ease;
+}
+
+.contact-info a:hover {
+  color: var(--sp-dark-gray) !important;
+}
+
 .contact-info i {
-  color: var(--sp-dark-gray); /* Icon color */
+  color: var(--sp-dark-gray);
   margin-right: 5px;
 }
 
 .social-icons .social-icon-link {
-  color: var(--sp-medium-gray) !important; /* Default icon color */
+  color: var(--sp-medium-gray) !important;
   font-size: 1.1em;
-  transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition for color and transform */
-  display: inline-block; /* Required for transform to work correctly */
+  transition: color 0.3s ease, transform 0.3s ease;
+  display: inline-block;
 }
 
 .social-icons .social-icon-link:hover {
-  color: var(--sp-dark-gray) !important; /* Darker on hover */
-  transform: translateY(-3px) scale(1.1); /* Subtle popup effect */
+  color: var(--sp-dark-gray) !important;
+  transform: translateY(-3px) scale(1.1);
 }
 
-/* Main Navigation Bar custom styles */
 .custom-main-navbar {
-  border-radius: 0 !important; /* Ensure sharp corners for a full-width bar */
+  border-radius: 0 !important;
   /* shadow-sm from Navbar.js gives a subtle lift */
 }
 
 .navbar-brand img {
-  height: 50px; /* Ensure logo height is consistent */
-  margin-right: 10px; /* Space between logo and any optional text */
-  transition: transform 0.2s ease-in-out; /* Subtle hover animation for logo */
+  height: 50px;
+  margin-right: 10px;
+  transition: transform 0.2s ease-in-out;
 }
 
 .navbar-brand img:hover {
-  transform: scale(1.05); /* Slightly enlarge logo on hover */
+  transform: scale(1.05);
 }
 
 .main-nav-links .nav-item {
-  position: relative; /* Needed for underline animation */
-  margin: 0 15px; /* Spacing between main nav items */
+  position: relative;
+  margin: 0 15px;
 }
 
 .main-nav-links .nav-button {
-  color: var(
-    --sp-dark-gray
-  ) !important; /* Dark gray text for links on light navbar */
+  color: var(--sp-dark-gray) !important;
   background-color: transparent;
   border: none;
-  padding: 0.5rem 0; /* Adjust padding for underline space, no side padding */
+  padding: 0.5rem 0;
   font-size: 1.05em;
   font-weight: 500;
-  transition: color 0.3s ease; /* Only color transition initially */
+  transition: color 0.3s ease;
   position: relative;
-  overflow: hidden; /* Hide overflow for the pseudo-element */
+  overflow: hidden;
 }
 
-/* Underline animation using pseudo-element */
 .main-nav-links .nav-button::before {
-  content: "";
+  content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 2px; /* Thickness of the underline */
-  background-color: var(--sp-dark-gray); /* Underline color */
-  transform: scaleX(0); /* Start hidden */
-  transform-origin: bottom right; /* Animate from right to left */
-  transition: transform 0.3s ease-out; /* Smooth transition */
+  height: 2px;
+  background-color: var(--sp-dark-gray);
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
 }
 
 .main-nav-links .nav-button:hover::before {
-  transform: scaleX(1); /* Expand on hover */
-  transform-origin: bottom left; /* Animate from left to right on hover */
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
 
 .main-nav-links .nav-button:hover {
-  color: #007bff !important; /* Example hover color (Bootstrap primary blue), adjust if needed */
+  color: var(--sp-accent-blue) !important; /* Change text color on hover */
 }
 
-/* Main content area - Seamless with page background */
+
+/* --- Main Content Area --- */
 .main-content {
   flex-grow: 1;
-  background-color: var(--sp-white); /* White background for content area */
+  background-color: var(--sp-white);
   padding: 30px;
-  border-radius: 0; /* Ensure sharp corners */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03); /* Very subtle shadow for depth */
+  border-radius: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
 }
 
-/* Headings and paragraphs - Using color scheme variables */
 .page-title {
-  color: var(--sp-dark-gray); /* Dark gray for headings */
+  color: var(--sp-dark-gray);
   font-size: 2.2em;
   margin-bottom: 25px;
-  border-bottom: 2px solid #ecf0f1; /* Light border */
+  border-bottom: 2px solid #ecf0f1;
   padding-bottom: 10px;
 }
 
 .paragraph {
   line-height: 1.7;
   margin-bottom: 15px;
-  color: var(--sp-medium-gray); /* Medium gray for paragraphs */
+  color: var(--sp-medium-gray);
 }
 
-/* Product Card styles (kept card format as it's a good modern pattern for items) */
-.service-card {
-  background-color: var(--sp-white); /* White background for product cards */
+/* --- Product Card Styles --- */
+.service-card { /* Renamed from .service-card to .product-card internally for clarity */
+  background-color: var(--sp-white);
   padding: 25px;
-  border-radius: 10px; /* Keep rounded corners for individual product cards */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* More pronounced shadow for cards */
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   border: 1px solid #eee;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .service-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
 }
 
-.service-title {
-  color: var(--sp-dark-gray); /* Dark gray for product titles */
+.service-title { /* Used for product title now */
+  color: var(--sp-dark-gray);
   font-size: 1.5em;
   margin-bottom: 10px;
 }
 
-.service-description {
-  color: var(--sp-medium-gray); /* Medium gray for product descriptions */
+.service-description { /* Used for product description now */
+  color: var(--sp-medium-gray);
   line-height: 1.6;
 }
 
-/* Form styles - Using color scheme variables */
+/* --- Form Styles --- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
 .input-field,
 .text-area-field {
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 1em;
-  color: var(--sp-dark-gray); /* Input text color */
+  color: var(--sp-dark-gray);
 }
 
 .input-field::placeholder,
 .text-area-field::placeholder {
-  color: var(--sp-medium-gray); /* Placeholder color */
+  color: var(--sp-medium-gray);
 }
 
 .submit-button {
-  background-color: var(--sp-dark-gray); /* Dark gray submit button */
+  background-color: var(--sp-dark-gray);
   color: var(--sp-white);
   border: none;
   padding: 12px 25px;
@@ -199,11 +209,11 @@ body {
 }
 
 .submit-button:hover {
-  background-color: var(--sp-medium-gray); /* Lighter gray on hover */
+  background-color: var(--sp-medium-gray);
   transform: translateY(-2px);
 }
 
-/* Message boxes (alerts) - Adjusted for new scheme */
+/* --- Message Boxes (Alerts) --- */
 .message-box {
   margin-top: 20px;
   padding: 15px;
@@ -213,57 +223,248 @@ body {
 }
 
 .success-message {
-  background-color: #e6ffe6; /* Keep standard green for success */
+  background-color: #e6ffe6;
   color: #27ae60;
   border: 1px solid #27ae60;
 }
 
 .error-message {
-  background-color: #ffe6e6; /* Keep standard red for error */
+  background-color: #ffe6e6;
   color: #e74c3c;
   border: 1px solid #e74c3c;
 }
 
-/* Footer styles - Seamless with page background */
-.footer {
-  margin-top: 30px;
-  padding: 20px;
-  background-color: var(--sp-dark-gray); /* Dark gray footer */
+/* --- Footer & Newsletter Styles --- */
+.newsletter-section {
+  background-color: var(--sp-dark-gray); /* Dark background for newsletter */
   color: var(--sp-white);
-  text-align: center;
-  border-radius: 0; /* Ensure sharp corners */
-  box-shadow: none; /* No shadow */
+  padding: 50px 0; /* Vertical padding */
 }
 
-.loading-text {
-  text-align: center;
+.newsletter-heading {
+  font-size: 1.8em;
+  margin-bottom: 10px;
+}
+
+.newsletter-form {
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.newsletter-input {
+  background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent white input */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--sp-white) !important;
+  border-radius: 0.375rem; /* Bootstrap default border-radius */
+  padding: 0.75rem 1rem;
+  flex-grow: 1; /* Allow input to take available space */
+}
+
+.newsletter-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.newsletter-input:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+}
+
+.newsletter-button {
+  background-color: var(--sp-white); /* White button */
+  color: var(--sp-dark-gray) !important; /* Dark text */
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-weight: bold;
+  border-radius: 0.375rem;
+  transition: all 0.3s ease;
+}
+
+.newsletter-button:hover {
+  background-color: var(--sp-light-gray); /* Lighter white on hover */
+  transform: translateY(-2px); /* Slight lift */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.newsletter-message {
+  font-size: 0.9em;
+  margin-top: 10px;
+}
+
+
+.footer {
+  background-color: var(--sp-dark-gray); /* Dark background for main footer */
+  color: var(--sp-white); /* Default text color */
+  padding: 50px 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.footer-brand {
+  margin-bottom: 20px;
+}
+
+.footer-logo {
+  height: 60px; /* Slightly larger logo in footer */
+  width: auto;
+}
+
+.footer-company-name {
+  font-size: 1.8em;
+  line-height: 1; /* Adjust line height to align with logo */
+}
+
+.footer-description {
+  font-size: 0.9em;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-heading {
   font-size: 1.2em;
-  color: var(--sp-medium-gray);
-  padding: 50px;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: var(--sp-white);
+  position: relative; /* For underline effect */
+  padding-bottom: 8px; /* Space for underline */
 }
 
-/* Responsive adjustments */
-/* Global container takes full width, and internal content is contained by Bootstrap's .container */
-@media (max-width: 768px) {
-  .top-bar {
-    display: none !important; /* Hide top bar completely on small screens */
+.footer-heading::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50px; /* Width of the underline */
+  height: 2px;
+  background-color: var(--sp-white); /* White underline */
+}
+
+.footer-links li {
+  margin-bottom: 8px;
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 0.95em;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.footer-link:hover {
+  color: var(--sp-white) !important;
+  padding-left: 5px; /* Slight indent on hover */
+}
+
+.footer-link::before { /* Animated arrow for quick links */
+  content: '\203A'; /* Unicode for single right angle quote */
+  position: absolute;
+  left: -15px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.footer-link:hover::before {
+  opacity: 1;
+  left: -5px; /* Move arrow to visible position */
+}
+
+
+.footer-contact-item {
+  font-size: 0.9em;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-contact-item i {
+  color: var(--sp-white);
+  font-size: 1em;
+  width: 20px; /* Align icons */
+}
+
+.footer-contact-item a {
+  color: rgba(255, 255, 255, 0.7) !important;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-contact-item a:hover {
+  color: var(--sp-white) !important;
+}
+
+/* Bottom Copyright Bar */
+.bottom-bar {
+  background-color: var(--sp-dark-gray);
+  opacity: 1; /* Ensure full opacity */
+  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Lighter border for contrast */
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85em;
+}
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 991.98px) { /* Medium devices (tablets) and down */
+  .newsletter-section .text-lg-start {
+    text-align: center !important;
   }
-  .custom-main-navbar .navbar-collapse {
+  .newsletter-form {
+    max-width: 100%;
+    justify-content: center;
+  }
+  .footer .col-md-4 {
+    text-align: center; /* Center footer columns on tablet */
+  }
+  .footer-heading::after {
+    left: 50%;
+    transform: translateX(-50%); /* Center underline */
+  }
+  .footer-links, .footer-contact-item {
+    padding-left: 0;
+  }
+  .footer-links li {
     text-align: center;
   }
-  .main-nav-links {
-    margin-left: 0 !important; /* Override ms-auto */
-    margin-right: 0 !important; /* Override me-auto */
-    width: 100%;
-    justify-content: center; /* Center items in collapsed menu */
+  .footer-link::before { /* Hide arrow on mobile for centered list */
+    display: none;
   }
-  .main-nav-links .nav-item {
-    margin: 5px 0; /* Adjust vertical spacing for collapsed menu */
+  .footer-brand {
+    justify-content: center;
   }
 }
 
-@media (max-width: 480px) {
-  .custom-main-navbar .navbar-brand img {
-    height: 40px; /* Smaller logo on very small screens */
+@media (max-width: 767.98px) { /* Small devices (mobile) and down */
+  .newsletter-section {
+    padding: 30px 0;
+  }
+  .newsletter-heading {
+    font-size: 1.5em;
+  }
+  .newsletter-input, .newsletter-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.9em;
+  }
+  .main-content {
+    padding: 20px;
+  }
+  .page-title {
+    font-size: 1.8em;
+  }
+  .service-card {
+    padding: 20px;
+  }
+  .service-title {
+    font-size: 1.3em;
+  }
+  .footer {
+    padding: 30px 0;
+  }
+  .footer-logo {
+    height: 50px;
+  }
+  .footer-company-name {
+    font-size: 1.5em;
+  }
+  .footer-heading {
+    font-size: 1.1em;
   }
 }
