@@ -15,28 +15,31 @@ body {
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--sp-light-gray);
+  background-color: var(--sp-light-gray); /* This is the main page background color */
   color: var(--sp-medium-gray);
+  overflow-x: hidden; /* Prevent horizontal scrollbar */
 }
 
-.container.custom-container {
+.app-wrapper {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   padding: 0;
   box-sizing: border-box;
-  max-width: 100% !important; /* Force full width for the outermost container */
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
 }
 
 /* --- Navbar Styles --- */
 .top-bar {
   background-color: var(--sp-light-gray);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  width: 100%;
 }
 
 .top-bar .container {
   max-width: 1200px;
+  margin: 0 auto;
 }
 
 .contact-info {
@@ -72,6 +75,8 @@ body {
 
 .custom-main-navbar {
   border-radius: 0 !important;
+  margin-bottom: 0 !important;
+  width: 100%;
 }
 
 .navbar-brand img {
@@ -124,13 +129,130 @@ body {
 }
 
 
-/* --- Main Content Area --- */
-.main-content {
-  flex-grow: 1;
-  background-color: var(--sp-white);
-  padding: 30px;
+/* --- Carousel Section Styles --- */
+#heroCarousel {
+  position: relative;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  border-radius: 0 !important;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-inner {
   border-radius: 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.carousel-item {
+  height: 500px;
+  background-color: var(--sp-dark-gray);
+}
+
+.carousel-img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  opacity: 0.7;
+}
+
+.carousel-caption {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: 80px;
+  padding-top: 80px;
+  background-color: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+}
+
+.carousel-title {
+  font-size: 3.5em;
+  font-weight: bold;
+  color: var(--sp-white);
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.carousel-text {
+  font-size: 1.4em;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.carousel-btn {
+  background-color: var(--sp-white) !important;
+  color: var(--sp-dark-gray) !important;
+  border-color: var(--sp-white) !important;
+  font-weight: 600;
+  padding: 12px 30px;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.carousel-btn:hover {
+  background-color: var(--sp-dark-gray) !important;
+  color: var(--sp-white) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-image: none;
+  font-size: 2.5rem;
+  color: var(--sp-white);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.carousel-control-prev-icon::before {
+  content: '\276E';
+}
+
+.carousel-control-next-icon::before {
+  content: '\276F';
+}
+
+.carousel-control-prev:hover .carousel-control-prev-icon,
+.carousel-control-next:hover .carousel-control-next-icon {
+  opacity: 1;
+}
+
+.carousel-indicators [data-bs-target] {
+  background-color: var(--sp-white);
+  opacity: 0.5;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.carousel-indicators .active {
+  opacity: 1;
+  background-color: var(--sp-white);
+}
+
+
+/* --- Main Content Section for Pages --- */
+/* This class will wrap the actual content within each page component */
+.content-section {
+  flex-grow: 1;
+  background-color: transparent; /* Changed to transparent */
+  box-shadow: none; /* Removed shadow */
+  border: none; /* Removed border */
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto 30px auto;
 }
 
 .page-title {
@@ -147,97 +269,206 @@ body {
   color: var(--sp-medium-gray);
 }
 
-/* --- Product Card Styles --- */
-.service-card {
-  background-color: var(--sp-white);
-  padding: 25px;
+.sub-heading {
+  color: var(--sp-dark-gray);
+  font-size: 1.6em;
+}
+
+
+/* --- Homepage Specific Styles --- */
+.hero-section {
+  background-color: var(--sp-dark-gray);
+  color: var(--sp-white);
+  padding: 80px 0;
+  text-align: center;
+  width: 100%; /* Ensure full width */
+}
+
+.hero-title {
+  font-size: 3em;
+  margin-bottom: 15px;
+  color: var(--sp-white);
+}
+
+.hero-subtitle {
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-btn {
+  background-color: var(--sp-white) !important;
+  color: var(--sp-dark-gray) !important;
+  border-color: var(--sp-white) !important;
+  font-weight: 600;
+  padding: 12px 30px;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.hero-btn:hover {
+  background-color: var(--sp-medium-gray) !important;
+  color: var(--sp-white) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.featured-section {
+  background-color: var(--sp-light-gray);
+  padding: 50px 0;
+  text-align: center;
+  width: 100%; /* Ensure full width */
+}
+
+.feature-card {
+  background-color: var(--sp-white); /* Keep white background for individual cards */
+  padding: 30px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   border: 1px solid #eee;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.service-card:hover {
+.feature-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 16px rgba(0,0,0,0.15);
 }
 
-.service-title {
+.feature-card i {
+  color: var(--sp-accent-blue);
+  margin-bottom: 15px;
+}
+
+.feature-title {
   color: var(--sp-dark-gray);
-  font-size: 1.5em;
+  font-size: 1.4em;
   margin-bottom: 10px;
 }
 
-.service-description {
+.feature-description {
   color: var(--sp-medium-gray);
-  line-height: 1.6;
+  font-size: 0.95em;
 }
+
+/* --- About Page Specific Styles --- */
+.values-list {
+  font-size: 1.05em;
+  line-height: 1.8;
+}
+
+.values-list li {
+  margin-bottom: 10px;
+}
+
+.values-list i {
+  color: var(--sp-accent-blue);
+}
+
+
+/* --- Products Page Specific Styles --- */
+.product-card {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  background-color: var(--sp-white); /* Keep white background for individual product cards */
+  overflow: hidden;
+}
+
+.product-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.product-image {
+  height: 250px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.product-title {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.product-description {
+  font-size: 0.9em;
+  color: var(--sp-medium-gray);
+}
+
+.product-details-btn {
+  border-color: var(--sp-dark-gray) !important;
+  color: var(--sp-dark-gray) !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.product-details-btn:hover {
+  background-color: var(--sp-dark-gray) !important;
+  color: var(--sp-white) !important;
+}
+
+
+/* --- Contact Page Specific Styles --- */
+.contact-form-card, .contact-info-card {
+  background-color: var(--sp-white); /* Keep white background for contact form/info cards */
+  border-radius: 10px;
+  border: 1px solid #eee;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Keep shadows for these cards */
+}
+
+.contact-info-card {
+  background-color: var(--sp-light-gray);
+}
+
+.contact-details-list li {
+  font-size: 1.05em;
+  margin-bottom: 20px;
+}
+
+.contact-details-list i {
+  color: var(--sp-accent-blue);
+  font-size: 1.2em;
+  width: 25px;
+}
+
+.contact-details-list a {
+  color: var(--sp-dark-gray) !important;
+  transition: color 0.3s ease;
+}
+
+.contact-details-list a:hover {
+  color: var(--sp-accent-blue) !important;
+}
+
 
 /* --- Form Styles --- */
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.input-field,
-.text-area-field {
-  padding: 12px;
+.form .input-field,
+.form .text-area-field {
+  border-radius: 8px;
+  padding: 10px 15px;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1em;
-  color: var(--sp-dark-gray);
 }
 
-.input-field::placeholder,
-.text-area-field::placeholder {
-  color: var(--sp-medium-gray);
+.form .input-field:focus,
+.form .text-area-field:focus {
+  border-color: var(--sp-accent-blue);
+  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
 }
 
-.submit-button {
-  background-color: var(--sp-dark-gray);
-  color: var(--sp-white);
-  border: none;
-  padding: 12px 25px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1.1em;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+.form .submit-button {
+  border-radius: 50px;
 }
 
-.submit-button:hover {
-  background-color: var(--sp-medium-gray);
-  transform: translateY(-2px);
-}
-
-/* --- Message Boxes (Alerts) --- */
-.message-box {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 8px;
-  font-size: 0.95em;
-  text-align: center;
-}
-
-.success-message {
-  background-color: #e6ffe6;
-  color: #27ae60;
-  border: 1px solid #27ae60;
-}
-
-.error-message {
-  background-color: #ffe6e6;
-  color: #e74c3c;
-  border: 1px solid #e74c3c;
-}
 
 /* --- Footer & Newsletter Styles --- */
 .newsletter-section {
   background-color: var(--sp-dark-gray);
   color: var(--sp-white);
   padding: 50px 0;
+  margin-top: 0 !important;
+  width: 100%;
 }
 
 .newsletter-heading {
@@ -249,12 +480,10 @@ body {
   max-width: 500px;
   margin-left: auto;
   margin-right: auto;
-  /* Ensure form elements stack on small screens and then go side-by-side */
-  flex-direction: column; /* Default to column for mobile */
+  flex-direction: column;
 }
 
-/* For small screens and up, make it a row */
-@media (min-width: 576px) { /* Bootstrap's 'sm' breakpoint */
+@media (min-width: 576px) {
   .newsletter-form {
     flex-direction: row;
   }
@@ -287,15 +516,14 @@ body {
   font-weight: bold;
   border-radius: 0.375rem;
   transition: all 0.3s ease;
-  width: 100%; /* Make button full width on mobile */
+  width: 100%;
 }
 
-/* For small screens and up, button aligns to content */
 @media (min-width: 576px) {
   .newsletter-button {
-    width: auto; /* Revert to auto width on sm+ */
-    margin-left: 0.5rem; /* Re-add margin to the left for side-by-side */
-    margin-top: 0; /* Remove top margin */
+    width: auto;
+    margin-left: 0.5rem;
+    margin-top: 0;
   }
 }
 
@@ -317,6 +545,8 @@ body {
   padding: 50px 0;
   border-radius: 0;
   box-shadow: none;
+  margin-top: 0 !important;
+  width: 100%;
 }
 
 .footer-brand {
@@ -431,6 +661,7 @@ body {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.85em;
+  width: 100%;
 }
 
 .footer-policy-links .list-inline-item {
@@ -455,8 +686,7 @@ body {
   }
   .newsletter-form {
     max-width: 100%;
-    /* flex-direction: column; This is now set as default for .newsletter-form */
-    justify-content: center; /* Center form elements horizontally when stacked */
+    justify-content: center;
   }
   .footer .col-md-4 {
     text-align: center;
@@ -472,13 +702,18 @@ body {
     text-align: center;
   }
   .footer-link::before {
-    display: none; /* Hide arrow on mobile for centered list */
+    display: none;
   }
   .footer-brand {
     justify-content: center;
   }
   .footer-social-icons {
     text-align: center;
+  }
+
+  .content-section {
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
 
@@ -493,7 +728,7 @@ body {
     padding: 0.6rem 1rem;
     font-size: 0.9em;
   }
-  .main-content {
+  .content-section {
     padding: 20px;
   }
   .page-title {
@@ -525,5 +760,29 @@ body {
   }
   .footer-policy-links .list-inline-item {
     margin: 0.25rem 0.75rem;
+  }
+
+  .carousel-title {
+    font-size: 2em;
+  }
+  .carousel-text {
+    font-size: 1em;
+  }
+  .carousel-item {
+    height: 350px;
+  }
+  .carousel-btn {
+    padding: 8px 20px;
+    font-size: 0.9em;
+  }
+
+  .hero-title {
+    font-size: 2.2em;
+  }
+  .hero-subtitle {
+    font-size: 1em;
+  }
+  .hero-section {
+    padding: 40px 0;
   }
 }

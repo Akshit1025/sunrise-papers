@@ -83,7 +83,7 @@ const Navbar = () => {
       </div>
 
       {/* Main Navigation Bar */}
-      <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm custom-main-navbar">
+      <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm custom-main-navbar mb-0">
         <div className="container-fluid">
           {/* Company logo */}
           <Link

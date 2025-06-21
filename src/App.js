@@ -50,18 +50,20 @@ const App = () => {
   }, []); // The empty dependency array ensures this effect runs only once on component mount
 
   return (
-    // Use Bootstrap container for overall layout, combined with custom 'container' class for specific styling
-    <div className="container custom-container d-flex flex-column min-vh-100">
+    <div className="app-wrapper">
       <Navbar />
-      {/* Bootstrap padding classes, and custom 'main-content' for specific styling */}
-      <div className="main-content flex-grow-1 p-3 p-md-4">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/products" element={<ProductsPage authReady={authReady} />} />
-          <Route path="/contact" element={<ContactPage userId={userId} authReady={authReady} />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route
+          path="/products"
+          element={<ProductsPage authReady={authReady} />}
+        />
+        <Route
+          path="/contact"
+          element={<ContactPage userId={userId} authReady={authReady} />}
+        />
+      </Routes>
       <Footer />
     </div>
   );
