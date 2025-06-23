@@ -113,43 +113,25 @@
   background-color: var(--sp-white);
 }
 
-/* Hero Section */
-.hero-section {
-  background-color: var(--sp-dark-gray);
-  color: var(--sp-white);
+/* About Company Section Styles */
+.about-company-section {
+  background-color: var(--sp-white);
   padding: 80px 0;
-  text-align: center;
-  width: 100%;
 }
 
-.hero-title {
-  font-size: 3em;
-  margin-bottom: 15px;
-  color: var(--sp-white);
+.about-company-section .page-title {
+  text-align: left;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 20px;
 }
 
-.hero-subtitle {
-  font-size: 1.2em;
-  color: rgba(255, 255, 255, 0.8);
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.hero-btn {
-  background-color: var(--sp-white) !important;
-  color: var(--sp-dark-gray) !important;
-  border-color: var(--sp-white) !important;
-  font-weight: 600;
-  padding: 12px 30px;
-  border-radius: 50px;
-  transition: all 0.3s ease;
-}
-
-.hero-btn:hover {
-  background-color: var(--sp-medium-gray) !important;
-  color: var(--sp-white) !important;
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+/* New: Styling for the image within the about-company-section on smaller screens */
+.about-company-section .col-12 img {
+  max-width: 70%; /* Limit image width to 70% of its parent column */
+  height: auto; /* Maintain aspect ratio */
+  display: block; /* Ensures margin auto works */
+  margin: 0 auto 30px auto; /* Center the image and add bottom margin */
 }
 
 /* Featured Section */
@@ -205,14 +187,21 @@
     padding: 8px 20px;
     font-size: 0.9em;
   }
-
-  .hero-title {
-    font-size: 2.2em;
-  }
-  .hero-subtitle {
-    font-size: 1em;
-  }
-  .hero-section {
+  .about-company-section {
     padding: 40px 0;
+  }
+  .about-company-section .page-title {
+    text-align: center;
+  }
+  .about-company-section .col-12 img {
+    max-width: 90%; /* Allow larger on phones, but still constrained */
+    margin-bottom: 20px; /* Adjust spacing */
+  }
+}
+
+/* Specific rule for tablet (md) screens - still stacks, but image controlled */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .about-company-section .col-12 img {
+    max-width: 60%; /* Slightly larger on tablets than phones, but not full width */
   }
 }

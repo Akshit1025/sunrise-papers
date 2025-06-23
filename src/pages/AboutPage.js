@@ -5,19 +5,16 @@ import { Link } from "react-router-dom";
 
 const AboutPage = () => (
   <div className="py-5">
-    {" "}
-    {/* Removed .content-section, using py-5 for direct padding */}
     <div className="container">
-      {" "}
-      {/* Use Bootstrap container for content */}
       <h2 className="page-title" style={{ color: "var(--sp-dark-gray)" }}>
         About Us
       </h2>
       <p className="paragraph lead">
         Founded in 20XX, Sunrise Papers has rapidly grown to become a leader in
-        the paper industry, driven by a commitment to innovation, quality, and
-        environmental stewardship.
+        the paper trading industry, driven by a commitment to innovation,
+        quality, and environmental stewardship.
       </p>
+
       <div className="row g-5 mt-4 align-items-center">
         <div className="col-md-6 order-md-2">
           <img
@@ -36,15 +33,17 @@ const AboutPage = () => (
           </p>
           <h3 className="sub-heading fw-bold mt-4 mb-3">Our Vision</h3>
           <p className="paragraph">
-            To be the global leader in sustainable paper manufacturing,
-            recognized for our innovative products, operational excellence, and
-            unwavering commitment to a greener future. We envision a world where
-            essential paper products are produced with minimal environmental
-            impact.
+            To be the global leader in sustainable paper **supply and
+            distribution**, recognized for our innovative products, operational
+            excellence, and unwavering commitment to a greener future. We
+            envision a world where essential paper products are **sourced and
+            supplied** with minimal environmental impact.
           </p>
         </div>
       </div>
+
       <hr className="my-5" />
+
       <div className="row g-5 align-items-center">
         <div className="col-md-6">
           <img
@@ -64,7 +63,7 @@ const AboutPage = () => (
             <li className="mb-2">
               <i className="fas fa-check-circle me-2 text-primary"></i>{" "}
               <strong>Sustainability:</strong> Protecting our planet through
-              responsible resource management.
+              responsible resource management and **ethical sourcing**.
             </li>
             <li className="mb-2">
               <i className="fas fa-check-circle me-2 text-primary"></i>{" "}
@@ -87,6 +86,7 @@ const AboutPage = () => (
           </Link>
         </div>
       </div>
+
       <div className="text-center mt-5">
         <h3 className="sub-heading fw-bold mb-3">
           Meet Our Team (Placeholder)
