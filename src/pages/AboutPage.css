@@ -1,0 +1,14 @@
+/* src/pages/AboutPage.css */
+
+.values-list {
+  font-size: 1.05em;
+  line-height: 1.8;
+}
+
+.values-list li {
+  margin-bottom: 10px;
+}
+
+.values-list i {
+  color: var(--sp-accent-blue);
+}

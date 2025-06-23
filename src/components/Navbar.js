@@ -24,7 +24,7 @@ const Navbar = () => {
         <div className="container d-flex justify-content-between align-items-center">
           <div className="contact-info text-muted small">
             <a
-              href="mailto:info@sunrisepapers.com"
+              href="mailto:dineshgupta@sunrisepapers.co.in"
               className="text-muted text-decoration-none"
             >
               <i className="fas fa-envelope me-2"></i>

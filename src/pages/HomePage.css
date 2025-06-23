@@ -1,0 +1,218 @@
+/* src/pages/HomePage.css */
+
+/* Carousel Section */
+#heroCarousel {
+  position: relative;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  border-radius: 0 !important;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-inner {
+  border-radius: 0;
+}
+
+.carousel-item {
+  height: 500px;
+  background-color: var(--sp-dark-gray);
+}
+
+.carousel-img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  opacity: 0.7;
+}
+
+.carousel-caption {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: 80px;
+  padding-top: 80px;
+  background-color: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+}
+
+.carousel-title {
+  font-size: 3.5em;
+  font-weight: bold;
+  color: var(--sp-white);
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.carousel-text {
+  font-size: 1.4em;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.carousel-btn {
+  background-color: var(--sp-white) !important;
+  color: var(--sp-dark-gray) !important;
+  border-color: var(--sp-white) !important;
+  font-weight: 600;
+  padding: 12px 30px;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.carousel-btn:hover {
+  background-color: var(--sp-dark-gray) !important;
+  color: var(--sp-white) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-image: none;
+  font-size: 2.5rem;
+  color: var(--sp-white);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.carousel-control-prev-icon::before {
+  content: "\276E";
+}
+
+.carousel-control-next-icon::before {
+  content: "\276F";
+}
+
+.carousel-control-prev:hover .carousel-control-prev-icon,
+.carousel-control-next:hover .carousel-control-next-icon {
+  opacity: 1;
+}
+
+.carousel-indicators [data-bs-target] {
+  background-color: var(--sp-white);
+  opacity: 0.5;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.carousel-indicators .active {
+  opacity: 1;
+  background-color: var(--sp-white);
+}
+
+/* Hero Section */
+.hero-section {
+  background-color: var(--sp-dark-gray);
+  color: var(--sp-white);
+  padding: 80px 0;
+  text-align: center;
+  width: 100%;
+}
+
+.hero-title {
+  font-size: 3em;
+  margin-bottom: 15px;
+  color: var(--sp-white);
+}
+
+.hero-subtitle {
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-btn {
+  background-color: var(--sp-white) !important;
+  color: var(--sp-dark-gray) !important;
+  border-color: var(--sp-white) !important;
+  font-weight: 600;
+  padding: 12px 30px;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.hero-btn:hover {
+  background-color: var(--sp-medium-gray) !important;
+  color: var(--sp-white) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Featured Section */
+.featured-section {
+  background-color: var(--sp-light-gray);
+  padding: 50px 0;
+  text-align: center;
+  width: 100%;
+}
+
+.feature-card {
+  background-color: var(--sp-white);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eee;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.feature-card i {
+  color: var(--sp-accent-blue);
+  margin-bottom: 15px;
+}
+
+.feature-title {
+  color: var(--sp-dark-gray);
+  font-size: 1.4em;
+  margin-bottom: 10px;
+}
+
+.feature-description {
+  color: var(--sp-medium-gray);
+  font-size: 0.95em;
+}
+
+/* Responsive adjustments for HomePage */
+@media (max-width: 767.98px) {
+  .carousel-title {
+    font-size: 2em;
+  }
+  .carousel-text {
+    font-size: 1em;
+  }
+  .carousel-item {
+    height: 350px;
+  }
+  .carousel-btn {
+    padding: 8px 20px;
+    font-size: 0.9em;
+  }
+
+  .hero-title {
+    font-size: 2.2em;
+  }
+  .hero-subtitle {
+    font-size: 1em;
+  }
+  .hero-section {
+    padding: 40px 0;
+  }
+}

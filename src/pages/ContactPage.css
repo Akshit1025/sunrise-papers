@@ -1,0 +1,52 @@
+/* src/pages/ContactPage.css */
+
+.contact-form-card,
+.contact-info-card {
+  background-color: var(--sp-white);
+  border-radius: 10px;
+  border: 1px solid #eee;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.contact-info-card {
+  background-color: var(--sp-light-gray);
+}
+
+.contact-details-list li {
+  font-size: 1.05em;
+  margin-bottom: 20px;
+}
+
+.contact-details-list i {
+  color: var(--sp-accent-blue);
+  font-size: 1.2em;
+  width: 25px;
+}
+
+.contact-details-list a {
+  color: var(--sp-dark-gray) !important;
+  transition: color 0.3s ease;
+}
+
+.contact-details-list a:hover {
+  color: var(--sp-accent-blue) !important;
+}
+
+/* Form Styles - Specific to Contact Page's form */
+.form .input-field,
+.form .text-area-field {
+  border-radius: 8px;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+}
+
+.form .input-field:focus,
+.form .text-area-field:focus {
+  border-color: var(--sp-accent-blue);
+  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+.form .submit-button {
+  border-radius: 50px;
+}
