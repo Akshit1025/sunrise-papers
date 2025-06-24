@@ -1,42 +1,215 @@
-/* src/pages/ProductsPage.css */
+/* src/pages/HomePage.css */
 
-.product-card {
-  transition: all 0.3s ease;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-  background-color: var(--sp-white);
+/* Carousel Section */
+#heroCarousel {
+  position: relative;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  border-radius: 0 !important;
+  width: 100%;
   overflow: hidden;
 }
 
-.product-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+.carousel-inner {
+  border-radius: 0;
 }
 
-.product-image {
-  height: 250px;
+.carousel-item {
+  height: 500px;
+  background-color: var(--sp-dark-gray);
+}
+
+.carousel-img {
   object-fit: cover;
+  height: 100%;
   width: 100%;
+  opacity: 0.7;
 }
 
-.product-title {
-  font-size: 1.3em;
+.carousel-caption {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: 80px;
+  padding-top: 80px;
+  background-color: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+}
+
+.carousel-title {
+  font-size: 3.5em;
   font-weight: bold;
+  color: var(--sp-white);
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.product-description {
-  font-size: 0.9em;
-  color: var(--sp-medium-gray);
+.carousel-text {
+  font-size: 1.4em;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-.product-details-btn {
-  border-color: var(--sp-dark-gray) !important;
+.carousel-btn {
+  background-color: var(--sp-white) !important;
   color: var(--sp-dark-gray) !important;
-  font-weight: 500;
+  border-color: var(--sp-white) !important;
+  font-weight: 600;
+  padding: 12px 30px;
+  border-radius: 50px;
   transition: all 0.3s ease;
 }
 
-.product-details-btn:hover {
+.carousel-btn:hover {
   background-color: var(--sp-dark-gray) !important;
   color: var(--sp-white) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-image: none;
+  font-size: 2.5rem;
+  color: var(--sp-white);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.carousel-control-prev-icon::before {
+  content: '\276E';
+}
+
+.carousel-control-next-icon::before {
+  content: '\276F';
+}
+
+.carousel-control-prev:hover .carousel-control-prev-icon,
+.carousel-control-next:hover .carousel-control-next-icon {
+  opacity: 1;
+}
+
+.carousel-indicators [data-bs-target] {
+  background-color: var(--sp-white);
+  opacity: 0.5;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.carousel-indicators .active {
+  opacity: 1;
+  background-color: var(--sp-white);
+}
+
+/* About Company Section Styles */
+.about-company-section {
+  background-color: var(--sp-white);
+  padding: 80px 0;
+}
+
+.about-company-section .page-title {
+  text-align: left;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 20px;
+}
+
+/* Styling for the image within the about-company-section on smaller screens */
+.about-company-section .col-12 img {
+  max-width: 70%; /* Limit image width to 70% of its parent column */
+  height: auto; /* Maintain aspect ratio */
+  display: block; /* Ensures margin auto works */
+  margin: 0 auto 30px auto; /* Center the image and add bottom margin */
+}
+
+/* New: Homepage Products Section */
+.homepage-products-section {
+  background-color: var(--sp-light-gray); /* Light background for visual separation */
+  padding: 50px 0;
+  text-align: center; /* Center the products title and view all button */
+}
+
+/* Featured Section (Our Core Strengths) */
+.featured-section {
+  background-color: var(--sp-light-gray);
+  padding: 50px 0;
+  text-align: center;
+  width: 100%;
+}
+
+.feature-card {
+  background-color: var(--sp-white);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border: 1px solid #eee;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.feature-card i {
+  color: var(--sp-accent-blue);
+  margin-bottom: 15px;
+}
+
+.feature-title {
+  color: var(--sp-dark-gray);
+  font-size: 1.4em;
+  margin-bottom: 10px;
+}
+
+.feature-description {
+  color: var(--sp-medium-gray);
+  font-size: 0.95em;
+}
+
+/* Responsive adjustments for HomePage */
+@media (max-width: 767.98px) {
+  .carousel-title {
+    font-size: 2em;
+  }
+  .carousel-text {
+    font-size: 1em;
+  }
+  .carousel-item {
+    height: 350px;
+  }
+  .carousel-btn {
+    padding: 8px 20px;
+    font-size: 0.9em;
+  }
+  .about-company-section {
+    padding: 40px 0;
+  }
+  .about-company-section .page-title {
+    text-align: center;
+  }
+  /* Image max-width on phones */
+  .about-company-section .col-12 img {
+    max-width: 90%;
+    margin-bottom: 20px;
+  }
+}
+
+/* Specific rule for tablet (md) screens - still stacks, but image controlled */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .about-company-section .col-12 img {
+    max-width: 60%;
+  }
 }
