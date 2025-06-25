@@ -1,7 +1,6 @@
 // src/pages/AboutPage.js
 
 import React from "react";
-import { Link } from "react-router-dom";
 
 const AboutPage = () => (
   <>
@@ -124,8 +123,8 @@ const AboutPage = () => (
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-1-2s">
                 <i className="fas fa-map-marker-alt me-2 text-primary"></i>{" "}
-                <strong>Registered Address:</strong> Unit No. 390, Vegas Mall,
-                Plot No. 6, Sector 14, Dwarka, New Delhi, 110078, India
+                <strong>Registered Address:</strong> 107, Vardhman, Crystal
+                Plaza, CD Block, Pitampura, Delhi- 110088, Delhi, India
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-1-5s">
                 <i className="fas fa-users me-2 text-primary"></i>{" "}
@@ -143,37 +142,12 @@ const AboutPage = () => (
                 <i className="fas fa-wallet me-2 text-primary"></i>{" "}
                 <strong>Annual Turnover:</strong> Rs. 25 - 50 Crores
               </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    {/* Statutory Profile Section */}
-    <section className="statutory-profile-section py-5 bg-light">
-      <div className="container">
-        <div className="row align-items-center g-5">
-          <div className="col-lg-6">
-            <h3 className="sub-heading fw-bold mb-3 animate__animated animate__fadeInLeft">
-              Statutory Profile:
-            </h3>
-            <ul className="list-unstyled company-info-list">
-              <li className="animate__animated animate__fadeInLeft animate__delay-0-3s">
-                <i className="fas fa-building me-2 text-primary"></i>{" "}
-                <strong>Banker:</strong> ICICI Bank
-              </li>
-              <li className="animate__animated animate__fadeInLeft animate__delay-0-6s">
+              {/* Moved GST No. here from Statutory Profile */}
+              <li className="animate__animated animate__fadeInRight animate__delay-2-7s">
                 <i className="fas fa-barcode me-2 text-primary"></i>{" "}
                 <strong>GST No.:</strong> 07AAJPK3664M1Z9
               </li>
             </ul>
-          </div>
-          <div className="col-lg-6 text-center">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/ICICI_Bank_Logo.svg/250px-ICICI_Bank_Logo.svg.png"
-              alt="ICICI Bank Logo"
-              className="img-fluid bank-logo animate__animated animate__fadeInRight"
-            />
           </div>
         </div>
       </div>
