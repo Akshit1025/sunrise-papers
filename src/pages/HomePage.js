@@ -317,7 +317,7 @@ const HomePage = () => {
                 ))}
               </div>
               {/* Conditional rendering for "View All Products" button */}
-              {!loading && products.length > 0 && (
+              {/* {!loading && products.length > 0 && (
                 <div className="text-center mt-5">
                   <Link
                     to="/products"
@@ -326,7 +326,7 @@ const HomePage = () => {
                     View All Products
                   </Link>
                 </div>
-              )}
+              )} */}
             </>
           )}
         </div>
