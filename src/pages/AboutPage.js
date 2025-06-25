@@ -110,41 +110,41 @@ const AboutPage = () => (
             </h3>
             <ul className="list-unstyled company-info-list">
               <li className="animate__animated animate__fadeInRight animate__delay-0-3s">
-                <i className="fas fa-dot-circle me-2 text-primary"></i>{" "}
+                <i className="fas fa-dot-circle me-2"></i>{" "}
                 <strong>Nature of Business:</strong> Wholesale Supplier
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-0-6s">
-                <i className="fas fa-dot-circle me-2 text-primary"></i>{" "}
+                <i className="fas fa-dot-circle me-2"></i>{" "}
                 <strong>Additional Business:</strong> Trader and Importer
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-0-9s">
-                <i className="fas fa-dot-circle me-2 text-primary"></i>{" "}
+                <i className="fas fa-dot-circle me-2"></i>{" "}
                 <strong>Company CEO:</strong> Dinesh Gupta
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-1-2s">
-                <i className="fas fa-map-marker-alt me-2 text-primary"></i>{" "}
+                <i className="fas fa-map-marker-alt me-2"></i>{" "}
                 <strong>Registered Address:</strong> 107, Vardhman, Crystal
                 Plaza, CD Block, Pitampura, Delhi- 110088, Delhi, India
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-1-5s">
-                <i className="fas fa-users me-2 text-primary"></i>{" "}
+                <i className="fas fa-users me-2"></i>{" "}
                 <strong>Total No. of Employees:</strong> 11 to 25 people
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-1-8s">
-                <i className="fas fa-calendar-alt me-2 text-primary"></i>{" "}
+                <i className="fas fa-calendar-alt me-2"></i>{" "}
                 <strong>Year of Establishment:</strong> 1990
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-2-1s">
-                <i className="fas fa-balance-scale me-2 text-primary"></i>{" "}
+                <i className="fas fa-balance-scale me-2"></i>{" "}
                 <strong>Legal Status of Firm:</strong> Individual - Proprietor
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-2-4s">
-                <i className="fas fa-wallet me-2 text-primary"></i>{" "}
+                <i className="fas fa-wallet me-2"></i>{" "}
                 <strong>Annual Turnover:</strong> Rs. 25 - 50 Crores
               </li>
               {/* Moved GST No. here from Statutory Profile */}
               <li className="animate__animated animate__fadeInRight animate__delay-2-7s">
-                <i className="fas fa-barcode me-2 text-primary"></i>{" "}
+                <i className="fas fa-barcode me-2"></i>{" "}
                 <strong>GST No.:</strong> 07AAJPK3664M1Z9
               </li>
             </ul>
@@ -174,23 +174,23 @@ const AboutPage = () => (
             </p>
             <ul className="list-unstyled values-list">
               <li className="animate__animated animate__fadeInLeft animate__delay-0-7s">
-                <i className="fas fa-shipping-fast me-2 text-primary"></i>{" "}
+                <i className="fas fa-shipping-fast me-2"></i>{" "}
                 Prompt delivery of an order
               </li>
               <li className="animate__animated animate__fadeInLeft animate__delay-0-9s">
-                <i className="fas fa-handshake me-2 text-primary"></i> Ethical
+                <i className="fas fa-handshake me-2"></i> Ethical
                 business deals
               </li>
               <li className="animate__animated animate__fadeInLeft animate__delay-1-1s">
-                <i className="fas fa-shield-alt me-2 text-primary"></i>{" "}
+                <i className="fas fa-shield-alt me-2"></i>{" "}
                 Transparency
               </li>
               <li className="animate__animated animate__fadeInLeft animate__delay-1-3s">
-                <i className="fas fa-tags me-2 text-primary"></i> Attractive
+                <i className="fas fa-tags me-2"></i> Attractive
                 Prices with technically superior products
               </li>
               <li className="animate__animated animate__fadeInLeft animate__delay-1-5s">
-                <i className="fas fa-globe me-2 text-primary"></i> Huge
+                <i className="fas fa-globe me-2"></i> Huge
                 distribution network
               </li>
             </ul>
