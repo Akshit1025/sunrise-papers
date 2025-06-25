@@ -1,5 +1,70 @@
 /* src/pages/AboutPage.css */
 
+/* About Us Hero Section */
+.about-hero-section {
+  background-image: url('https://placehold.co/1920x400/495057/ffffff?text=About+Us+Background'); /* Placeholder background image */
+  background-size: cover;
+  background-position: center;
+  height: 300px; /* Adjust height as needed */
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sp-white);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.about-hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4); /* Dark overlay */
+  z-index: 1;
+}
+
+.about-hero-section .container {
+  z-index: 2; /* Ensure content is above overlay */
+}
+
+.about-hero-title {
+  font-size: 3.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.about-hero-subtitle {
+  font-size: 1.5em;
+}
+
+
+/* General Section Styles (applies to all main content sections) */
+.glance-at-sunrise-section,
+.our-team-section,
+.company-profile-section,
+.statutory-profile-section,
+.why-us-section,
+.quality-assurance-section {
+  padding: 80px 0; /* Default large screen padding */
+}
+
+.glance-at-sunrise-section,
+.company-profile-section,
+.why-us-section {
+  background-color: var(--sp-white); /* White background */
+}
+
+.our-team-section,
+.statutory-profile-section,
+.quality-assurance-section {
+  background-color: var(--sp-light-gray); /* Light gray background */
+}
+
+
+/* Specific list styles (values-list from previous version, reused here) */
 .values-list {
   font-size: 1.05em;
   line-height: 1.8;
@@ -10,5 +75,155 @@
 }
 
 .values-list i {
+  color: var(--sp-accent-blue); /* Uses variable from App.css */
+}
+
+.company-info-list {
+  font-size: 1.05em;
+  line-height: 2; /* Increased line height for readability */
+}
+
+.company-info-list li {
+  margin-bottom: 8px;
+}
+
+.company-info-list i {
   color: var(--sp-accent-blue);
+  width: 20px; /* Align icons */
+}
+
+/* Image specific sizing for smaller screens (when columns stack) */
+.glance-at-sunrise-section .img-fluid,
+.our-team-section .img-fluid,
+.company-profile-section .img-fluid,
+.quality-assurance-section .img-fluid {
+  max-width: 80%; /* Limit images to 80% width when stacked on tablets/mobile */
+  display: block; /* Ensure margin auto works */
+  margin: 0 auto; /* Center the image */
+}
+
+.company-profile-section .img-fluid {
+  margin-bottom: 30px; /* Add margin below the image when stacked */
+}
+
+
+/* Statutory profile bank logo specific styling */
+.bank-logo {
+  max-width: 250px; /* Control size of bank logo on large screens */
+  height: auto;
+  margin-top: 20px;
+}
+
+/* Quality assurance seal specific styling */
+.quality-seal-img {
+  max-width: 300px; /* Control size of quality seal image on large screens */
+  height: auto;
+  margin-top: 20px;
+}
+
+
+/* Responsive adjustments for AboutPage */
+@media (max-width: 991.98px) { /* Tablet screens (md breakpoint) and down */
+  .about-hero-section {
+    height: 250px;
+  }
+  .about-hero-title {
+    font-size: 2.8em;
+  }
+  .about-hero-subtitle {
+    font-size: 1.2em;
+  }
+
+  /* Adjust padding for all main content sections on tablets */
+  .glance-at-sunrise-section,
+  .our-team-section,
+  .company-profile-section,
+  .statutory-profile-section,
+  .why-us-section,
+  .quality-assurance-section {
+    padding: 60px 0;
+  }
+
+  /* Center text content for columns when they stack on tablet */
+  .glance-at-sunrise-section .col-lg-6,
+  .our-team-section .col-lg-6,
+  .company-profile-section .col-lg-6,
+  .statutory-profile-section .col-lg-6,
+  .why-us-section .col-lg-6,
+  .quality-assurance-section .col-lg-6 {
+    text-align: center; /* Center column content when stacked */
+  }
+
+  /* Specific image sizing for tablet portrait */
+  .glance-at-sunrise-section .img-fluid,
+  .our-team-section .img-fluid,
+  .company-profile-section .img-fluid,
+  .quality-assurance-section .img-fluid {
+    max-width: 60%; /* More aggressive image sizing for tablets */
+    margin-bottom: 30px; /* Add space below image when it's above text */
+  }
+
+  /* Adjust specific logos/seals on tablet */
+  .bank-logo,
+  .quality-seal-img {
+    max-width: 200px;
+    margin-bottom: 30px; /* Add margin below stacked logo */
+  }
+
+  /* Ensure lists are left-aligned even if their parent column is centered */
+  .company-info-list,
+  .values-list {
+    text-align: left; /* Keep lists left-aligned within centered column */
+    padding-left: 20px; /* Add some padding to lists */
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 767.98px) { /* Mobile screens (sm breakpoint) and down */
+  .about-hero-section {
+    height: 200px;
+  }
+  .about-hero-title {
+    font-size: 2em;
+  }
+  .about-hero-subtitle {
+    font-size: 1em;
+  }
+  /* Adjust padding for all main content sections on mobile */
+  .glance-at-sunrise-section,
+  .our-team-section,
+  .company-profile-section,
+  .statutory-profile-section,
+  .why-us-section,
+  .quality-assurance-section {
+    padding: 40px 0;
+  }
+
+  /* Image sizing for mobile */
+  .glance-at-sunrise-section .img-fluid,
+  .our-team-section .img-fluid,
+  .company-profile-section .img-fluid,
+  .quality-assurance-section .img-fluid {
+    max-width: 90%; /* Allow larger on phones, but still constrained */
+    margin-bottom: 20px; /* Adjust spacing */
+  }
+
+  .bank-logo,
+  .quality-seal-img {
+    max-width: 150px;
+    margin-bottom: 20px;
+  }
+
+  /* Re-center titles that were left-aligned on desktop */
+  .about-company-section .page-title, /* on homepage */
+  .our-team-section .page-title,
+  .quality-assurance-section .page-title {
+    text-align: center !important; /* Force center on mobile/small tablets */
+  }
+
+  /* Ensure lists are still readable on mobile */
+  .company-info-list,
+  .values-list {
+    padding-left: 0; /* Remove default list padding completely on smallest screens */
+  }
 }
