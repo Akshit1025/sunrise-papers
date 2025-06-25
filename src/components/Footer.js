@@ -138,7 +138,7 @@ const Footer = () => {
                   <i className="fab fa-github"></i>
                 </a>
                 <a
-                  href="https://wa.me/919555509507"
+                  href="https://wa.me/919810087126"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-icon-link text-white-50 me-3"
@@ -209,14 +209,14 @@ const Footer = () => {
                 <p className="footer-contact-item">
                   <i className="fas fa-envelope me-2 footer-icon"></i>
                   <a
-                    href="mailto:info@sunrisepapers.com"
+                    href="mailto:dineshgupta@sunrisepapers.co.in"
                     className="text-decoration-none footer-link"
                   >
                     dineshgupta@sunrisepapers.co.in
                   </a>
                 </p>
                 <p className="footer-contact-item">
-                  <i className="fas fa-phone-alt me-2 footer-icon"></i>
+                  <i className="fas fa-phone me-2 footer-icon"></i>
                   <a
                     href="tel:+919555509507"
                     className="text-decoration-none footer-link"
