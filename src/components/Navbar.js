@@ -30,7 +30,7 @@ const Navbar = () => {
               <i className="fas fa-envelope me-2"></i>
               dineshgupta@sunrisepapers.co.in
             </a>
-            <i className="fas fa-phone-alt ms-4 me-2"></i>
+            <i className="fas fa-phone ms-4 me-2"></i>
             <a
               href="tel:+919555509507"
               className="text-muted text-decoration-none"
@@ -63,7 +63,7 @@ const Navbar = () => {
               <i className="fab fa-github"></i>
             </a>
             <a
-              href="https://wa.me/919555509507"
+              href="https://wa.me/919810087126"
               target="_blank"
               rel="noopener noreferrer"
               className="social-icon-link text-muted me-3"
