@@ -63,15 +63,14 @@ const ContactPage = ({ userId, authReady }) => {
 
   return (
     <>
-      {/* Contact us Hero Section */}
+      {/* Contact Us Hero Section */}
       <section className="contact-hero-section py-5 text-center d-flex align-items-center justify-content-center">
         <div className="container animate__animated animate__fadeIn">
           <h1 className="display-3 fw-bold mb-3 contact-hero-title">
             Contact Us
           </h1>
           <p className="lead contact-hero-subtitle">
-            We're here to help! Reach out to us for any inquiries, feedback, or
-            support.
+            We're here to help! Reach out to us for any inquiries.
           </p>
         </div>
       </section>
@@ -84,6 +83,7 @@ const ContactPage = ({ userId, authReady }) => {
             information provided.
           </p>
           <div className="row g-4">
+            {/* Contact Form Column */}
             <div className="col-lg-7">
               <div className="contact-form-card p-4 border rounded shadow-lg h-100 animate__animated animate__fadeInLeft">
                 <h3 className="sub-heading fw-bold mb-4">Send Us a Message</h3>
@@ -183,42 +183,53 @@ const ContactPage = ({ userId, authReady }) => {
               <div className="contact-info-card p-4 border rounded shadow-lg h-100 bg-light animate__animated animate__fadeInRight">
                 <h3 className="sub-heading fw-bold mb-4">Our Details</h3>
                 <ul className="list-unstyled contact-details-list">
-                  <li className="mb-3">
+                  <li className="mb-3 contact-detail-item">
                     <i className="fas fa-map-marker-alt me-3 fa-lg"></i>
-                    <a
-                      href="https://maps.app.goo.gl/zFrzmgSPvqrrL79Z9"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-decoration-none text-dark"
-                    >
-                      Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka,
-                      New Delhi, 110078, India
-                    </a>
+                    <span className="contact-text">
+                      <a
+                        href="https://maps.app.goo.gl/zFrzmgSPvqrrL79Z9"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-decoration-none"
+                        style={{ color: "var(--sp-dark-primary)" }}
+                      >
+                        Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka,
+                        New Delhi, 110078, India
+                      </a>
+                    </span>
                   </li>
-                  <li className="mb-3">
+                  <li className="mb-3 contact-detail-item">
                     <i className="fas fa-envelope me-3 fa-lg"></i>
-                    <a
-                      href="mailto:dineshgupta@sunrisepapers.co.in"
-                      className="text-decoration-none text-dark"
-                    >
-                      dineshgupta@sunrisepapers.co.in
-                    </a>
+                    <span className="contact-text">
+                      <a
+                        href="mailto:dineshgupta@sunrisepapers.co.in"
+                        className="text-decoration-none"
+                        style={{ color: "var(--sp-dark-primary)" }}
+                      >
+                        dineshgupta@sunrisepapers.co.in
+                      </a>
+                      {/* Updated email */}
+                    </span>
                   </li>
-                  <li className="mb-3">
-                    <i className="fas fa-phone me-3 fa-lg"></i>
-                    <a
-                      href="tel:+919555509507"
-                      className="text-decoration-none text-dark"
-                    >
-                      +91 95555 09507
-                    </a>
-                    &nbsp;|&nbsp;
-                    <a
-                      href="tel:+919810087126"
-                      className="text-decoration-none text-dark"
-                    >
-                      +91 98100 87126
-                    </a>
+                  <li className="mb-3 contact-detail-item">
+                    <i className="fas fa-phone-alt me-3 fa-lg"></i>
+                    <span className="contact-text">
+                      <a
+                        href="tel:+919555509507"
+                        className="text-decoration-none"
+                        style={{ color: "var(--sp-dark-primary)" }}
+                      >
+                        +91 95555 09507
+                      </a>
+                      | {/* Adjusted spacing */}
+                      <a
+                        href="tel:+919810087126"
+                        className="text-decoration-none"
+                        style={{ color: "var(--sp-dark-primary)" }}
+                      >
+                        +91 98100 87126
+                      </a>
+                    </span>
                   </li>
                 </ul>
                 <h4 className="sub-heading fw-bold mt-5 mb-3">
