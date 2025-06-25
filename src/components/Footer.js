@@ -1,79 +1,73 @@
 // src/components/Footer.js
 
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom"; // Import Link for navigation
-import { collection, addDoc } from "firebase/firestore"; // For Newsletter Storage
-import { db } from "../firebaseConfig"; // Import Firebase configuration
+// import { collection, addDoc } from "firebase/firestore"; // For Newsletter Storage
+// import { db } from "../firebaseConfig"; // Import Firebase configuration
 
 const Footer = () => {
-  const [newsletterEmail, setNewsletterEmail] = useState("");
-  const [newsletterStatus, setNewsletterStatus] = useState(null); // 'success' or 'error' or null
-  const [newsletterMessage, setNewsletterMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [newsletterEmail, setNewsletterEmail] = useState("");
+  // const [newsletterStatus, setNewsletterStatus] = useState(null); // 'success' or 'error' or null
+  // const [newsletterMessage, setNewsletterMessage] = useState("");
+  // const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const validateEmail = (email) => {
-    // Basic email validation regex
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
+  // const validateEmail = (email) => {
+  //   // Basic email validation regex
+  //   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  // };
 
-  const handleNewsletterSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setNewsletterStatus(null);
-    setNewsletterMessage("");
+  // const handleNewsletterSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setIsSubmitting(true);
+  //   setNewsletterStatus(null);
+  //   setNewsletterMessage("");
 
-    if (!validateEmail(newsletterEmail)) {
-      setNewsletterStatus("error");
-      setNewsletterMessage("Please enter a valid email address.");
-      setIsSubmitting(false);
-      setTimeout(() => {
-        setNewsletterStatus(null);
-        setNewsletterMessage("");
-      }, 3000); // Clear message after 3 seconds
-      return;
-    }
+  //   if (!validateEmail(newsletterEmail)) {
+  //     setNewsletterStatus("error");
+  //     setNewsletterMessage("Please enter a valid email address.");
+  //     setIsSubmitting(false);
+  //     setTimeout(() => {
+  //       setNewsletterStatus(null);
+  //       setNewsletterMessage("");
+  //     }, 3000); // Clear message after 3 seconds
+  //     return;
+  //   }
 
-    try {
-      // Store newsletter subscription in Firestore
-      await addDoc(collection(db, "newsletter_subscriptions"), {
-        email: newsletterEmail,
-        timestamp: new Date(),
-      });
-      setNewsletterStatus("success");
-      setNewsletterMessage("Thank you for subscribing to our newsletter!");
-      setNewsletterEmail(""); // Clear the input field
-    } catch (error) {
-      console.error("Error subscribing to newsletter: ", error);
-      setNewsletterStatus("error");
-      setNewsletterMessage("Failed to subscribe. Please try again later.");
-    } finally {
-      setIsSubmitting(false);
-      setTimeout(() => {
-        setNewsletterStatus(null);
-        setNewsletterMessage("");
-      }, 3000); // Clear message after 3 seconds
-    }
-  };
+  //   try {
+  //     // Store newsletter subscription in Firestore
+  //     await addDoc(collection(db, "newsletter_subscriptions"), {
+  //       email: newsletterEmail,
+  //       timestamp: new Date(),
+  //     });
+  //     setNewsletterStatus("success");
+  //     setNewsletterMessage("Thank you for subscribing to our newsletter!");
+  //     setNewsletterEmail(""); // Clear the input field
+  //   } catch (error) {
+  //     console.error("Error subscribing to newsletter: ", error);
+  //     setNewsletterStatus("error");
+  //     setNewsletterMessage("Failed to subscribe. Please try again later.");
+  //   } finally {
+  //     setIsSubmitting(false);
+  //     setTimeout(() => {
+  //       setNewsletterStatus(null);
+  //       setNewsletterMessage("");
+  //     }, 3000); // Clear message after 3 seconds
+  //   }
+  // };
 
   return (
     <>
-      {/* Newsletter Section - Above the Main Footer */}
+      {/* Newsletter Section - Above the main footer (COMMENTED OUT FOR FUTURE USE) */}
+      {/*
       <div className="newsletter-section bg-dark py-5">
         <div className="container">
           <div className="row justify-content-center align-items-center">
             <div className="col-lg-5 text-center text-lg-start mb-4 mb-lg-0">
-              <h3 className="newsletter-heading text-white fw-bold">
-                SUBSCRIBE TO OUR NEWSLETTER
-              </h3>
-              <p className="text-white-50 mb-0">
-                Get the latest updates from Sunrise Papers.
-              </p>
+              <h3 className="newsletter-heading text-white fw-bold">SUBSCRIBE TO OUR NEWSLETTER</h3>
+              <p className="text-white-50 mb-0">Get the latest updates from Sunrise Papers.</p>
             </div>
             <div className="col-lg-7">
-              <form
-                className="d-flex flex-column flex-sm-row newsletter-form"
-                onSubmit={handleNewsletterSubmit}
-              >
+              <form className="d-flex flex-column flex-sm-row newsletter-form" onSubmit={handleNewsletterSubmit}>
                 <input
                   type="email"
                   className="form-control newsletter-input mb-2 mb-sm-0"
@@ -88,15 +82,13 @@ const Footer = () => {
                   className="btn btn-primary newsletter-button ms-sm-2"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Subscribing..." : "Subscribe"}
+                  {isSubmitting ? 'Submitting...' : 'Submit'}
                 </button>
               </form>
               {newsletterStatus && (
                 <div
                   className={`newsletter-message mt-3 text-center text-lg-start ${
-                    newsletterStatus === "success"
-                      ? "alert-success"
-                      : "alert-danger"
+                    newsletterStatus === 'success' ? 'text-success' : 'text-danger'
                   }`}
                 >
                   {newsletterMessage}
@@ -106,6 +98,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      */}
 
       {/* Main Footer */}
       <footer className="footer bg-dark py-5 text-white-50">
