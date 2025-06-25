@@ -1,7 +1,8 @@
 /* src/components/Footer.css */
 
+/* Newsletter Section - Styles are kept here for future use, but the HTML is commented out in Footer.js */
 .newsletter-section {
-  background-color: var(--sp-dark-gray);
+  background-color: var(--sp-dark-primary); /* Changed to new dark primary */
   color: var(--sp-white);
   padding: 50px 0;
   margin-top: 0 !important;
@@ -47,7 +48,7 @@
 
 .newsletter-button {
   background-color: var(--sp-white);
-  color: var(--sp-dark-gray) !important;
+  color: var(--sp-dark-primary) !important; /* Changed to new dark primary */
   border: none;
   padding: 0.75rem 1.5rem;
   font-weight: bold;
@@ -65,9 +66,9 @@
 }
 
 .newsletter-button:hover {
-  background-color: var(--sp-light-gray);
+  background-color: var(--sp-light-background);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 .newsletter-message {
@@ -75,8 +76,10 @@
   margin-top: 10px;
 }
 
+
+/* Main Footer Content */
 .footer {
-  background-color: var(--sp-dark-gray);
+  background-color: var(--sp-dark-primary); /* Changed to new dark primary */
   color: var(--sp-white);
   padding: 50px 0;
   border-radius: 0;
@@ -112,6 +115,7 @@
   transform: translateY(-3px) scale(1.1);
 }
 
+
 .footer-description {
   font-size: 0.9em;
   line-height: 1.6;
@@ -128,7 +132,7 @@
 }
 
 .footer-heading::after {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   bottom: 0;
@@ -154,7 +158,7 @@
 }
 
 .footer-link::before {
-  content: "\203A";
+  content: '\203A';
   position: absolute;
   left: -15px;
   opacity: 0;
@@ -165,6 +169,7 @@
   opacity: 1;
   left: -5px;
 }
+
 
 .footer-contact-item {
   font-size: 0.9em;
@@ -190,7 +195,7 @@
 
 /* Bottom Copyright Bar */
 .bottom-bar {
-  background-color: var(--sp-dark-gray);
+  background-color: var(--sp-dark-primary); /* Changed to new dark primary */
   opacity: 1;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.6);
@@ -228,8 +233,7 @@
     left: 50%;
     transform: translateX(-50%);
   }
-  .footer-links,
-  .footer-contact-item {
+  .footer-links, .footer-contact-item {
     padding-left: 0;
   }
   .footer-links li {
@@ -241,8 +245,9 @@
   .footer-brand {
     justify-content: center;
   }
-  .footer-social-icons {
+  .social-icons {
     text-align: center;
+    margin-top: 10px;
   }
 }
 
@@ -253,8 +258,7 @@
   .newsletter-heading {
     font-size: 1.5em;
   }
-  .newsletter-input,
-  .newsletter-button {
+  .newsletter-input, .newsletter-button {
     padding: 0.6rem 1rem;
     font-size: 0.9em;
   }

@@ -1,16 +1,15 @@
 /* src/pages/ContactPage.css */
 
-.contact-form-card,
-.contact-info-card {
-  background-color: var(--sp-white);
+.contact-form-card, .contact-info-card {
+  background-color: var(--sp-white); /* Keep white for contact cards */
   border-radius: 10px;
-  border: 1px solid #eee;
+  border: 1px solid var(--sp-border-light); /* Changed to new border color */
   padding: 30px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Keep rgba black for shadow effect */
 }
 
 .contact-info-card {
-  background-color: var(--sp-light-gray);
+  background-color: var(--sp-light-background);
 }
 
 .contact-details-list li {
@@ -19,34 +18,43 @@
 }
 
 .contact-details-list i {
-  color: var(--sp-accent-blue);
+  color: var(--sp-accent-brown);
   font-size: 1.2em;
   width: 25px;
 }
 
 .contact-details-list a {
-  color: var(--sp-dark-gray) !important;
+  color: var(--sp-dark-primary) !important; /* Changed to new dark primary */
   transition: color 0.3s ease;
 }
 
 .contact-details-list a:hover {
-  color: var(--sp-accent-blue) !important;
+  color: var(--sp-accent-brown) !important;
 }
+
 
 /* Form Styles - Specific to Contact Page's form */
 .form .input-field,
 .form .text-area-field {
   border-radius: 8px;
   padding: 10px 15px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--sp-border-light);
 }
 
 .form .input-field:focus,
 .form .text-area-field:focus {
-  border-color: var(--sp-accent-blue);
-  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+  border-color: var(--sp-accent-brown);
+  box-shadow: 0 0 0 0.25rem rgba(161, 98, 7, 0.25); /* Adjusted shadow color based on accent brown */
 }
 
 .form .submit-button {
   border-radius: 50px;
+  background-color: var(--sp-dark-primary); /* Changed to new dark primary */
+  border-color: var(--sp-dark-primary); /* Changed to new dark primary */
+  color: var(--sp-white);
+}
+
+.form .submit-button:hover {
+  background-color: var(--sp-accent-brown);
+  border-color: var(--sp-accent-brown);
 }

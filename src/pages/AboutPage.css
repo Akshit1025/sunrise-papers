@@ -2,7 +2,7 @@
 
 /* About Us Hero Section */
 .about-hero-section {
-  background-image: url('https://placehold.co/1920x400/495057/ffffff?text=About+Us+Background'); /* Placeholder background image */
+  background-image: url('https://placehold.co/1920x400/A16207/ffffff?text=About+Us+Background'); /* Placeholder background image, using accent brown */
   background-size: cover;
   background-position: center;
   height: 300px; /* Adjust height as needed */
@@ -11,8 +11,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--sp-white);
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  color: var(--sp-white); /* White text on dark background */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Keep rgba black for shadow effect */
 }
 
 .about-hero-section::before {
@@ -22,7 +22,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4); /* Dark overlay */
+  background-color: rgba(0, 0, 0, 0.4); /* Keep rgba black for overlay effect */
   z-index: 1;
 }
 
@@ -54,13 +54,13 @@
 .glance-at-sunrise-section,
 .company-profile-section,
 .why-us-section {
-  background-color: var(--sp-white); /* White background */
+  background-color: var(--sp-white); /* White background for these sections */
 }
 
 .our-team-section,
 .statutory-profile-section,
 .quality-assurance-section {
-  background-color: var(--sp-light-gray); /* Light gray background */
+  background-color: var(--sp-light-background); /* Light wooden background for these sections */
 }
 
 
@@ -75,7 +75,7 @@
 }
 
 .values-list i {
-  color: var(--sp-accent-blue); /* Uses variable from App.css */
+  color: var(--sp-accent-brown);
 }
 
 .company-info-list {
@@ -88,7 +88,7 @@
 }
 
 .company-info-list i {
-  color: var(--sp-accent-blue);
+  color: var(--sp-accent-brown);
   width: 20px; /* Align icons */
 }
 
@@ -215,11 +215,12 @@
   }
 
   /* Re-center titles that were left-aligned on desktop */
-  .about-company-section .page-title, /* on homepage */
-  .our-team-section .page-title,
-  .quality-assurance-section .page-title {
-    text-align: center !important; /* Force center on mobile/small tablets */
-  }
+  /* This rule exists in App.css for .page-title, so removing specific page-level overrides */
+  /* .about-company-section .page-title, */
+  /* .our-team-section .page-title, */
+  /* .quality-assurance-section .page-title {
+    text-align: center !important;
+  } */
 
   /* Ensure lists are still readable on mobile */
   .company-info-list,

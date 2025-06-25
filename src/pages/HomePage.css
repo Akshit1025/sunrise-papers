@@ -16,7 +16,7 @@
 
 .carousel-item {
   height: 500px;
-  background-color: var(--sp-dark-gray);
+  background-color: var(--sp-dark-primary); /* Changed to new dark primary */
 }
 
 .carousel-img {
@@ -33,7 +33,7 @@
   right: 0;
   padding-bottom: 80px;
   padding-top: 80px;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.3); /* Keep rgba black for transparency here */
   text-align: center;
   width: 100%;
   max-width: 800px;
@@ -45,19 +45,19 @@
   font-weight: bold;
   color: var(--sp-white);
   margin-bottom: 20px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Keep rgba black for shadow effect */
 }
 
 .carousel-text {
   font-size: 1.4em;
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: 30px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); /* Keep rgba black for shadow effect */
 }
 
 .carousel-btn {
   background-color: var(--sp-white) !important;
-  color: var(--sp-dark-gray) !important;
+  color: var(--sp-dark-primary) !important; /* Changed to new dark primary */
   border-color: var(--sp-white) !important;
   font-weight: 600;
   padding: 12px 30px;
@@ -66,10 +66,10 @@
 }
 
 .carousel-btn:hover {
-  background-color: var(--sp-dark-gray) !important;
+  background-color: var(--sp-dark-primary) !important; /* Changed to new dark primary */
   color: var(--sp-white) !important;
   transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Keep rgba black for shadow effect */
 }
 
 .carousel-control-prev,
@@ -87,11 +87,11 @@
 }
 
 .carousel-control-prev-icon::before {
-  content: "\276E";
+  content: '\276E';
 }
 
 .carousel-control-next-icon::before {
-  content: "\276F";
+  content: '\276F';
 }
 
 .carousel-control-prev:hover .carousel-control-prev-icon,
@@ -124,9 +124,10 @@
   border-bottom: none;
   padding-bottom: 0;
   margin-bottom: 20px;
+  color: var(--sp-dark-primary); /* Changed to new dark primary */
 }
 
-/* New: Styling for the image within the about-company-section on smaller screens */
+/* Styling for the image within the about-company-section on smaller screens */
 .about-company-section .col-12 img {
   max-width: 70%; /* Limit image width to 70% of its parent column */
   height: auto; /* Maintain aspect ratio */
@@ -134,9 +135,16 @@
   margin: 0 auto 30px auto; /* Center the image and add bottom margin */
 }
 
-/* Featured Section */
+/* New: Homepage Products Section */
+.homepage-products-section {
+  background-color: var(--sp-light-background);
+  padding: 50px 0;
+  text-align: center; /* Center the products title and view all button */
+}
+
+/* Featured Section (Our Core Strengths) */
 .featured-section {
-  background-color: var(--sp-light-gray);
+  background-color: var(--sp-light-background);
   padding: 50px 0;
   text-align: center;
   width: 100%;
@@ -146,31 +154,37 @@
   background-color: var(--sp-white);
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border: 1px solid #eee;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Keep rgba black for shadow effect */
+  border: 1px solid var(--sp-border-light);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .feature-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15); /* Keep rgba black for shadow effect */
 }
 
 .feature-card i {
-  color: var(--sp-accent-blue);
+  color: var(--sp-accent-brown);
   margin-bottom: 15px;
 }
 
 .feature-title {
-  color: var(--sp-dark-gray);
+  color: var(--sp-dark-primary); /* Changed to new dark primary */
   font-size: 1.4em;
   margin-bottom: 10px;
 }
 
 .feature-description {
-  color: var(--sp-medium-gray);
+  color: var(--sp-dark-secondary); /* Changed to new dark secondary */
   font-size: 0.95em;
 }
+
+/* Product Card specific styles (reused from ProductsPage.css, but listed here for clarity for homepage products) */
+/* The styles below for product-card are actually imported via @import "./pages/ProductsPage.css" in App.css */
+/* However, if specific overrides for homepage product cards were needed, they would go here. */
+/* For now, they rely on the imported ProductsPage.css and global variables. */
+
 
 /* Responsive adjustments for HomePage */
 @media (max-width: 767.98px) {
@@ -193,15 +207,16 @@
   .about-company-section .page-title {
     text-align: center;
   }
+  /* Image max-width on phones */
   .about-company-section .col-12 img {
-    max-width: 90%; /* Allow larger on phones, but still constrained */
-    margin-bottom: 20px; /* Adjust spacing */
+    max-width: 90%;
+    margin-bottom: 20px;
   }
 }
 
 /* Specific rule for tablet (md) screens - still stacks, but image controlled */
 @media (min-width: 768px) and (max-width: 991.98px) {
   .about-company-section .col-12 img {
-    max-width: 60%; /* Slightly larger on tablets than phones, but not full width */
+    max-width: 60%;
   }
 }

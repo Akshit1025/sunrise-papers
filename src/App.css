@@ -1,12 +1,13 @@
 /* src/App.css - Main Global Styles and Imports */
 
-/* --- Custom CSS Variables (Primary Color Scheme) --- */
+/* --- Custom CSS Variables (New Color Scheme: Browns, White, Wooden Beige) --- */
 :root {
-  --sp-dark-gray: #212529;   /* Almost black, from logo text, used for dark backgrounds */
-  --sp-medium-gray: #495057; /* Dark gray for body text, secondary elements */
-  --sp-light-gray: #f8f9fa;  /* Very light gray, page background (top bar background) */
-  --sp-white: #ffffff;      /* Pure white for elements on dark background, main content background */
-  --sp-accent-blue: #007bff; /* A subtle blue for hover effects/accents, derived from Bootstrap primary */
+  --sp-dark-primary: #3A2E2A;    /* Very deep coffee/chocolate brown for headings/main text/dark backgrounds */
+  --sp-dark-secondary: #6D5E5B; /* Slightly lighter, warm mid-brown for body text, secondary elements */
+  --sp-light-background: #F5F5DC; /* Very light cream/beige - the "wooden" background for pages */
+  --sp-white: #FFFFFF;         /* Pure white for card backgrounds, text on dark backgrounds */
+  --sp-accent-brown: #A16207;   /* Deep, rich wooden brown/orange for accents, icons, hovers */
+  --sp-border-light: #D3D3D3;   /* Light gray for borders and subtle lines */
 }
 
 /* --- Global Styles & Layout --- */
@@ -15,8 +16,8 @@ body {
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--sp-light-gray); /* This is the main page background color */
-  color: var(--sp-medium-gray);
+  background-color: var(--sp-light-background); /* Main page background color (wooden color) */
+  color: var(--sp-dark-secondary); /* Default body text color */
   overflow-x: hidden; /* Prevent horizontal scrollbar */
 }
 
@@ -41,22 +42,22 @@ body {
 
 /* Generic typographic styles used across multiple pages */
 .page-title {
-  color: var(--sp-dark-gray);
+  color: var(--sp-dark-primary); /* Changed to new dark primary */
   font-size: 2.2em;
   margin-bottom: 25px;
-  border-bottom: 2px solid #ecf0f1;
+  border-bottom: 2px solid var(--sp-border-light); /* Changed to new border color */
   padding-bottom: 10px;
-  text-align: center; /* ADDED: Ensure page titles are centered by default */
+  text-align: center;
 }
 
 .paragraph {
   line-height: 1.7;
   margin-bottom: 15px;
-  color: var(--sp-medium-gray);
+  color: var(--sp-dark-secondary); /* Changed to new dark secondary */
 }
 
 .sub-heading {
-  color: var(--sp-dark-gray);
+  color: var(--sp-dark-primary); /* Changed to new dark primary */
   font-size: 1.6em;
 }
 
@@ -70,13 +71,13 @@ body {
 }
 
 .success-message {
-  background-color: #e6ffe6;
+  background-color: #e6ffe6; /* Keep green for success */
   color: #27ae60;
   border: 1px solid #27ae60;
 }
 
 .error-message {
-  background-color: #ffe6e6;
+  background-color: #ffe6e6; /* Keep red for error */
   color: #e74c3c;
   border: 1px solid #e74c3c;
 }
