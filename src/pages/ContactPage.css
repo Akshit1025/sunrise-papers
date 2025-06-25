@@ -1,11 +1,58 @@
 /* src/pages/ContactPage.css */
 
+/* Contact Us Hero Section - Designed like About Us Hero */
+.contact-hero-section {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--sp-light-background),
+    var(--sp-light-background) 10px,
+    #F0EAD6 10px,
+    #F0EAD6 20px
+  ); /* For a subtle stripe effect */
+  background-size: cover;
+  background-position: center;
+  height: 300px; /* Adjust height as needed */
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sp-dark-primary); /* Dark text for contrast on light background */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Lighter shadow for dark text */
+}
+
+.contact-hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.contact-hero-section .container {
+  z-index: 2;
+}
+
+.contact-hero-title {
+  font-size: 3.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--sp-dark-primary);
+}
+
+.contact-hero-subtitle {
+  font-size: 1.5em;
+  color: var(--sp-dark-secondary);
+}
+
 .contact-form-card, .contact-info-card {
-  background-color: var(--sp-white); /* Keep white for contact cards */
+  background-color: var(--sp-white);
   border-radius: 10px;
-  border: 1px solid var(--sp-border-light); /* Changed to new border color */
+  border: 1px solid var(--sp-border-light);
   padding: 30px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Keep rgba black for shadow effect */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .contact-info-card {
@@ -20,11 +67,13 @@
 .contact-details-list i {
   color: var(--sp-accent-brown);
   font-size: 1.2em;
-  width: 25px;
+  width: 25px; /* Ensures consistent icon width */
+  text-align: center; /* Center icon within its fixed width */
+  flex-shrink: 0; /* Prevent icon from shrinking */
 }
 
 .contact-details-list a {
-  color: var(--sp-dark-primary) !important; /* Changed to new dark primary */
+  color: var(--sp-dark-primary) !important;
   transition: color 0.3s ease;
 }
 
@@ -44,17 +93,140 @@
 .form .input-field:focus,
 .form .text-area-field:focus {
   border-color: var(--sp-accent-brown);
-  box-shadow: 0 0 0 0.25rem rgba(161, 98, 7, 0.25); /* Adjusted shadow color based on accent brown */
+  box-shadow: 0 0 0 0.25rem rgba(161, 98, 7, 0.25);
 }
 
 .form .submit-button {
   border-radius: 50px;
-  background-color: var(--sp-dark-primary); /* Changed to new dark primary */
-  border-color: var(--sp-dark-primary); /* Changed to new dark primary */
+  background-color: var(--sp-dark-primary);
+  border-color: var(--sp-dark-primary);
   color: var(--sp-white);
 }
 
 .form .submit-button:hover {
   background-color: var(--sp-accent-brown);
   border-color: var(--sp-accent-brown);
+}
+
+/* Google Map Embed Styling */
+.map-container {
+  margin-top: 20px;
+  width: 100%;
+  height: 300px; /* Default height for the map container */
+  border: 1px solid var(--sp-border-light);
+}
+
+.map-container iframe {
+  width: 100%;
+  height: 100%;
+  display: block; /* Remove extra space below iframe */
+}
+
+/* Responsive adjustments for ContactPage */
+@media (max-width: 991.98px) { /* Tablet screens and down */
+  .contact-hero-section {
+    height: 250px;
+  }
+  .contact-hero-title {
+    font-size: 2.8em;
+  }
+  .contact-hero-subtitle {
+    font-size: 1.2em;
+  }
+  .contact-form-card, .contact-info-card {
+    padding: 25px; /* Slightly less padding on tablets */
+  }
+}
+
+@media (max-width: 767.98px) { /* Mobile (L) and smaller - up to 767.98px */
+  .contact-hero-section {
+    height: 200px;
+  }
+  .contact-hero-title {
+    font-size: 2em;
+  }
+  .contact-hero-subtitle {
+    font-size: 1em;
+  }
+  .contact-form-card, .contact-info-card {
+    padding: 20px; /* Further reduced padding on mobile */
+  }
+  /* Ensure paragraph text within the info card is centered */
+  .contact-info-card .paragraph {
+    text-align: center;
+  }
+  /* Ensure sub-headings within the info card are centered */
+  .contact-info-card .sub-heading {
+    text-align: center;
+  }
+
+  .map-container {
+    height: 250px; /* Slightly reduced height for map on mobile */
+  }
+
+  /* Specific adjustments for contact details list on phones */
+  .contact-details-list {
+    list-style: none; /* Remove default bullet points if any */
+    padding-left: 0; /* Remove default list padding */
+    margin-left: auto; /* Center the list */
+    margin-right: auto;
+    max-width: 280px; /* Constrain width for better wrapping on very small screens */
+    text-align: left; /* Align text left within constrained width */
+  }
+  .contact-details-list li {
+    display: flex; /* Use flexbox for icon-text alignment */
+    align-items: flex-start; /* Align items to the top (icon with first line of text) */
+    text-align: left; /* Override parent center if needed for li content */
+    margin-bottom: 15px; /* Adjust spacing between list items */
+  }
+  .contact-details-list i {
+    margin-right: 10px; /* Space between icon and text */
+    /* text-align: center; Keep this for icon width consistency if desired, or remove */
+    /* No need for display: inline-block; or vertical-align if using flexbox */
+  }
+  .contact-details-list a {
+    word-break: break-word; /* Allow long words to break and wrap */
+  }
+}
+
+/* Specific adjustments for Mobile (M) 375px and (S) 320px */
+@media (max-width: 424px) { /* Targets 375px and 320px views */
+  .contact-details-list {
+    max-width: 290px; /* Adjust width for better fit on these screens */
+  }
+  .contact-details-list li {
+    font-size: 0.95em; /* Slightly smaller font for very small screens */
+    margin-bottom: 12px; /* Reduce spacing slightly */
+  }
+  .contact-details-list i {
+    font-size: 1.1em; /* Adjust icon size if needed */
+    width: 20px; /* Adjust icon width */
+  }
+  .contact-hero-title {
+    font-size: 1.8em;
+  }
+  .contact-hero-subtitle {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 374px) { /* Specifically for 320px view and smaller */
+  .contact-details-list {
+    max-width: 270px; /* Even tighter width for the smallest screens */
+  }
+  .contact-details-list li {
+    font-size: 0.9em; /* Smallest font size for critical readability */
+    margin-bottom: 10px;
+  }
+  .contact-details-list i {
+    font-size: 1em;
+    width: 18px;
+    margin-right: 8px; /* Maintain good spacing */
+  }
+  .contact-form-card, .contact-info-card {
+    padding: 15px; /* Less padding to give content more room */
+  }
+  .map-container {
+    height: 200px; /* Make map slightly shorter on very small screens */
+  }
 }

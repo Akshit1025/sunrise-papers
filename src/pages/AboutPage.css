@@ -2,12 +2,6 @@
 
 /* About Us Hero Section */
 .about-hero-section {
-  /* Removed background-image */
-  /* New CSS background for visual appeal without an image */
-  /* background: var(--sp-light-background); */ /* Base wooden light color */
-  /* background: linear-gradient(135deg, var(--sp-light-background) 0%, #EDE9D5 50%, var(--sp-light-background) 100%); */ /* Subtle diagonal gradient */
-  /* You can experiment with other gradients or patterns: */
-  /* background: radial-gradient(circle at top left, var(--sp-light-background) 0%, rgba(240, 230, 210, 0.8) 100%); */
    background: repeating-linear-gradient(
     45deg,
     var(--sp-light-background),
