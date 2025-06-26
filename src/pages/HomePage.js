@@ -2,35 +2,39 @@
 
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { collection, onSnapshot, query } from "firebase/firestore"; // Added Firestore imports
+import { collection, onSnapshot, query } from "firebase/firestore";
 import { db } from "../firebaseConfig.js"; // Import db
 
 const HomePage = () => {
-  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]); // Renamed from 'products' to 'categories'
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null); // Fetch categories for the homepage display
 
-  // Fetch products for the homepage display
   useEffect(() => {
-    const productsCollectionPath = "company_products";
-    const q = query(collection(db, productsCollectionPath));
+    const categoriesCollectionPath = "categories"; // Change to 'categories' collection
+    const q = query(collection(db, categoriesCollectionPath));
 
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
-        const productsList = [];
+        const categoriesList = []; // Renamed from 'productsList'
         snapshot.forEach((doc) => {
-          productsList.push({ id: doc.id, ...doc.data() });
+          categoriesList.push({ id: doc.id, ...doc.data() });
         });
-        setProducts(productsList);
+        // Sort categories by 'order' field, then by name if order is same/missing
+        categoriesList.sort(
+          (a, b) =>
+            (a.order || 0) - (b.order || 0) || a.name.localeCompare(b.name)
+        );
+        setCategories(categoriesList); // Set categories state
         setLoading(false);
         setError(null);
-        console.log("Homepage Products fetched:", productsList);
+        console.log("Homepage Categories fetched:", categoriesList);
       },
       (err) => {
-        console.error("Error fetching homepage products:", err);
+        console.error("Error fetching homepage categories:", err);
         setError(
-          "Failed to load products for homepage. Please try again later."
+          "Failed to load categories for homepage. Please try again later."
         );
         setLoading(false);
       }
@@ -166,13 +170,11 @@ const HomePage = () => {
           <span className="visually-hidden">Next</span>
         </button>
       </div>
-
       {/* 2. About Company Section */}
       <section className="about-company-section py-5">
         <div className="container">
           <div className="row align-items-center g-5">
             <div className="col-12 col-lg-6 order-lg-2">
-              {" "}
               {/* Image column */}
               <img
                 src="images/about-home-img.png"
@@ -181,7 +183,6 @@ const HomePage = () => {
               />
             </div>
             <div className="col-12 col-lg-6 order-lg-1">
-              {" "}
               {/* Text content column */}
               <h2
                 className="page-title text-start animate__animated animate__fadeInLeft"
@@ -216,7 +217,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-
       {/* 3. Our Core Strengths Section */}
       <div className="featured-section bg-light py-5">
         <div className="container">
@@ -260,73 +260,93 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* 4. Our Products Section */}
-      <section className="homepage-products-section py-5 bg-light">
+      {/* 4. Our Product Categories Section (Updated from 'Our Products Section') */}
+      <section className="homepage-products-section py-5 bg-white">
+        {/* Changed to bg-white for uniformity */}
         <div className="container">
-          <h2 className="page-title text-center mb-5">Our Products</h2>
+          <h2 className="page-title text-center mb-5">
+            Explore Our Product Categories
+          </h2>
+          {/* Updated title */}
           {loading ? (
-            <div className="loading-text text-center">Loading products...</div>
+            <div className="loading-text text-center d-flex justify-content-center align-items-center py-5">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading categories...</span>
+              </div>
+            </div>
           ) : error ? (
-            <div className="alert alert-danger text-center">{error}</div>
-          ) : products.length === 0 ? (
-            <div className="alert alert-info text-center">
-              No products available yet. Check back soon!
+            <div className="alert alert-danger text-center message-box">
+              {error}
+            </div>
+          ) : categories.length === 0 ? (
+            <div className="alert alert-info text-center message-box">
+              No product categories available yet. Check back soon!
             </div>
           ) : (
             <>
-              {" "}
-              {/* Fragment to group products grid and button */}
               <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                {products.map((product) => (
-                  <div
-                    key={product.id}
-                    className="col animate__animated animate__fadeInUp"
-                  >
-                    <div className="product-card card h-100 shadow-sm border-0 rounded-lg overflow-hidden">
-                      <img
-                        src={`https://placehold.co/400x250/212529/ffffff?text=${encodeURIComponent(
-                          product.name
-                        )}`}
-                        alt={product.name}
-                        className="card-img-top product-image"
-                      />
-                      <div className="card-body p-4">
-                        <h5
-                          className="card-title mb-2 product-title fw-bold"
-                          style={{ color: "var(--sp-dark-gray)" }}
-                        >
-                          {product.name}
-                        </h5>
-                        <p
-                          className="card-text product-description"
-                          style={{ color: "var(--sp-medium-gray)" }}
-                        >
-                          {product.description}
-                        </p>
-                      </div>
-                      <div className="card-footer bg-transparent border-top-0 pt-0 pb-3 text-center">
-                        <Link
-                          to={`/products/${product.id}`}
-                          className="btn btn-outline-dark btn-sm product-details-btn"
-                        >
-                          View Details
-                        </Link>
-                      </div>
+                {categories.map(
+                  (
+                    category /* Changed from 'products.map' to 'categories.map' */
+                  ) => (
+                    <div
+                      key={category.id}
+                      className="col animate__animated animate__fadeInUp"
+                    >
+                      {/* Use category-card-link and category-card styles from ProductsPage.css */}
+
+                      <Link
+                        to={`/products/${category.slug}`}
+                        className="category-card-link text-decoration-none"
+                      >
+                        <div className="category-card card h-100 rounded-3 shadow-sm overflow-hidden">
+                          {/* Use category-card */}
+                          <img
+                            src={
+                              category.image_url ||
+                              "https://placehold.co/600x400/dddddd/333333?text=Category+Image"
+                            } /* Use category.image_url */
+                            alt={category.name}
+                            className="card-img-top category-image" /* Use category-image */
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src =
+                                "https://placehold.co/600x400/dddddd/333333?text=Image+Error";
+                            }}
+                          />
+
+                          <div className="card-body text-center">
+                            <h5 className="card-title category-title mb-2">
+                              {category.name}
+                            </h5>
+                            {/* Use category-title */}
+                            <p className="card-text category-description">
+                              {category.description}
+                            </p>
+                            {/* Use category-description */}
+                          </div>
+                        </div>
+                      </Link>
                     </div>
-                  </div>
-                ))}
+                  )
+                )}
               </div>
-              {/* Conditional rendering for "View All Products" button */}
-              {/* {!loading && products.length > 0 && (
+              {/* "View All Categories" button */}
+              {!loading && categories.length > 3 && (
                 <div className="text-center mt-5">
                   <Link
                     to="/products"
                     className="btn btn-dark btn-lg rounded-pill"
+                    style={{
+                      backgroundColor: "var(--sp-dark-primary)",
+                      borderColor: "var(--sp-dark-primary)",
+                      color: "var(--sp-white)",
+                    }}
                   >
-                    View All Products
+                    View All Categories
                   </Link>
                 </div>
-              )} */}
+              )}
             </>
           )}
         </div>

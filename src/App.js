@@ -5,7 +5,7 @@ import { signInAnonymously, onAuthStateChanged } from "firebase/auth"; // Remove
 import { Routes, Route } from "react-router-dom"; // Import Routes and Route for routing
 
 // Import Firebase config and instances
-import { auth } from "./firebaseConfig"; // Removed .js extension
+import { auth } from "./firebaseConfig";
 // Import main CSS file
 import "./App.css"; // App.css will be loaded after Bootstrap
 
@@ -15,6 +15,8 @@ import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import ProductsPage from "./pages/ProductsPage";
+import CategoryProductsPage from "./pages/CategoryProductsPage"; // NEW IMPORT
+import ProductDetailPage from "./pages/ProductDetailPage"; // NEW IMPORT
 import ContactPage from "./pages/ContactPage";
 
 const App = () => {
@@ -27,9 +29,8 @@ const App = () => {
         // Attempt to sign in anonymously. This is a simple way to get a userId
         // for Firestore security rules that require authentication.
         await signInAnonymously(auth);
-        console.log("Signed in anonymously.");
+        console.log("Signed in anonymously."); // Set up an authentication state listener to update userId
 
-        // Set up an authentication state listener to update userId
         onAuthStateChanged(auth, (user) => {
           if (user) {
             setUserId(user.uid);
@@ -49,6 +50,17 @@ const App = () => {
     initializeAuth();
   }, []); // The empty dependency array ensures this effect runs only once on component mount
 
+  if (!authReady) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh', backgroundColor: 'var(--sp-light-background)' }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p className="ms-3 text-secondary">Loading application...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="app-wrapper">
       <Navbar />
@@ -58,6 +70,15 @@ const App = () => {
         <Route
           path="/products"
           element={<ProductsPage authReady={authReady} />}
+        />
+        {/* NEW: Routes for Category Products and Product Details */}
+        <Route
+          path="/products/:categorySlug"
+          element={<CategoryProductsPage authReady={authReady} />}
+        />
+        <Route
+          path="/product/:productSlug"
+          element={<ProductDetailPage authReady={authReady} />}
         />
         <Route
           path="/contact"
