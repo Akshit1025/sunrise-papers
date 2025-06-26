@@ -212,7 +212,7 @@ const ContactPage = ({ userId, authReady }) => {
                     </span>
                   </li>
                   <li className="mb-3 contact-detail-item">
-                    <i className="fas fa-phone-alt me-3 fa-lg"></i>
+                    <i className="fas fa-phone me-3 fa-lg"></i>
                     <span className="contact-text">
                       <a
                         href="tel:+919555509507"
@@ -221,7 +221,7 @@ const ContactPage = ({ userId, authReady }) => {
                       >
                         +91 95555 09507
                       </a>
-                      | {/* Adjusted spacing */}
+                      &nbsp;| {/* Adjusted spacing */}
                       <a
                         href="tel:+919810087126"
                         className="text-decoration-none"

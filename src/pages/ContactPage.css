@@ -2,8 +2,13 @@
 
 /* Contact Us Hero Section - Designed like About Us Hero */
 .contact-hero-section {
-  background: var(--sp-light-background); /* Base wooden light color */
-  background: linear-gradient(135deg, var(--sp-light-background) 0%, #EDE9D5 50%, var(--sp-light-background) 100%); /* Subtle diagonal gradient */
+  background: repeating-linear-gradient(
+    45deg,
+    var(--sp-light-background),
+    var(--sp-light-background) 10px,
+    #F0EAD6 10px,
+    #F0EAD6 20px
+  ); /* For a subtle stripe effect */
   background-size: cover;
   background-position: center;
   height: 300px; /* Adjust height as needed */
@@ -52,6 +57,8 @@
 
 .contact-info-card {
   background-color: var(--sp-light-background);
+  /* Ensure it's always block on mobile for content to appear */
+  display: block; /* Override any potential display: none from global rules if necessary */
 }
 
 /* Base styles for contact details list - Default for Desktop/Laptop (min-width: 992px) */
@@ -59,15 +66,17 @@
   list-style: none; /* Remove default bullets */
   padding-left: 0; /* Remove default padding */
   margin-left: 0; /* Ensure no default margin from parent */
-  /* No text-align here, handled by flex children */
+  display: block; /* Ensure list is visible by default */
 }
 
 .contact-details-list .contact-detail-item { /* Target the li */
   font-size: 1.05em;
   margin-bottom: 20px;
   display: flex; /* Use flexbox for icon-text alignment on desktop */
-  align-items: flex-start; /* Align icon to the top of text */
+  align-items: center; /* ALIGN ICONS AND TEXT VERTICALLY CENTER (Crucial change for parallel) */
   justify-content: flex-start; /* Align contents to the start horizontally */
+  text-align: left; /* Ensure text aligns left within the item */
+  line-height: 1.5; /* Explicit line height for consistency */
 }
 
 .contact-details-list .contact-detail-item i { /* Target icon within the item */
@@ -84,7 +93,7 @@
   word-break: break-word; /* Allow long words to break if necessary */
   overflow-wrap: break-word; /* Modern equivalent for word-break */
   display: block; /* Ensure the span behaves as a block for text wrapping */
-  line-height: 1.5; /* Ensure good line spacing for wrapped text */
+  /* line-height inherited from parent li */
   text-align: left; /* Ensure text within the span is left-aligned */
 }
 
@@ -156,7 +165,7 @@
     padding: 25px; /* Slightly less padding on tablets */
   }
 
-  /* Center headings and paragraphs within the info card on tablets and smaller */
+  /* Center headings and paragraphs within the info card on tablets */
   .contact-info-card .paragraph,
   .contact-info-card .sub-heading {
     text-align: center;
@@ -173,11 +182,11 @@
     font-size: 1.05em; /* Keep standard size for tablet */
     margin-bottom: 20px; /* Standard spacing */
     /* Flex properties remain active from base for tablet */
-    /* No changes needed here, as base flex will handle it */
+    align-items: center; /* Explicitly ensure icons and text are centered for parallel display */
   }
 }
 
-/* Mobile (L) and smaller (max-width: 767.98px) */
+/* Mobile (L, M, S) - Specific adjustments */
 @media (max-width: 767.98px) {
   .contact-hero-section {
     height: 200px;
@@ -188,40 +197,32 @@
   .contact-hero-subtitle {
     font-size: 1em;
   }
-  .contact-form-card, .contact-info-card {
-    padding: 20px; /* Further reduced padding on mobile */
+  .contact-form-card { /* Only form card needs padding adjustments */
+    padding: 20px;
   }
   .map-container {
-    height: 250px; /* Slightly reduced height for map on mobile */
+    height: 250px;
   }
 
-  /* Adjust contact details list for mobile L, M, S views */
+  /* HIDE ONLY THE CONTACT DETAILS LIST ON MOBILE */
   .contact-details-list {
-    max-width: 290px; /* Tighten width for mobile L (e.g., 425px width) */
-    margin-left: auto; /* Re-center for these smaller views */
-    margin-right: auto;
-    text-align: left; /* Ensure entire list block is left-aligned */
+    display: none;
   }
-  .contact-details-list .contact-detail-item {
-    font-size: 1em; /* Standard mobile font size */
-    margin-bottom: 15px; /* Slightly less space for smaller screens */
-    display: flex; /* Keep flex */
-    align-items: flex-start; /* Keep icons top-left aligned */
-    justify-content: flex-start; /* Keep content left-aligned */
+
+  /* Ensure the remaining visible content in contact-info-card is centered */
+  .contact-info-card .paragraph,
+  .contact-info-card .sub-heading {
+    text-align: center;
   }
-  .contact-details-list .contact-detail-item i {
-    font-size: 1.1em; /* Adjust icon size for mobile L */
-    width: 22px; /* Adjust icon fixed width */
-    margin-right: 8px; /* Adjust margin */
-  }
-  .contact-details-list .contact-detail-item .contact-text {
-    flex-grow: 1; /* Allow text to grow */
-    display: block; /* Crucial for wrapping */
-    text-align: left; /* Ensure text within span is left-aligned */
+
+  /* Center the contact-info-card itself if it takes full width */
+  .contact-info-card {
+    padding-left: 20px; /* Adjust padding if needed for centering */
+    padding-right: 20px;
   }
 }
 
-/* Mobile (M) and smaller (max-width: 424px) */
+/* Additional mobile breakpoints below 767.98px will inherit display: none for contact-details-list */
 @media (max-width: 424px) {
   .contact-hero-title {
     font-size: 1.8em;
@@ -229,38 +230,13 @@
   .contact-hero-subtitle {
     font-size: 0.9em;
   }
-  .contact-details-list {
-    max-width: 270px; /* Tighter width for mobile M (e.g., 375px width) */
-  }
-  .contact-details-list .contact-detail-item {
-    font-size: 0.95em; /* Smaller font for mobile M */
-    margin-bottom: 12px;
-  }
-  .contact-details-list .contact-detail-item i {
-    font-size: 1em; /* Adjust icon size for mobile M */
-    width: 20px; /* Adjust icon fixed width */
-    margin-right: 7px; /* Fine-tune margin */
-  }
 }
 
-/* Mobile (S) and smaller (max-width: 374px) */
 @media (max-width: 374px) {
-  .contact-form-card, .contact-info-card {
-    padding: 15px; /* Less padding to give content more room */
+  .contact-form-card {
+    padding: 15px;
   }
   .map-container {
-    height: 200px; /* Make map slightly shorter on very small screens */
-  }
-  .contact-details-list {
-    max-width: 240px; /* Even tighter width for mobile S */
-  }
-  .contact-details-list .contact-detail-item {
-    font-size: 0.88em; /* Smallest font size for critical readability */
-    margin-bottom: 10px;
-  }
-  .contact-details-list .contact-detail-item i {
-    font-size: 0.9em; /* Adjust icon size for mobile S */
-    width: 18px; /* Adjust icon fixed width */
-    margin-right: 5px; /* Smallest margin */
+    height: 200px;
   }
 }
