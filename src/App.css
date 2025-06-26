@@ -10,7 +10,11 @@
   --sp-border-light: #D3D3D3;   /* Light gray for borders and subtle lines */
 }
 
-/* --- Global Styles & Layout --- */
+/* --- Global Box Sizing and Overflow Control --- */
+html {
+  overflow-x: hidden; /* Ensure horizontal overflow is hidden for html element */
+}
+
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -18,8 +22,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--sp-light-background); /* Main page background color (wooden color) */
   color: var(--sp-dark-secondary); /* Default body text color */
-  overflow-x: hidden; /* Prevent horizontal scrollbar */
+  overflow-x: hidden; /* Ensure horizontal overflow is hidden for body element */
+  position: relative; /* Sometimes needed for overflow-x: hidden to be effective */
 }
+
+/* Apply border-box globally for consistent sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 
 .app-wrapper {
   display: flex;
@@ -29,6 +40,7 @@ body {
   box-sizing: border-box;
   width: 100%;
   margin: 0;
+  overflow: hidden; /* Also hide overflow here for app wrapper */
 }
 
 /* Common container styling for content within pages/sections */
@@ -38,14 +50,16 @@ body {
   margin-right: auto;
   padding-left: 15px; /* Default Bootstrap padding */
   padding-right: 15px; /* Default Bootstrap padding */
+  /* Ensure container itself doesn't cause overflow */
+  width: 100%; /* Ensure it takes full available width */
 }
 
 /* Generic typographic styles used across multiple pages */
 .page-title {
-  color: var(--sp-dark-primary); /* Changed to new dark primary */
+  color: var(--sp-dark-primary);
   font-size: 2.2em;
   margin-bottom: 25px;
-  border-bottom: 2px solid var(--sp-border-light); /* Changed to new border color */
+  border-bottom: 2px solid var(--sp-border-light);
   padding-bottom: 10px;
   text-align: center;
 }
@@ -53,11 +67,11 @@ body {
 .paragraph {
   line-height: 1.7;
   margin-bottom: 15px;
-  color: var(--sp-dark-secondary); /* Changed to new dark secondary */
+  color: var(--sp-dark-secondary);
 }
 
 .sub-heading {
-  color: var(--sp-dark-primary); /* Changed to new dark primary */
+  color: var(--sp-dark-primary);
   font-size: 1.6em;
 }
 
@@ -103,7 +117,7 @@ body {
 
 @media (max-width: 767.98px) { /* Small devices (mobile) and down */
   .container {
-    padding: 20px; /* Uniform padding on small screens for all content containers */
+    padding: 15px; /* Slightly reduced padding on very small screens to give content more room */
   }
   .page-title {
     font-size: 1.8em;
