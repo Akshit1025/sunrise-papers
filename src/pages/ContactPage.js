@@ -75,7 +75,7 @@ const ContactPage = ({ userId, authReady }) => {
         </div>
       </section>
 
-      <div className="py-5">
+      <div className="py-5 bg-light">
         <div className="container">
           <p className="paragraph lead mb-4 text-center">
             Have a question or want to discuss a project? Feel free to reach out
