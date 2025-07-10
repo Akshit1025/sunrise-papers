@@ -20,7 +20,14 @@ const AboutPage = () => (
         <h2 className="page-title text-center mb-5">A Glance at Sunrise</h2>
         <div className="row align-items-center g-5">
           <div className="col-lg-6">
-            <p className="paragraph lead animate__animated animate__fadeInLeft animate__delay-0-5s">
+            <img
+              src="images/about-glance-img.jpeg"
+              alt="Paper Supply"
+              className="img-fluid rounded-3 shadow-lg animate__animated animate__fadeInLeft"
+            />
+          </div>
+          <div className="col-lg-6">
+            <p className="paragraph lead animate__animated animate__fadeInRight animate__delay-0-5s">
               Established in 1990, Sunrise Papers is a leading{" "}
               <b>Importer, Trader, and Wholesale Supplier</b> of Carbonless and
               Baking Paper. Our range is highly demanded for its optimum
@@ -28,7 +35,7 @@ const AboutPage = () => (
               quality products have enabled them to build long-lasting business
               relationships with their clients.
             </p>
-            <p className="paragraph animate__animated animate__fadeInLeft animate__delay-1s">
+            <p className="paragraph animate__animated animate__fadeInRight animate__delay-1s">
               The provided products are conceptualized with a client-oriented
               approach to bring extreme gratification to our patrons. The
               offered gamut of products is rendered in obedience to the quality
@@ -38,13 +45,6 @@ const AboutPage = () => (
               delivering top-tier paper solutions that cater to the diverse
               needs of our discerning customers.
             </p>
-          </div>
-          <div className="col-lg-6">
-            <img
-              src="images/about-glance-img.jpeg"
-              alt="Paper Supply"
-              className="img-fluid rounded-3 shadow-lg animate__animated animate__fadeInRight"
-            />
           </div>
         </div>
       </div>
@@ -56,7 +56,7 @@ const AboutPage = () => (
         <div className="row align-items-center g-5">
           <div className="col-lg-6 order-lg-2">
             <img
-              src="https://placehold.co/600x400/999999/ffffff?text=Our+Owner"
+              src="images/logo-no-bg.png"
               alt="Our Owner"
               className="img-fluid rounded-3 shadow-lg animate__animated animate__fadeInRight"
             />
@@ -159,14 +159,15 @@ const AboutPage = () => (
         <div className="row align-items-center g-5">
           <div className="col-lg-6 order-lg-2 text-center">
             <i className="fas fa-question-circle fa-8x text-muted mb-4 animate__animated animate__zoomIn"></i>
+            
+          </div>
+          <div className="col-lg-6 order-lg-1">
             <h2
-              className="page-title text-center animate__animated animate__fadeIn"
-              style={{ borderBottom: "none", paddingBottom: "0" }}
+              className="page-title text-start animate__animated animate__fadeInLeft"
+              style={{ borderBottom: "none", paddingBottom: "0", color: "var(--sp-dark-gray)" }}
             >
               WHY US?
             </h2>
-          </div>
-          <div className="col-lg-6 order-lg-1">
             <p className="paragraph lead animate__animated animate__fadeInLeft animate__delay-0-5s">
               We have been immersed in the realm of presenting to our clients an
               extensive variety of products. Following are the reasons for our
@@ -203,9 +204,16 @@ const AboutPage = () => (
     <section className="quality-assurance-section py-5 bg-light">
       <div className="container">
         <div className="row align-items-center g-5">
+          <div className="col-lg-6 text-center">
+            <img
+              src="images/about-quality-img.png"
+              alt="Quality Seal"
+              className="img-fluid quality-seal-img animate__animated animate__fadeInLeft"
+            />
+          </div>
           <div className="col-lg-6">
             <h2
-              className="page-title text-start animate__animated animate__fadeInLeft"
+              className="page-title text-start animate__animated animate__fadeInRight"
               style={{
                 color: "var(--sp-dark-gray)",
                 borderBottom: "none",
@@ -214,26 +222,19 @@ const AboutPage = () => (
             >
               Quality Assurance
             </h2>
-            <p className="paragraph lead animate__animated animate__fadeInLeft animate__delay-0-5s">
+            <p className="paragraph lead animate__animated animate__fadeInRight animate__delay-0-5s">
               As a Wholesale Supplier and Importer, our sole emphasis &
               objective has always been the quality of our paper products. Made
               out of high-quality imported chemicals, our product range is
               prepared by skillful artisans & workforce.
             </p>
-            <p className="paragraph animate__animated animate__fadeInLeft animate__delay-1s">
+            <p className="paragraph animate__animated animate__fadeInRight animate__delay-1s">
               Our products go under strict quality checks in the pre &
               post-manufacture process to avoid faults & defects when the
               materials reach our clients. The detailed workmanship of our team
               is involved in the production process right from the selection of
               the materials to their finalization.
             </p>
-          </div>
-          <div className="col-lg-6 text-center">
-            <img
-              src="images/about-quality-img.png"
-              alt="Quality Seal"
-              className="img-fluid quality-seal-img animate__animated animate__fadeInRight"
-            />
           </div>
         </div>
       </div>
