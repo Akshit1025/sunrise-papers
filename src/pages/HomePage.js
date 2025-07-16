@@ -195,17 +195,18 @@ const HomePage = () => {
                 Welcome to Sunrise Papers
               </h2>
               <p className="paragraph lead animate__animated animate__fadeInLeft">
-                Established in 1990, Sunrise Papers is a leading import and
-                wholesale trading company specializing in Carbonless and Baking
-                Paper. Our commitment to providing the highest quality products
-                has earned us a distinguished reputation within the industry.
+                Founded in 1990, Sunrise Papers has grown into a trusted name in
+                the import and wholesale trade of premium carbonless papers and
+                food-grade papers. With over three decades of experience, we are
+                proud to be recognised for our consistent quality, reliability,
+                and service excellence.
               </p>
               <p className="paragraph animate__animated animate__fadeInLeft">
-                Over the years, we have fostered enduring business relationships
-                with our valued clients, a testament to our unwavering
-                dedication to excellence. Our product selection is meticulously
-                curated with a client-centric approach, ensuring the utmost
-                satisfaction of our patrons.
+                At the heart of our business is a deep commitment to building
+                long-term relationships. Our loyal clientele is a reflection of
+                our integrity, responsiveness, and client-first approach. Every
+                product we offer is carefully selected to meet the evolving
+                needs of our customers, ensuring quality at every step.
               </p>
               <Link
                 to="/about"
