@@ -5,7 +5,7 @@
   --sp-dark-primary: #3A2E2A;    /* Very deep coffee/chocolate brown for headings/main text/dark backgrounds */
   --sp-dark-secondary: #6D5E5B; /* Slightly lighter, warm mid-brown for body text, secondary elements */
   --sp-light-background: #F5F5DC; /* Very light cream/beige - the "wooden" background for pages */
-  --sp-white: #FFFFFF;         /* Pure white for card backgrounds, text on dark backgrounds */
+  --sp-white: #FFFFFF;          /* Pure white for card backgrounds, text on dark backgrounds */
   --sp-accent-brown: #A16207;   /* Deep, rich wooden brown/orange for accents, icons, hovers */
   --sp-border-light: #D3D3D3;   /* Light gray for borders and subtle lines */
 }
@@ -96,6 +96,60 @@ body {
   border: 1px solid #e74c3c;
 }
 
+/* --- Preloader Styles (New) --- */
+.preloader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--sp-light-background);
+  position: fixed; /* Fix it to cover the entire viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999; /* Ensure it's on top of everything */
+}
+
+.custom-loader {
+  position: relative;
+  width: 150px; /* Size of the outer loader */
+  height: 150px;
+  border: 8px solid var(--sp-accent-brown); /* Loader color */
+  border-top-color: transparent; /* Top part transparent for rolling effect */
+  border-radius: 50%;
+  animation: roll 1.5s linear infinite; /* Outer circle rolling animation */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.custom-loader-logo {
+  max-width: 70%; /* Size of the logo inside the loader */
+  max-height: 70%;
+  object-fit: contain;
+  animation: counter-roll 1.5s linear infinite; /* Counter-rotation for the logo */
+}
+
+@keyframes roll {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes counter-roll {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg); /* Rotate in the opposite direction */
+  }
+}
+
+
 /* --- Import Component and Page Specific Styles --- */
 /* Components */
 @import "./components/Navbar.css";
@@ -108,10 +162,15 @@ body {
 @import "./pages/ContactPage.css";
 
 /* --- Responsive Adjustments (Global overrides or common container adjustments) --- */
-@media (max-width: 991.98px) { /* Medium devices (tablets) and down */
+@media (max-width: 991.98px) { /* Medium devices (tables) and down */
   .container {
     padding-left: 20px;
     padding-right: 20px;
+  }
+  .custom-loader {
+    width: 120px; /* Smaller loader on tablets */
+    height: 120px;
+    border-width: 6px;
   }
 }
 
@@ -121,5 +180,10 @@ body {
   }
   .page-title {
     font-size: 1.8em;
+  }
+  .custom-loader {
+    width: 100px; /* Even smaller loader on mobile */
+    height: 100px;
+    border-width: 5px;
   }
 }

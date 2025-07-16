@@ -1,22 +1,22 @@
 // src/App.js
 
 import React, { useState, useEffect } from "react";
-import { signInAnonymously, onAuthStateChanged } from "firebase/auth"; // Removed signInWithCustomToken
-import { Routes, Route } from "react-router-dom"; // Import Routes and Route for routing
+import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
+import { Routes, Route } from "react-router-dom";
 
 // Import Firebase config and instances
 import { auth } from "./firebaseConfig";
 // Import main CSS file
-import "./App.css"; // App.css will be loaded after Bootstrap
+import "./App.css";
 
-// Import components and pages (no .js extension)
+// Import components and pages
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import ProductsPage from "./pages/ProductsPage";
-import CategoryProductsPage from "./pages/CategoryProductsPage"; // NEW IMPORT
-import ProductDetailPage from "./pages/ProductDetailPage"; // NEW IMPORT
+import CategoryProductsPage from "./pages/CategoryProductsPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
 import ContactPage from "./pages/ContactPage";
 
 const App = () => {
@@ -26,18 +26,18 @@ const App = () => {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        // Attempt to sign in anonymously. This is a simple way to get a userId
-        // for Firestore security rules that require authentication.
+        // Attempt to sign in anonymously.
         await signInAnonymously(auth);
-        console.log("Signed in anonymously."); // Set up an authentication state listener to update userId
+        console.log("Signed in anonymously.");
 
+        // Set up an authentication state listener to update userId
         onAuthStateChanged(auth, (user) => {
           if (user) {
             setUserId(user.uid);
             console.log("Firebase user ID:", user.uid);
           } else {
             console.log("No user signed in.");
-            setUserId(null); // Clear userId if no user is signed in
+            setUserId(null);
           }
           setAuthReady(true); // Mark authentication as ready regardless of user status
         });
@@ -48,15 +48,19 @@ const App = () => {
     };
 
     initializeAuth();
-  }, []); // The empty dependency array ensures this effect runs only once on component mount
+  }, []);
 
+  // New Preloader UI
   if (!authReady) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh', backgroundColor: 'var(--sp-light-background)' }}>
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
+      <div className="preloader-container">
+        <div className="custom-loader">
+          <img
+            src="images/logo-no-bg.png" // Path to your company logo with no background
+            alt="Sunrise Papers Logo"
+            className="custom-loader-logo"
+          />
         </div>
-        <p className="ms-3 text-secondary">Loading application...</p>
       </div>
     );
   }
@@ -71,7 +75,6 @@ const App = () => {
           path="/products"
           element={<ProductsPage authReady={authReady} />}
         />
-        {/* NEW: Routes for Category Products and Product Details */}
         <Route
           path="/products/:categorySlug"
           element={<CategoryProductsPage authReady={authReady} />}
