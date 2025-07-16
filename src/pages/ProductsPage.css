@@ -4,11 +4,11 @@
 .products-hero-section {
   background: repeating-linear-gradient(
     45deg,
-    var(--sp-light-background),
-    var(--sp-light-background) 10px,
-    #F0EAD6 10px,
-    #F0EAD6 20px
-  ); /* For a subtle stripe effect */
+    var(--royal-light-beige), /* Updated */
+    var(--royal-light-beige) 10px, /* Updated */
+    #F0EAD6 10px, /* Keeping this specific light beige for subtle stripe variation */
+    #F0EAD6 20px /* Keeping this specific light beige for subtle stripe variation */
+  );
   background-size: cover;
   background-position: center;
   height: 300px; /* Adjust height as needed */
@@ -17,8 +17,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--sp-dark-primary); /* Dark text for contrast on light background */
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Lighter shadow for dark text */
+  color: var(--royal-dark-brown); /* Updated */
+  text-shadow: 1px 1px 2px rgba(74, 44, 42, 0.2); /* Updated to royal dark brown rgba */
 }
 
 .products-hero-section::before {
@@ -39,25 +39,25 @@
   font-size: 3.5em;
   font-weight: bold;
   margin-bottom: 10px;
-  color: var(--sp-dark-primary);
+  color: var(--royal-dark-brown); /* Updated */
 }
 
 .products-hero-subtitle {
   font-size: 1.5em;
-  color: var(--sp-dark-secondary);
+  color: var(--royal-medium-brown); /* Updated */
 }
 
 /* Category & Product Card Styling */
 .category-card, .product-card {
   transition: all 0.3s ease;
-  border: 1px solid var(--sp-border-light);
-  background-color: var(--sp-white); /* Cards are white */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border: 1px solid var(--royal-light-gold); /* Updated */
+  background-color: var(--royal-white); /* Updated */
+  box-shadow: 0 4px 12px rgba(74, 44, 42, 0.08); /* Updated to royal dark brown rgba */
 }
 
 .category-card:hover, .product-card:hover {
   transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 20px rgba(74, 44, 42, 0.2); /* Updated to royal dark brown rgba */
 }
 
 .category-image, .product-image {
@@ -69,12 +69,12 @@
 .category-title, .product-title {
   font-size: 1.3em;
   font-weight: bold;
-  color: var(--sp-dark-primary);
+  color: var(--royal-dark-brown); /* Updated */
 }
 
 .category-description, .product-short-description {
   font-size: 0.95em;
-  color: var(--sp-dark-secondary);
+  color: var(--royal-medium-brown); /* Updated */
 }
 
 .category-card-link, .product-card-link {
@@ -95,13 +95,13 @@
 }
 
 .product-detail-name {
-  color: var(--sp-dark-primary);
+  color: var(--royal-dark-brown); /* Updated */
   font-size: 2em; /* Larger heading for product name */
 }
 
 .product-detail-description {
   font-size: 1.1em; /* Slightly larger text for main description */
-  color: var(--sp-dark-secondary);
+  color: var(--royal-medium-brown); /* Updated */
 }
 
 .features-list, .specifications-list {
@@ -111,24 +111,24 @@
 
 .features-list li, .specifications-list li {
   margin-bottom: 8px;
-  color: var(--sp-dark-secondary);
+  color: var(--royal-medium-brown); /* Updated */
 }
 
 .features-list i {
-  color: var(--sp-accent-brown); /* Feature checkmark icon color */
+  color: var(--royal-gold); /* Updated */
   margin-right: 8px;
 }
 
 .product-back-btn {
-  border-color: var(--sp-accent-brown) !important;
-  color: var(--sp-accent-brown) !important;
+  border-color: var(--royal-gold) !important; /* Updated */
+  color: var(--royal-gold) !important; /* Updated */
   font-weight: 500;
   transition: all 0.3s ease;
 }
 
 .product-back-btn:hover {
-  background-color: var(--sp-accent-brown) !important;
-  color: var(--sp-white) !important;
+  background-color: var(--royal-gold) !important; /* Updated */
+  color: var(--royal-dark-brown) !important; /* Updated */
 }
 
 

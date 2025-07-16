@@ -101,18 +101,20 @@ const Footer = () => {
       */}
 
       {/* Main Footer */}
-      <footer className="footer bg-dark py-5 text-white-50">
+      {/* Removed text-white-50 from footer tag */}
+      <footer className="footer py-5">
         <div className="container">
           <div className="row">
             {/* Column 1: Sunrise Papers logo and info */}
             <div className="col-md-4 mb-4 mb-md-0">
               <div className="footer-brand d-flex align-items-center mb-3">
                 <img
-                  src="/images/logo.png"
+                  src="/images/logo-no-bg.png"
                   alt="Sunrise Papers Logo"
                   className="footer-logo me-3"
                 />
-                <span className="footer-company-name fw-bold text-white">
+                {/* Removed text-white from footer-company-name span */}
+                <span className="footer-company-name fw-bold">
                   Sunrise Papers
                 </span>
               </div>
@@ -121,11 +123,12 @@ const Footer = () => {
                 to quality and sustainability.
               </p>
               <div className="footer-social-icons mt-4">
+                {/* Removed text-white-50 from social-icon-link */}
                 <a
                   href="https://twitter.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-icon-link text-white-50 me-3"
+                  className="social-icon-link me-3"
                 >
                   <i className="fab fa-twitter"></i>
                 </a>
@@ -133,7 +136,7 @@ const Footer = () => {
                   href="https://github.com/Akshit1025/sunrise-papers"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-icon-link text-white-50 me-3"
+                  className="social-icon-link me-3"
                 >
                   <i className="fab fa-github"></i>
                 </a>
@@ -141,7 +144,7 @@ const Footer = () => {
                   href="https://wa.me/919810087126"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-icon-link text-white-50 me-3"
+                  className="social-icon-link me-3"
                 >
                   <i className="fab fa-whatsapp"></i>
                 </a>
@@ -149,7 +152,7 @@ const Footer = () => {
                   href="https://instagram.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-icon-link text-white-50"
+                  className="social-icon-link"
                 >
                   <i className="fab fa-instagram"></i>
                 </a>
@@ -157,7 +160,8 @@ const Footer = () => {
             </div>
             {/* Column 2: Quick Links */}
             <div className="col-md-4 mb-4 mb-md-0">
-              <h5 className="footer-heading text-white mb-3">Quick Links</h5>
+              {/* Removed text-white from footer-heading */}
+              <h5 className="footer-heading mb-3">Quick Links</h5>
               <ul className="list-unstyled footer-links">
                 <li>
                   <Link to="/" className="footer-link text-decoration-none">
@@ -192,7 +196,8 @@ const Footer = () => {
             </div>
             {/* Column 3: Contact Information */}
             <div className="col-md-4">
-              <h5 className="footer-heading text-white mb-3">Contact Info</h5>
+              {/* Removed text-white from footer-heading */}
+              <h5 className="footer-heading mb-3">Contact Info</h5>
               <address className="mb-0">
                 <p className="footer-contact-item">
                   <i className="fas fa-map-marker-alt me-2 footer-icon"></i>
@@ -202,7 +207,8 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     className="text-decoration-none footer-link"
                   >
-                    Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka, Delhi, 110078, India
+                    Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka,
+                    Delhi, 110078, India
                   </a>
                 </p>
                 <p className="footer-contact-item">
@@ -236,7 +242,8 @@ const Footer = () => {
         </div>
       </footer>
       {/* Bottom Copyright Bar */}
-      <div className="bottom-bar bg-dark py-3 text-center text-white-50 border-top border-secondary opacity-75">
+      {/* Removed text-white-50 from bottom-bar div */}
+      <div className="bottom-bar py-3 text-center">
         <div className="container d-md-flex justify-content-between align-items-center">
           <small className="mb-2 mb-md-0">
             &copy; {new Date().getFullYear()} Sunrise Papers. All Rights
