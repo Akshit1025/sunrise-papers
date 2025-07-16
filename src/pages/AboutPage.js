@@ -123,8 +123,8 @@ const AboutPage = () => (
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-1-2s">
                 <i className="fas fa-map-marker-alt me-2"></i>{" "}
-                <strong>Registered Address:</strong> 107, Vardhman, Crystal
-                Plaza, CD Block, Pitampura, Delhi- 110088, Delhi, India
+                <strong>Registered Address:</strong> Unit No. 390, Vegas Mall,
+                Plot No. 6, Sector 14, Dwarka, Delhi, 110078, India
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-1-5s">
                 <i className="fas fa-users me-2"></i>{" "}
@@ -159,12 +159,15 @@ const AboutPage = () => (
         <div className="row align-items-center g-5">
           <div className="col-lg-6 order-lg-2 text-center">
             <i className="fas fa-question-circle fa-8x text-muted mb-4 animate__animated animate__zoomIn"></i>
-            
           </div>
           <div className="col-lg-6 order-lg-1">
             <h2
               className="page-title text-start animate__animated animate__fadeInLeft"
-              style={{ borderBottom: "none", paddingBottom: "0", color: "var(--sp-dark-gray)" }}
+              style={{
+                borderBottom: "none",
+                paddingBottom: "0",
+                color: "var(--sp-dark-gray)",
+              }}
             >
               WHY US?
             </h2>
@@ -175,24 +178,21 @@ const AboutPage = () => (
             </p>
             <ul className="list-unstyled values-list">
               <li className="animate__animated animate__fadeInLeft animate__delay-0-7s">
-                <i className="fas fa-shipping-fast me-2"></i>{" "}
-                Prompt delivery of an order
+                <i className="fas fa-shipping-fast me-2"></i> Prompt delivery of
+                an order
               </li>
               <li className="animate__animated animate__fadeInLeft animate__delay-0-9s">
-                <i className="fas fa-handshake me-2"></i> Ethical
-                business deals
+                <i className="fas fa-handshake me-2"></i> Ethical business deals
               </li>
               <li className="animate__animated animate__fadeInLeft animate__delay-1-1s">
-                <i className="fas fa-shield-alt me-2"></i>{" "}
-                Transparency
+                <i className="fas fa-shield-alt me-2"></i> Transparency
               </li>
               <li className="animate__animated animate__fadeInLeft animate__delay-1-3s">
-                <i className="fas fa-tags me-2"></i> Attractive
-                Prices with technically superior products
+                <i className="fas fa-tags me-2"></i> Attractive Prices with
+                technically superior products
               </li>
               <li className="animate__animated animate__fadeInLeft animate__delay-1-5s">
-                <i className="fas fa-globe me-2"></i> Huge
-                distribution network
+                <i className="fas fa-globe me-2"></i> Huge distribution network
               </li>
             </ul>
           </div>

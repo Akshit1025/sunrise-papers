@@ -193,8 +193,7 @@ const ContactPage = ({ userId, authReady }) => {
                         className="text-decoration-none"
                         style={{ color: "var(--sp-dark-primary)" }}
                       >
-                        Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka,
-                        New Delhi, 110078, India
+                        Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka, Delhi, 110078, India
                       </a>
                     </span>
                   </li>

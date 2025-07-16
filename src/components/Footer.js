@@ -202,8 +202,7 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     className="text-decoration-none footer-link"
                   >
-                    Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka, New
-                    Delhi, 110078, India
+                    Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka, Delhi, 110078, India
                   </a>
                 </p>
                 <p className="footer-contact-item">
