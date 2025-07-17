@@ -56,7 +56,7 @@ const App = () => {
       <div className="preloader-container">
         <div className="custom-loader">
           <img
-            src="images/logo-no-bg.png" // Path to your company logo with no background
+            src="https://sunrise-papers.vercel.app/images/logo-no-bg.png" // Path to your company logo with no background
             alt="Sunrise Papers Logo"
             className="custom-loader-logo"
           />
