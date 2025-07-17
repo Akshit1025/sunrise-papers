@@ -17,7 +17,9 @@ const AboutPage = () => (
     {/* A Glance at Sunrise Papers */}
     <section className="glance-at-sunrise-section py-5">
       <div className="container">
-        <h2 className="page-title text-center mb-5">A Glance at Sunrise</h2>
+        <h2 className="page-title text-center mb-5">
+          A Glance at Sunrise Papers
+        </h2>
         <div className="row align-items-center g-5">
           <div className="col-lg-6">
             <img
@@ -28,30 +30,53 @@ const AboutPage = () => (
           </div>
           <div className="col-lg-6">
             <p className="paragraph lead animate__animated animate__fadeInRight animate__delay-0-5s">
-              Established in 1990, Sunrise Papers is a leading{" "}
-              <b>Importer, Trader, and Wholesale Supplier</b> of Carbonless and
-              Baking Paper. Our range is highly demanded for its optimum
-              quality. All the efforts of the company to ensure excellent
-              quality products have enabled them to build long-lasting business
-              relationships with their clients.
+              Established in 1990, Sunrise Papers is a leading importer, trader,
+              and wholesale supplier of high-quality carbonless paper and
+              food-grade paper. Known for our consistent quality and
+              client-centric approach, our products are trusted across
+              industries for their reliability and performance.
             </p>
             <p className="paragraph animate__animated animate__fadeInRight animate__delay-1s">
-              The provided products are conceptualized with a client-oriented
-              approach to bring extreme gratification to our patrons. The
-              offered gamut of products is rendered in obedience to the quality
-              constraints by our competent experts with a rich understanding of
-              this field. Through continuous adaptation to industry trends and
-              innovative strategies, Sunrise Papers remains at the forefront of
-              delivering top-tier paper solutions that cater to the diverse
-              needs of our discerning customers.
+              Our success is built so strong, long-term relationships with
+              clients - a result of our unwavering commitment to quality and
+              service. Every product in our range is carefully selected and
+              offered to deliver maximum value satisfaction. From procurement to
+              supply, we maintain strict adherence to industry standards, guided
+              by a team of experience professionals with deep domain knowledge.
+            </p>
+            <p className="paragraph animate__animated animate__fadeInRight animate__delay-1-5s">
+              We remain at the forefront of the paper industry by staying
+              attuned to market trends, embracing innovation, and continually
+              refining our product offerings to meet the evolving needs of our
+              customers.
             </p>
           </div>
         </div>
       </div>
     </section>
 
-    {/* Our Team Section */}
+    {/* New: Paper Supply Philosophy Section */}
+    <section className="paper-philosophy-section py-5">
+      <div className="container">
+        <h2 className="page-title text-center mb-5">Paper Supply Philosophy</h2>
+        <div className="row justify-content-center">
+          <div className="col-lg-8 text-center">
+            <i className="fas fa-lightbulb philosophy-icon animate__animated animate__fadeInDown mb-4"></i>
+            <p className="paragraph lead animate__animated animate__fadeInUp animate__delay-0-5s">
+              We believe in delivering only the best, high-grade paper products
+              that combine functionality, hygiene, and durability. Accurate
+              selection supports both food-grade and documentation needs with
+              precision and care.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Our Leadership Section (formerly Our Team Section) */}
     <section className="our-team-section py-5 bg-light">
+      {" "}
+      {/* Retaining class for existing CSS */}
       <div className="container">
         <div className="row align-items-center g-5">
           <div className="col-lg-6 order-lg-2">
@@ -65,27 +90,29 @@ const AboutPage = () => (
             <h2
               className="page-title text-start animate__animated animate__fadeInLeft"
               style={{
-                color: "var(--sp-dark-gray)",
+                color: "var(--sp-dark-gray)", // This will be overridden by royal theme CSS
                 borderBottom: "none",
                 paddingBottom: "0",
               }}
             >
-              Our Accomplishment Story
+              Our Leadership
             </h2>
-            <p className="paragraph lead animate__animated animate__fadeInLeft animate__delay-0-5s">
-              For our accomplishment story, we are grateful to our owner,{" "}
-              <b>Mr. Dinesh Gupta</b>, whose continual backing and direction
-              have been useful to us for attaining exponential development in
-              the current market.
-            </p>
+            {/* Styled Quote */}
+            <blockquote className="leadership-quote animate__animated animate__fadeInLeft animate__delay-0-5s">
+              <p className="mb-2">
+                "It's not about how many years I've worked - it's about how much
+                those years have taught me."
+              </p>
+              <footer className="blockquote-footer mt-2">
+                Mr. Dinesh Gupta
+              </footer>
+            </blockquote>
+            {/* New Paragraph */}
             <p className="paragraph animate__animated animate__fadeInLeft animate__delay-1s">
-              We have an adroit team of quality people that value the quality of
-              our provided products at each stage to make sure that the norms
-              are effectively met. We direct all our activities to cater to the
-              expectations of customers by providing them excellent quality
-              products as per their gratifications. Moreover, we follow moral
-              business policies and crystal pure transparency in all our
-              transactions to keep healthy relations with the customers.
+              Under the insightful leadership of Mr. Dinesh Gupta, Sunrise
+              Papers has grown with purpose and vision. His experience-driven
+              guidance continues to shape our commitment to quality, trust, and
+              long-term growth.
             </p>
           </div>
         </div>
@@ -105,21 +132,18 @@ const AboutPage = () => (
             />
           </div>
           <div className="col-lg-6">
-            <h3 className="sub-heading fw-bold mb-3 animate__animated animate__fadeInRight">
-              Basic Information:
-            </h3>
             <ul className="list-unstyled company-info-list">
               <li className="animate__animated animate__fadeInRight animate__delay-0-3s">
                 <i className="fas fa-dot-circle me-2"></i>{" "}
-                <strong>Nature of Business:</strong> Wholesale Supplier
+                <strong>Nature of Business:</strong> Trader and Importer
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-0-6s">
                 <i className="fas fa-dot-circle me-2"></i>{" "}
-                <strong>Additional Business:</strong> Trader and Importer
+                <strong>Additional Business:</strong> Wholesale Supplier
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-0-9s">
                 <i className="fas fa-dot-circle me-2"></i>{" "}
-                <strong>Company CEO:</strong> Dinesh Gupta
+                <strong>Company Owner:</strong> Dinesh Gupta
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-1-2s">
                 <i className="fas fa-map-marker-alt me-2"></i>{" "}
@@ -142,7 +166,6 @@ const AboutPage = () => (
                 <i className="fas fa-wallet me-2"></i>{" "}
                 <strong>Annual Turnover:</strong> Rs. 25 - 50 Crores
               </li>
-              {/* Moved GST No. here from Statutory Profile */}
               <li className="animate__animated animate__fadeInRight animate__delay-2-7s">
                 <i className="fas fa-barcode me-2"></i>{" "}
                 <strong>GST No.:</strong> 07AAJPK3664M1Z9
@@ -166,33 +189,37 @@ const AboutPage = () => (
               style={{
                 borderBottom: "none",
                 paddingBottom: "0",
-                color: "var(--sp-dark-gray)",
+                color: "var(--sp-dark-gray)", // This will be overridden by royal theme CSS
               }}
             >
-              WHY US?
+              WHY US ?
             </h2>
             <p className="paragraph lead animate__animated animate__fadeInLeft animate__delay-0-5s">
-              We have been immersed in the realm of presenting to our clients an
-              extensive variety of products. Following are the reasons for our
-              success:
+              Over the years, we have established a reputation for providing a
+              comprehensive and reliable range of paper solutions tailored to
+              our clients' specific needs. The following key strengths drive our
+              continued success:
             </p>
             <ul className="list-unstyled values-list">
               <li className="animate__animated animate__fadeInLeft animate__delay-0-7s">
-                <i className="fas fa-shipping-fast me-2"></i> Prompt delivery of
-                an order
+                <i className="fas fa-shipping-fast me-2"></i> Prompt and
+                Reliable Delivery
               </li>
               <li className="animate__animated animate__fadeInLeft animate__delay-0-9s">
-                <i className="fas fa-handshake me-2"></i> Ethical business deals
+                <i className="fas fa-handshake me-2"></i> Ethical and
+                Transparent Business Practices
               </li>
               <li className="animate__animated animate__fadeInLeft animate__delay-1-1s">
-                <i className="fas fa-shield-alt me-2"></i> Transparency
+                <i className="fas fa-tags me-2"></i> Competitive Pricing with
+                Technically Advanced Products
               </li>
               <li className="animate__animated animate__fadeInLeft animate__delay-1-3s">
-                <i className="fas fa-tags me-2"></i> Attractive Prices with
-                technically superior products
+                <i className="fas fa-globe me-2"></i> Widespread and Efficient
+                Distribution Network
               </li>
               <li className="animate__animated animate__fadeInLeft animate__delay-1-5s">
-                <i className="fas fa-globe me-2"></i> Huge distribution network
+                <i className="fas fa-check-circle me-2"></i> Consistent Product
+                Quality and Client Satisfaction
               </li>
             </ul>
           </div>
@@ -215,25 +242,28 @@ const AboutPage = () => (
             <h2
               className="page-title text-start animate__animated animate__fadeInRight"
               style={{
-                color: "var(--sp-dark-gray)",
+                color: "var(--sp-dark-gray)", // This will be overridden by royal theme CSS
                 borderBottom: "none",
                 paddingBottom: "0",
               }}
             >
-              Quality Assurance
+              Our Commitment to Quality
             </h2>
             <p className="paragraph lead animate__animated animate__fadeInRight animate__delay-0-5s">
-              As a Wholesale Supplier and Importer, our sole emphasis &
-              objective has always been the quality of our paper products. Made
-              out of high-quality imported chemicals, our product range is
-              prepared by skillful artisans & workforce.
+              As a dedicated wholesale supplier and importer, our foremost
+              priority has always been the quality of the paper we provide.
             </p>
             <p className="paragraph animate__animated animate__fadeInRight animate__delay-1s">
-              Our products go under strict quality checks in the pre &
-              post-manufacture process to avoid faults & defects when the
-              materials reach our clients. The detailed workmanship of our team
-              is involved in the production process right from the selection of
-              the materials to their finalization.
+              Our product range is crafted using high-grade imported raw
+              materials and chemicals, handled by a skilled and experienced
+              workforce. Every batch undergoes rigorous quality checks - both
+              before and after production - to ensure defect-free delivery.
+            </p>
+            <p className="paragraph animate__animated animate__fadeInRight animate__delay-1-5s">
+              We maintain detailed oversight throughout the process, from
+              material selection to final dispatch, ensuring that only
+              precision-finished, high-performance paper products reach our
+              customers.
             </p>
           </div>
         </div>
