@@ -2,79 +2,79 @@
 
 /* Products Hero Section (Shared for Products, Category Products, Product Detail) */
 .products-hero-section {
-  background: repeating-linear-gradient(
-    45deg,
-    var(--royal-light-beige), /* Updated */
-    var(--royal-light-beige) 10px, /* Updated */
-    #F0EAD6 10px, /* Keeping this specific light beige for subtle stripe variation */
-    #F0EAD6 20px /* Keeping this specific light beige for subtle stripe variation */
-  );
-  background-size: cover;
-  background-position: center;
-  height: 300px; /* Adjust height as needed */
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--royal-dark-brown); /* Updated */
-  text-shadow: 1px 1px 2px rgba(74, 44, 42, 0.2); /* Updated to royal dark brown rgba */
+    background: repeating-linear-gradient(
+        45deg,
+        var(--royal-light-beige), /* Updated */
+        var(--royal-light-beige) 10px, /* Updated */
+        #F0EAD6 10px, /* Keeping this specific light beige for subtle stripe variation */
+        #F0EAD6 20px /* Keeping this specific light beige for subtle stripe variation */
+    );
+    background-size: cover;
+    background-position: center;
+    height: 300px; /* Adjust height as needed */
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--royal-dark-brown); /* Updated */
+    text-shadow: 1px 1px 2px rgba(74, 44, 42, 0.2); /* Updated to royal dark brown rgba */
 }
 
 .products-hero-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
 }
 
 .products-hero-section .container {
-  z-index: 2;
+    z-index: 2;
 }
 
 .products-hero-title {
-  font-size: 3.5em;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: var(--royal-dark-brown); /* Updated */
+    font-size: 3.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: var(--royal-dark-brown); /* Updated */
 }
 
 .products-hero-subtitle {
-  font-size: 1.5em;
-  color: var(--royal-medium-brown); /* Updated */
+    font-size: 1.5em;
+    color: var(--royal-medium-brown); /* Updated */
 }
 
 /* Category & Product Card Styling */
 .category-card, .product-card {
-  transition: all 0.3s ease;
-  border: 1px solid var(--royal-light-gold); /* Updated */
-  background-color: var(--royal-white); /* Updated */
-  box-shadow: 0 4px 12px rgba(74, 44, 42, 0.08); /* Updated to royal dark brown rgba */
+    transition: all 0.3s ease;
+    border: 1px solid var(--royal-light-gold); /* Updated */
+    background-color: var(--royal-white); /* Updated */
+    box-shadow: 0 4px 12px rgba(74, 44, 42, 0.08); /* Updated to royal dark brown rgba */
 }
 
 .category-card:hover, .product-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(74, 44, 42, 0.2); /* Updated to royal dark brown rgba */
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(74, 44, 42, 0.2); /* Updated to royal dark brown rgba */
 }
 
 .category-image, .product-image {
-  height: 200px; /* Fixed height for consistent card appearance */
-  object-fit: cover;
-  width: 100%;
+    height: 200px; /* Fixed height for consistent card appearance */
+    object-fit: cover;
+    width: 100%;
 }
 
 .category-title, .product-title {
-  font-size: 1.3em;
-  font-weight: bold;
-  color: var(--royal-dark-brown); /* Updated */
+    font-size: 1.3em;
+    font-weight: bold;
+    color: var(--royal-dark-brown); /* Updated */
 }
 
 .category-description, .product-short-description {
-  font-size: 0.95em;
-  color: var(--royal-medium-brown); /* Updated */
+    font-size: 0.95em;
+    color: var(--royal-medium-brown); /* Updated */
 }
 
 .category-card-link, .product-card-link {
@@ -83,122 +83,206 @@
 
 /* Product Detail Page Styling */
 .product-detail-content {
-  padding-top: 20px;
-  padding-bottom: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .product-detail-image {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 }
 
 .product-detail-name {
-  color: var(--royal-dark-brown); /* Updated */
-  font-size: 2em; /* Larger heading for product name */
+    color: var(--royal-dark-brown); /* Updated */
+    font-size: 2em; /* Larger heading for product name */
 }
 
 .product-detail-description {
-  font-size: 1.1em; /* Slightly larger text for main description */
-  color: var(--royal-medium-brown); /* Updated */
+    font-size: 1.1em; /* Slightly larger text for main description */
+    color: var(--royal-medium-brown); /* Updated */
 }
 
 .features-list, .specifications-list {
-  padding-left: 0;
-  list-style: none;
+    padding-left: 0;
+    list-style: none;
 }
 
 .features-list li, .specifications-list li {
-  margin-bottom: 8px;
-  color: var(--royal-medium-brown); /* Updated */
+    margin-bottom: 8px;
+    color: var(--royal-medium-brown); /* Updated */
 }
 
 .features-list i {
-  color: var(--royal-gold); /* Updated */
-  margin-right: 8px;
+    color: var(--royal-gold); /* Updated */
+    margin-right: 8px;
 }
 
 .product-back-btn {
-  border-color: var(--royal-gold) !important; /* Updated */
-  color: var(--royal-gold) !important; /* Updated */
-  font-weight: 500;
-  transition: all 0.3s ease;
+    border-color: var(--royal-gold) !important; /* Updated */
+    color: var(--royal-gold) !important; /* Updated */
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
 
 .product-back-btn:hover {
-  background-color: var(--royal-gold) !important; /* Updated */
-  color: var(--royal-dark-brown) !important; /* Updated */
+    background-color: var(--royal-gold) !important; /* Updated */
+    color: var(--royal-dark-brown) !important; /* Updated */
+}
+
+/* New: Category Info Sections (for CategoryProductsPage) */
+.category-info-section,
+.category-benefits-applications-section { /* Renamed/Combined */
+    border: 1px solid var(--royal-light-gold); /* Consistent border */
+    box-shadow: 0 4px 12px rgba(74, 44, 42, 0.05); /* Lighter shadow */
+    margin-bottom: 40px; /* Space between sections */
+}
+
+.category-info-section {
+    background-color: var(--royal-light-beige); /* Beige background */
+}
+
+.category-benefits-applications-section { /* Combined section background */
+    background-color: var(--royal-white); /* White background */
+}
+
+.category-info-section .sub-heading,
+.category-benefits-applications-section .sub-heading { /* Combined heading style */
+    color: var(--royal-dark-brown); /* Dark brown for headings */
+    border-bottom: 2px solid var(--royal-gold); /* Golden underline */
+    display: inline-block;
+    padding-bottom: 8px;
+    margin-bottom: 25px; /* Space below heading */
+}
+
+.category-info-section .paragraph {
+    font-size: 1.1em; /* Slightly larger text */
+    line-height: 1.7;
+    color: var(--royal-medium-brown); /* Consistent text color */
+}
+
+.combined-list { /* New class for combined list */
+    padding-left: 0;
+    list-style: none;
+}
+
+.combined-list li { /* Styling for list items in combined section */
+    font-size: 1.05em;
+    color: var(--royal-medium-brown);
+    margin-bottom: 10px;
+}
+
+.category-list-icon { /* New general icon style for combined list */
+    color: var(--royal-gold); /* Golden for all list icons */
+    font-size: 1.2em;
+    flex-shrink: 0; /* Prevent icon from shrinking */
 }
 
 
 /* Responsive adjustments for Products Pages */
 @media (max-width: 991.98px) { /* Tablet screens and down */
-  .products-hero-section {
-    height: 250px;
-  }
-  .products-hero-title {
-    font-size: 2.8em;
-  }
-  .products-hero-subtitle {
-    font-size: 1.2em;
-  }
-  /* Category/Product Cards on Tablet */
-  .category-card, .product-card {
-    margin-bottom: 20px; /* Add some space between stacked cards */
-  }
-  .product-detail-content .col-lg-6 {
-    text-align: center; /* Center content in columns when stacked */
-  }
-  .product-detail-image {
-    max-width: 80%; /* Limit image width on tablets */
-    margin-bottom: 30px;
-  }
-  .features-list, .specifications-list {
-    text-align: left; /* Keep lists left-aligned within centered column */
-    max-width: 80%; /* Constrain list width for readability */
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .product-back-btn {
-    width: 100%;
-    margin-bottom: 15px; /* Add space when buttons stack */
-  }
+    .products-hero-section {
+        height: 250px;
+    }
+    .products-hero-title {
+        font-size: 2.8em;
+    }
+    .products-hero-subtitle {
+        font-size: 1.2em;
+    }
+    /* Category/Product Cards on Tablet */
+    .category-card, .product-card {
+        margin-bottom: 20px; /* Add some space between stacked cards */
+    }
+    .product-detail-content .col-lg-6 {
+        text-align: center; /* Center content in columns when stacked */
+    }
+    .product-detail-image {
+        max-width: 80%; /* Limit image width on tablets */
+        margin-bottom: 30px;
+    }
+    .features-list, .specifications-list {
+        text-align: left; /* Keep lists left-aligned within centered column */
+        max-width: 80%; /* Constrain list width for readability */
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .product-back-btn {
+        width: 100%;
+        margin-bottom: 15px; /* Add space when buttons stack */
+    }
+
+    /* Category Info Sections on Tablet */
+    .category-info-section,
+    .category-benefits-applications-section { /* Combined */
+        padding: 30px; /* Adjust padding */
+    }
+    .category-info-section .sub-heading,
+    .category-benefits-applications-section .sub-heading { /* Combined */
+        font-size: 1.4em; /* Smaller headings */
+        margin-bottom: 20px;
+    }
+    .combined-list { /* New class for combined list */
+        padding-left: 20px; /* Add padding for lists */
+        text-align: left;
+    }
 }
 
 @media (max-width: 767.98px) { /* Mobile screens and down */
-  .products-hero-section {
-    height: 200px;
-  }
-  .products-hero-title {
-    font-size: 2em;
-  }
-  .products-hero-subtitle {
-    font-size: 1em;
-  }
-  /* Category/Product Cards on Mobile */
-  .category-image, .product-image {
-    height: 180px; /* Slightly smaller images on mobile */
-  }
-  .category-title, .product-title {
-    font-size: 1.2em;
-  }
-  .product-detail-image {
-    max-width: 90%; /* Allow image to be wider on phones */
-    margin-bottom: 20px;
-  }
-  .product-detail-name {
-    font-size: 1.8em;
-  }
-  .product-detail-description {
-    font-size: 1em;
-  }
-  .features-list, .specifications-list {
-    padding-left: 0;
-    max-width: 90%; /* Adjust list width for mobile */
-  }
-  .product-back-btn {
-    font-size: 0.9em;
-    padding: 10px 20px;
-  }
+    .products-hero-section {
+        height: 200px;
+    }
+    .products-hero-title {
+        font-size: 2em;
+    }
+    .products-hero-subtitle {
+        font-size: 1em;
+    }
+    /* Category/Product Cards on Mobile */
+    .category-image, .product-image {
+        height: 180px; /* Slightly smaller images on mobile */
+    }
+    .category-title, .product-title {
+        font-size: 1.2em;
+    }
+    .product-detail-image {
+        max-width: 90%; /* Allow image to be wider on phones */
+        margin-bottom: 20px;
+    }
+    .product-detail-name {
+        font-size: 1.8em;
+    }
+    .product-detail-description {
+        font-size: 1em;
+    }
+    .features-list, .specifications-list {
+        padding-left: 0;
+        max-width: 90%; /* Adjust list width for mobile */
+    }
+    .product-back-btn {
+        font-size: 0.9em;
+        padding: 10px 20px;
+    }
+
+    /* Category Info Sections on Mobile */
+    .category-info-section,
+    .category-benefits-applications-section { /* Combined */
+        padding: 20px; /* Further adjust padding */
+    }
+    .category-info-section .sub-heading,
+    .category-benefits-applications-section .sub-heading { /* Combined */
+        font-size: 1.2em; /* Even smaller headings */
+        margin-bottom: 15px;
+    }
+    .combined-list { /* New class for combined list */
+        padding-left: 0; /* Remove padding for very small screens */
+    }
+    .combined-list li {
+        font-size: 0.95em;
+    }
+    .category-list-icon { /* New general icon style for combined list */
+        font-size: 1em;
+        margin-right: 10px;
+    }
 }
