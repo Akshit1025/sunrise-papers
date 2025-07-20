@@ -8,6 +8,10 @@
   --royal-gold: #B8860B;         /* Vibrant, rich golden color (replaces --sp-accent-brown) */
   --royal-light-gold: #E0D3B3;   /* Very subtle, light golden tone for borders (replaces --sp-border-light, grey) */
   --royal-white: #FFFFFF;        /* Pure white for strong contrast */
+
+  /* --- New Font Variables --- */
+  --font-playfair-heading: 'Playfair Display', serif; /* For headings and important elements */
+  --font-playfair-body: 'Playfair', serif;           /* For body text and general content */
 }
 
 /* --- Global Box Sizing and Overflow Control --- */
@@ -17,7 +21,7 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-playfair-body); /* Applied Playfair to body */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--royal-light-beige); /* Main page background color (wooden color) */
@@ -56,6 +60,7 @@ body {
 
 /* Generic typographic styles used across multiple pages */
 .page-title {
+  font-family: var(--font-playfair-heading); /* Applied Playfair Display */
   color: var(--royal-dark-brown); /* Updated */
   font-size: 2.2em;
   margin-bottom: 25px;
@@ -65,18 +70,21 @@ body {
 }
 
 .paragraph {
+  font-family: var(--font-playfair-body); /* Applied Playfair */
   line-height: 1.7;
   margin-bottom: 15px;
   color: var(--royal-medium-brown); /* Updated */
 }
 
 .sub-heading {
+  font-family: var(--font-playfair-heading); /* Applied Playfair Display */
   color: var(--royal-dark-brown); /* Updated */
   font-size: 1.6em;
 }
 
 /* Reusable message box styles for alerts (e.g., form submissions, loading/error states) */
 .message-box {
+  font-family: var(--font-playfair-body); /* Applied Playfair */
   margin-top: 20px;
   padding: 15px;
   border-radius: 8px;
