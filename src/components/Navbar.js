@@ -47,12 +47,13 @@ const Navbar = () => {
           </div>
           <div className="social-icons">
             <a
-              href="https://twitter.com"
+              href="https://www.linkedin.com/company/sunriise-papers/" // Updated LinkedIn URL (example)
               target="_blank"
               rel="noopener noreferrer"
               className="social-icon-link text-muted me-3"
             >
-              <i className="fab fa-twitter"></i>
+              <i className="fab fa-linkedin"></i>{" "}
+              {/* Changed from fa-twitter to fa-linkedin */}
             </a>
             <a
               href="https://github.com/Akshit1025/sunrise-papers"
@@ -71,12 +72,13 @@ const Navbar = () => {
               <i className="fab fa-whatsapp"></i>
             </a>
             <a
-              href="https://instagram.com"
+              href="https://g.co/kgs/WDyBz11" // Updated Google Business URL (example)
               target="_blank"
               rel="noopener noreferrer"
               className="social-icon-link text-muted"
             >
-              <i className="fab fa-instagram"></i>
+              <i className="fab fa-google-plus-g"></i>{" "}
+              {/* Changed from fa-instagram to fa-google-plus-g */}
             </a>
           </div>
         </div>

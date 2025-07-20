@@ -9,7 +9,7 @@ const AboutPage = () => (
       <div className="container animate__animated animate__fadeIn">
         <h1 className="display-3 fw-bold mb-3 about-hero-title">About Us</h1>
         <p className="lead about-hero-subtitle">
-          Your trusted partner in paper trading industry since 1990.
+          Your trusted partner in paper trading industry since 1995.
         </p>
       </div>
     </section>
@@ -30,7 +30,7 @@ const AboutPage = () => (
           </div>
           <div className="col-lg-6">
             <p className="paragraph lead animate__animated animate__fadeInRight animate__delay-0-5s">
-              Established in 1990, Sunrise Papers is a leading importer, trader,
+              Established in 1995, Sunrise Papers is a leading importer, trader,
               and wholesale supplier of high-quality carbonless paper and
               food-grade paper. Known for our consistent quality and
               client-centric approach, our products are trusted across
@@ -156,7 +156,7 @@ const AboutPage = () => (
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-1-8s">
                 <i className="fas fa-calendar-alt me-2"></i>{" "}
-                <strong>Year of Establishment:</strong> 1990
+                <strong>Year of Establishment:</strong> 1995
               </li>
               <li className="animate__animated animate__fadeInRight animate__delay-2-1s">
                 <i className="fas fa-balance-scale me-2"></i>{" "}

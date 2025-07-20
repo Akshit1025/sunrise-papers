@@ -101,7 +101,6 @@ const Footer = () => {
       */}
 
       {/* Main Footer */}
-      {/* Removed text-white-50 from footer tag */}
       <footer className="footer py-5">
         <div className="container">
           <div className="row">
@@ -109,28 +108,27 @@ const Footer = () => {
             <div className="col-md-4 mb-4 mb-md-0">
               <div className="footer-brand d-flex align-items-center mb-3">
                 <img
-                  src="/images/logo-no-bg.png"
+                  src="/images/logo-no-bg.png" // Changed logo path here
                   alt="Sunrise Papers Logo"
                   className="footer-logo me-3"
                 />
-                {/* Removed text-white from footer-company-name span */}
                 <span className="footer-company-name fw-bold">
                   Sunrise Papers
                 </span>
               </div>
               <p className="footer-description">
-                Delivering execellence in paper products since 1990. Committed
+                Delivering execellence in paper products since 1995. Committed
                 to quality and sustainability.
               </p>
               <div className="footer-social-icons mt-4">
-                {/* Removed text-white-50 from social-icon-link */}
                 <a
-                  href="https://twitter.com"
+                  href="https://www.linkedin.com/company/sunriise-papers/" // Updated LinkedIn URL (example)
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-icon-link me-3"
                 >
-                  <i className="fab fa-twitter"></i>
+                  <i className="fab fa-linkedin"></i>{" "}
+                  {/* Changed from fa-twitter to fa-linkedin */}
                 </a>
                 <a
                   href="https://github.com/Akshit1025/sunrise-papers"
@@ -149,18 +147,18 @@ const Footer = () => {
                   <i className="fab fa-whatsapp"></i>
                 </a>
                 <a
-                  href="https://instagram.com"
+                  href="https://g.co/kgs/WDyBz11" // Updated Google Business URL (example)
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-icon-link"
                 >
-                  <i className="fab fa-instagram"></i>
+                  <i className="fab fa-google-plus-g"></i>{" "}
+                  {/* Changed from fa-instagram to fa-google-plus-g */}
                 </a>
               </div>
             </div>
             {/* Column 2: Quick Links */}
             <div className="col-md-4 mb-4 mb-md-0">
-              {/* Removed text-white from footer-heading */}
               <h5 className="footer-heading mb-3">Quick Links</h5>
               <ul className="list-unstyled footer-links">
                 <li>
@@ -196,7 +194,6 @@ const Footer = () => {
             </div>
             {/* Column 3: Contact Information */}
             <div className="col-md-4">
-              {/* Removed text-white from footer-heading */}
               <h5 className="footer-heading mb-3">Contact Info</h5>
               <address className="mb-0">
                 <p className="footer-contact-item">
@@ -242,7 +239,6 @@ const Footer = () => {
         </div>
       </footer>
       {/* Bottom Copyright Bar */}
-      {/* Removed text-white-50 from bottom-bar div */}
       <div className="bottom-bar py-3 text-center">
         <div className="container d-md-flex justify-content-between align-items-center">
           <small className="mb-2 mb-md-0">

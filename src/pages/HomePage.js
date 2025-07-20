@@ -195,7 +195,7 @@ const HomePage = () => {
                 Welcome to Sunrise Papers
               </h2>
               <p className="paragraph lead animate__animated animate__fadeInLeft">
-                Founded in 1990, Sunrise Papers has grown into a trusted name in
+                Founded in 1995, Sunrise Papers has grown into a trusted name in
                 the import and wholesale trade of premium carbonless papers and
                 food-grade papers. With over three decades of experience, we are
                 proud to be recognised for our consistent quality, reliability,
