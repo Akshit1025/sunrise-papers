@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom"; // Import useLocation
 
 // Import Firebase config and instances
 import { auth } from "./firebaseConfig";
@@ -18,6 +18,18 @@ import ProductsPage from "./pages/ProductsPage";
 import CategoryProductsPage from "./pages/CategoryProductsPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import ContactPage from "./pages/ContactPage";
+
+// New ScrollToTop component
+const ScrollToTop = () => {
+  const { pathname } = useLocation(); // Get the current path from React Router
+
+  useEffect(() => {
+    // Scroll to top whenever the pathname changes (i.e., route changes)
+    window.scrollTo(0, 0);
+  }, [pathname]); // Dependency array: re-run effect when pathname changes
+
+  return null; // This component doesn't render anything itself
+};
 
 const App = () => {
   const [userId, setUserId] = useState(null);
@@ -56,7 +68,7 @@ const App = () => {
       <div className="preloader-container">
         <div className="custom-loader">
           <img
-            src="https://sunrise-papers.vercel.app/images/logo-no-bg.png" // Path to your company logo with no background
+            src="https://sunrise-papers.vercel.app/images/logo-no-bg.png" // Company logo URL
             alt="Sunrise Papers Logo"
             className="custom-loader-logo"
           />
@@ -68,6 +80,8 @@ const App = () => {
   return (
     <div className="app-wrapper">
       <Navbar />
+      {/* Render ScrollToTop component here */}
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />

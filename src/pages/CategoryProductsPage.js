@@ -31,7 +31,7 @@ const CategoryProductsPage = ({ authReady }) => {
         // --- Step 1: Fetch Category Details ---
         // Get a reference to the 'categories' collection in Firestore
         const categoriesCollectionRef = collection(db, "categories");
-        // Create a query to find the category document where 'slug' matches the 'categorySlug' from the URL
+        // Create a query to find the category document where 'slug' matches the the 'categorySlug' from the URL
         const categoryQuery = query(
           categoriesCollectionRef,
           where("slug", "==", categorySlug),
@@ -45,34 +45,37 @@ const CategoryProductsPage = ({ authReady }) => {
           const fetchedCategoryData = categorySnapshot.docs[0].data();
           setCategoryData(fetchedCategoryData); // Store the fetched category data in state
           console.log("Fetched category details:", fetchedCategoryData);
+
+          // --- Step 2: Conditionally Fetch Products for this Category ---
+          // Only fetch products if the category is marked as having sub-products
+          if (fetchedCategoryData.hasSubProducts) {
+            const productsCollectionRef = collection(db, "products");
+            const productsQuery = query(
+              productsCollectionRef,
+              where("category_slug", "==", categorySlug)
+            );
+            const productsSnapshot = await getDocs(productsQuery);
+            const fetchedProducts = productsSnapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+            setProducts(fetchedProducts);
+            console.log(
+              `Fetched products for category "${categorySlug}":`,
+              fetchedProducts
+            );
+          } else {
+            // If hasSubProducts is false, no need to fetch products, so set products to empty array
+            setProducts([]);
+            console.log(
+              `Category "${categorySlug}" does not have sub-products.`
+            );
+          }
+          setError(null); // Clear any errors if category was fetched successfully
         } else {
           // If no category found for the given slug, set an error and stop loading
           setError(`Category "${categorySlug}" not found.`);
-          setLoading(false);
-          return; // Exit early as there's no category to display products for
         }
-
-        // --- Step 2: Fetch Products for this Category ---
-        // Get a reference to the 'products' collection in Firestore
-        const productsCollectionRef = collection(db, "products");
-        // Create a query to find product documents where 'category_slug' matches the current category's slug
-        const productsQuery = query(
-          productsCollectionRef,
-          where("category_slug", "==", categorySlug)
-        );
-        // Execute the query to get the products snapshot
-        const productsSnapshot = await getDocs(productsQuery);
-        // Map the product documents to an array of objects, including their Firestore ID
-        const fetchedProducts = productsSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setProducts(fetchedProducts); // Store the fetched products in state
-        console.log(
-          `Fetched products for category "${categorySlug}":`,
-          fetchedProducts
-        );
-        setError(null); // Clear any errors if products were fetched successfully
       } catch (err) {
         // Catch and log any errors during the fetch process
         console.error(
@@ -92,15 +95,15 @@ const CategoryProductsPage = ({ authReady }) => {
     if (categorySlug) {
       fetchCategoryAndProducts();
     }
-  }, [authReady, categorySlug]); // Dependencies: re-run effect if authReady, categorySlug changes
+  }, [authReady, categorySlug]); // Removed 'db' from dependency array to fix the warning
 
   return (
     <>
-      {/* Products Page Hero Section - Displays dynamic title based on category */}
+      {/* Category Products Hero Section - Displays dynamic title based on category */}
       <section className="products-hero-section py-5 text-center d-flex align-items-center justify-content-center">
         <div className="container animate__animated animate__fadeIn">
           <h1 className="display-3 fw-bold mb-3 products-hero-title">
-            {loading && !categoryData // Show "Loading Category..." if loading and no data yet
+            {loading && !categoryData
               ? "Loading Category..."
               : categoryData?.name || "Products"}{" "}
             {/* Show category name or "Products" */}
@@ -116,7 +119,6 @@ const CategoryProductsPage = ({ authReady }) => {
       {/* Main Content Area - Displays category info and products */}
       <section className="py-5 bg-white">
         <div className="container">
-          {/* Loading spinner display */}
           {loading && (
             <div className="d-flex justify-content-center align-items-center py-5">
               <div className="spinner-border text-primary" role="status">
@@ -125,14 +127,12 @@ const CategoryProductsPage = ({ authReady }) => {
             </div>
           )}
 
-          {/* Error message display */}
           {error && (
             <div className="alert alert-danger text-center message-box animate__animated animate__fadeIn">
               {error}
             </div>
           )}
 
-          {/* Render content only if not loading, no error, and category data is available */}
           {!loading && !error && categoryData && (
             <>
               {/* What is this Category About Section */}
@@ -148,7 +148,7 @@ const CategoryProductsPage = ({ authReady }) => {
                 </div>
               )}
 
-              {/* Benefits and Applications Section (Combined) */}
+              {/* Benefits and Applications Section (Combined, only uses 'benefits' field) */}
               {categoryData.benefits &&
                 categoryData.benefits.length > 0 && ( // Conditionally render if benefits array exists and has items
                   <div className="category-benefits-applications-section mb-5 p-4 rounded-3 shadow-sm bg-white animate__animated animate__fadeInUp animate__delay-0-3s">
@@ -173,57 +173,72 @@ const CategoryProductsPage = ({ authReady }) => {
                   </div>
                 )}
 
-              {/* Products Heading for the current category */}
-              <h2 className="page-title text-center mb-5">
-                {categoryData.name} Products
-              </h2>
+              {/* Conditionally render Products Heading and Listing ONLY if hasSubProducts is true */}
+              {categoryData.hasSubProducts && (
+                <>
+                  {/* Products Heading for the current category */}
+                  <h2 className="page-title text-center mb-5">
+                    {categoryData.name} Products
+                  </h2>
 
-              {/* Product Listing */}
-              {products.length === 0 ? ( // If no products found for this category
-                <div className="alert alert-info text-center message-box animate__animated animate__fadeIn">
-                  No products found for this category.
-                </div>
-              ) : (
-                // Render product cards if products exist
-                <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                  {products.map((product) => (
-                    <div
-                      className="col animate__animated animate__fadeInUp"
-                      key={product.id}
-                    >
-                      <Link
-                        to={`/product/${product.slug}`} // Link to the Product Detail Page
-                        className="product-card-link text-decoration-none"
-                      >
-                        <div className="product-card card h-100 rounded-3 shadow-sm overflow-hidden">
-                          <img
-                            src={
-                              product.image_url || // Product image URL from Firestore
-                              "https://placehold.co/600x400/dddddd/333333?text=Product+Image" // Placeholder if no image
-                            }
-                            className="card-img-top product-image"
-                            alt={product.name}
-                            onError={(e) => {
-                              // Fallback for broken images
-                              e.target.onerror = null;
-                              e.target.src =
-                                "https://placehold.co/600x400/dddddd/333333?text=Image+Error";
-                            }}
-                          />
-                          <div className="card-body text-center">
-                            <h5 className="card-title product-title mb-2">
-                              {product.name}
-                            </h5>
-                            <p className="card-text product-short_description">
-                              {product.short_description}
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
+                  {/* Product Listing */}
+                  {products.length === 0 ? ( // If no products found for this category
+                    <div className="alert alert-info text-center message-box animate__animated animate__fadeIn">
+                      No products found for this category.
                     </div>
-                  ))}
-                </div>
+                  ) : (
+                    // Render product cards if products exist
+                    <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                      {products.map((product) => (
+                        <div
+                          className="col animate__animated animate__fadeInUp"
+                          key={product.id}
+                        >
+                          <Link
+                            to={`/product/${product.slug}`} // Link to the Product Detail Page
+                            className="product-card-link text-decoration-none"
+                          >
+                            <div className="product-card card h-100 rounded-3 shadow-sm overflow-hidden">
+                              <img
+                                src={
+                                  product.image_url || // Product image URL from Firestore
+                                  "https://placehold.co/600x400/dddddd/333333?text=Product+Image" // Placeholder if no image
+                                }
+                                className="card-img-top product-image"
+                                alt={product.name}
+                                onError={(e) => {
+                                  // Fallback for broken images
+                                  e.target.onerror = null;
+                                  e.target.src =
+                                    "https://placehold.co/600x400/dddddd/333333?text=Image+Error";
+                                }}
+                              />
+                              <div className="card-body text-center">
+                                <h5 className="card-title product-title mb-2">
+                                  {product.name}
+                                </h5>
+                                <p className="card-text product-short_description">
+                                  {product.short_description}
+                                </p>
+                              </div>
+                            </div>
+                          </Link>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
+
+              {/* New: View All Categories Button */}
+              <div className="text-center mt-5">
+                <Link
+                  to="/products"
+                  className="btn btn-outline-dark btn-lg rounded-pill product-back-btn" // FIXED: Changed btn-dark to btn-outline-dark
+                >
+                  View All Categories
+                </Link>
+              </div>
             </>
           )}
         </div>
