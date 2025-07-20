@@ -22,6 +22,7 @@ html {
 body {
   margin: 0;
   font-family: var(--font-playfair-body); /* Applied Playfair to body */
+  font-size: 1.125rem; /* Increased base font size further (was 1.05rem) */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--royal-light-beige); /* Main page background color (wooden color) */
@@ -62,7 +63,7 @@ body {
 .page-title {
   font-family: var(--font-playfair-heading); /* Applied Playfair Display */
   color: var(--royal-dark-brown); /* Updated */
-  font-size: 2.2em;
+  font-size: 2.8em; /* Increased for more prominence (was 2.5em) */
   margin-bottom: 25px;
   border-bottom: 2px solid var(--royal-light-gold); /* Updated */
   padding-bottom: 10px;
@@ -71,15 +72,21 @@ body {
 
 .paragraph {
   font-family: var(--font-playfair-body); /* Applied Playfair */
-  line-height: 1.7;
+  line-height: 1.75; /* Reduced line-height (was 1.9) */
   margin-bottom: 15px;
   color: var(--royal-medium-brown); /* Updated */
+}
+
+/* Specifically target lead paragraphs for a bit more size */
+.paragraph.lead {
+    font-size: 1.25em; /* Increased further (was 1.15em) */
+    line-height: 1.85; /* Reduced line-height (was 2) */
 }
 
 .sub-heading {
   font-family: var(--font-playfair-heading); /* Applied Playfair Display */
   color: var(--royal-dark-brown); /* Updated */
-  font-size: 1.6em;
+  font-size: 2em; /* Increased for better hierarchy (was 1.8em) */
 }
 
 /* Reusable message box styles for alerts (e.g., form submissions, loading/error states) */
@@ -88,7 +95,7 @@ body {
   margin-top: 20px;
   padding: 15px;
   border-radius: 8px;
-  font-size: 0.95em;
+  font-size: 1.05em; /* Adjusted relative to new body font size (was 1em) */
   text-align: center;
 }
 
@@ -176,6 +183,18 @@ body {
     padding-left: 20px;
     padding-right: 20px;
   }
+  .page-title {
+    font-size: 2.5em; /* Adjusted for tablet (was 2.2em) */
+  }
+  .sub-heading {
+    font-size: 1.8em; /* Adjusted for tablet (was 1.6em) */
+  }
+  body {
+    font-size: 1.05rem; /* Slightly smaller base font on tablet (was 1rem) */
+  }
+  .paragraph.lead {
+    font-size: 1.15em; /* Adjusted for tablet (was 1.1em) */
+  }
   .custom-loader {
     width: 120px;
     height: 120px;
@@ -188,7 +207,16 @@ body {
     padding: 15px;
   }
   .page-title {
-    font-size: 1.8em;
+    font-size: 2.2em; /* Adjusted for mobile (was 1.8em) */
+  }
+  .sub-heading {
+    font-size: 1.6em; /* Adjusted for mobile (was 1.4em) */
+  }
+  body {
+    font-size: 1rem; /* Even smaller base font on mobile (was 0.95rem) */
+  }
+  .paragraph.lead {
+    font-size: 1.1em; /* Adjusted for mobile (was 1.05em) */
   }
   .custom-loader {
     width: 100px;
