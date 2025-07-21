@@ -23,7 +23,7 @@ const AboutPage = () => (
         <div className="row align-items-center g-5">
           <div className="col-lg-6">
             <img
-              src="images/about-glance-img.jpeg"
+              src="images/about/about-glance-img.jpeg"
               alt="Paper Supply"
               className="img-fluid rounded-3 shadow-lg animate__animated animate__fadeInLeft"
             />
@@ -126,7 +126,7 @@ const AboutPage = () => (
         <div className="row g-5">
           <div className="col-lg-6">
             <img
-              src="images/about-profile-img.jpg"
+              src="images/about/about-profile-img.jpg"
               alt="Paper Rolls Storage"
               className="img-fluid rounded-3 shadow-lg mb-4 animate__animated animate__fadeInLeft"
             />
@@ -233,7 +233,7 @@ const AboutPage = () => (
         <div className="row align-items-center g-5">
           <div className="col-lg-6 text-center">
             <img
-              src="images/about-quality-img.png"
+              src="images/about/about-quality-img.png"
               alt="Quality Seal"
               className="img-fluid quality-seal-img animate__animated animate__fadeInLeft"
             />

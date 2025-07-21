@@ -177,7 +177,7 @@ const HomePage = () => {
             <div className="col-12 col-lg-6 order-lg-2">
               {/* Image column */}
               <img
-                src="images/about-home-img.png"
+                src="images/home/about-home-img.png"
                 alt="Quality Paper Rolls Trading"
                 className="img-fluid rounded-3 shadow-lg animate__animated animate__fadeInRight"
               />
