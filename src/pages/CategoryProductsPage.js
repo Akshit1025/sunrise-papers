@@ -5,6 +5,7 @@ import { collection, getDocs, query, where, limit } from "firebase/firestore";
 import { useParams, Link } from "react-router-dom";
 import { db } from "../firebaseConfig"; // Import db directly
 import "./ProductsPage.css"; // Shared CSS for product-related pages
+import QuoteModal from "../components/QuoteModal";
 
 const CategoryProductsPage = ({ authReady }) => {
   const { categorySlug } = useParams(); // Extracts the 'categorySlug' from the URL (e.g., 'food-grade-papers')
@@ -96,6 +97,12 @@ const CategoryProductsPage = ({ authReady }) => {
       fetchCategoryAndProducts();
     }
   }, [authReady, categorySlug]); // Removed 'db' from dependency array to fix the warning
+
+  const [showQuoteModal, setShowQuoteModal] = useState(false);
+
+  const handleShowQuoteModal = () => setShowQuoteModal(true);
+  const handleCloseQuoteModal = () => setShowQuoteModal(false);
+
 
   return (
     <>
@@ -230,19 +237,31 @@ const CategoryProductsPage = ({ authReady }) => {
                 </>
               )}
 
-              {/* New: View All Categories Button */}
-              <div className="text-center mt-5">
+              {/* Container for both buttons */}
+              {/* Use d-flex for flex container, justify-content-center to center items */}
+              <div className="d-flex justify-content-center mt-5">
+                {/* View All Categories Button */}
                 <Link
                   to="/products"
                   className="btn btn-outline-dark btn-lg rounded-pill product-back-btn" // FIXED: Changed btn-dark to btn-outline-dark
                 >
                   View All Categories
                 </Link>
+
+                {(categorySlug === 'carbonless-paper' || categorySlug === 'coated-paper') && (
+                  <> {/* Use a fragment to group the conditional button */}
+                    {/* Get a Quote Button */}
+                    <button type="button" className="btn btn-outline-dark btn-lg rounded-pill product-back-btn ms-3" onClick={handleShowQuoteModal}> {/* Added ms-3 for left margin */}
+                      Get a Quote
+                    </button>
+                  </>
+                )}
               </div>
             </>
           )}
         </div>
       </section>
+      <QuoteModal show={showQuoteModal} handleClose={handleCloseQuoteModal} categorySlug={categorySlug} />
     </>
   );
 };

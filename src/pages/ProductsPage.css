@@ -128,7 +128,7 @@
 
 .product-back-btn:hover {
     background-color: var(--royal-gold) !important; /* Updated */
-    color: var(--royal-dark-brown) !important; /* Updated */
+    color: var(--royal-white) !important; /* Updated */
 }
 
 /* New: Category Info Sections (for CategoryProductsPage) */

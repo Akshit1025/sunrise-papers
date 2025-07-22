@@ -112,6 +112,37 @@ body {
   border: 1px solid #e74c3c;
 }
 
+/* --- Themed Button Styles --- */
+
+/* Style for outline dark buttons using theme color */
+.btn-outline-dark {
+  color: var(--royal-dark-brown);
+  border-color: var(--royal-dark-brown);
+}
+
+.btn-outline-dark:hover {
+  color: var(--royal-white);
+  /* White text on hover */
+  background-color: var(--royal-dark-brown);
+  /* Dark brown background on hover */
+  border-color: var(--royal-dark-brown);
+  /* Dark brown border on hover */
+}
+
+.btn-outline-dark:focus,
+.btn-outline-dark.focus {
+  box-shadow: 0 0 0 0.25rem rgba(74, 44, 42, 0.5);
+  /* Focus shadow using royal-dark-brown rgba */
+}
+
+.btn-outline-dark.disabled,
+.btn-outline-dark:disabled {
+  color: var(--royal-medium-brown);
+  /* Slightly lighter color for disabled state */
+  border-color: var(--royal-medium-brown);
+  background-color: transparent;
+}
+
 /* --- Preloader Styles --- */
 .preloader-container {
   display: flex;

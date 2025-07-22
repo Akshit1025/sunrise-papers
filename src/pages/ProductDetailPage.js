@@ -5,6 +5,7 @@ import { collection, getDocs, query, where, limit } from "firebase/firestore"; /
 import { useParams, Link } from "react-router-dom";
 import { db } from "../firebaseConfig"; // Import db directly
 import "./ProductsPage.css"; // Shared CSS for product-related pages
+import QuoteModal from '../components/QuoteModal';
 
 const ProductDetailPage = ({ authReady }) => {
   // authReady is passed as a prop
@@ -55,6 +56,12 @@ const ProductDetailPage = ({ authReady }) => {
       fetchProduct();
     }
   }, [authReady, productSlug]); // Depend on authReady and productSlug
+
+  const [showQuoteModal, setShowQuoteModal] = useState(false);
+
+  const handleShowQuoteModal = () => setShowQuoteModal(true);
+  const handleCloseQuoteModal = () => setShowQuoteModal(false);
+
 
   return (
     <>
@@ -132,9 +139,9 @@ const ProductDetailPage = ({ authReady }) => {
                     <i className="fas fa-arrow-left me-2"></i> Back to{" "}
                     {product.category_slug
                       ? product.category_slug
-                          .replace(/-/g, " ")
-                          .replace(/\b\w/g, (s) => s.toUpperCase()) +
-                        " Products"
+                        .replace(/-/g, " ")
+                        .replace(/\b\w/g, (s) => s.toUpperCase()) +
+                      " Products"
                       : "Categories"}
                   </Link>
                   <Link
@@ -143,12 +150,22 @@ const ProductDetailPage = ({ authReady }) => {
                   >
                     <i className="fas fa-th-large me-2"></i> View All Categories
                   </Link>
+                  {product && product.category_slug === 'food-grade-papers' && (
+                    <div className="mt-4 text-center">
+                      <button type="button" className="btn btn-outline-dark btn-lg rounded-pill product-back-btn" onClick={handleShowQuoteModal}>
+                        Get a Quote
+                      </button>
+                    </div>
+                  )}
+
+
                 </div>
               </div>
             </div>
           )}
         </div>
       </section>
+      <QuoteModal show={showQuoteModal} handleClose={handleCloseQuoteModal} categorySlug={product ? product.category_slug : ''} />
     </>
   );
 };
