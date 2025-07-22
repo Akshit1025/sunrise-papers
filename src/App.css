@@ -133,7 +133,7 @@ body {
   border: 8px solid var(--royal-gold); /* Updated */
   border-top-color: transparent;
   border-radius: 50%;
-  animation: roll 1.5s linear infinite;
+  animation: spin 1.5s linear infinite; /* Changed animation from 'roll' to 'spin' */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -144,10 +144,10 @@ body {
   max-width: 70%;
   max-height: 70%;
   object-fit: contain;
-  animation: counter-roll 1.5s linear infinite;
+  animation: spin 1.5s linear infinite reverse; /* Changed animation from 'counter-roll' to 'spin' and added reverse */
 }
 
-@keyframes roll {
+@keyframes spin {
   0% {
     transform: rotate(0deg);
   }
@@ -156,15 +156,7 @@ body {
   }
 }
 
-@keyframes counter-roll {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(-360deg);
-  }
-}
-
+/* Removed counter-roll keyframes as it's no longer used */
 
 /* --- Import Component and Page Specific Styles --- */
 /* Components */

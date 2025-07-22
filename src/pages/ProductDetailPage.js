@@ -123,37 +123,6 @@ const ProductDetailPage = ({ authReady }) => {
                   {product.long_description || product.short_description}
                 </p>
 
-                {product.features && product.features.length > 0 && (
-                  <div className="product-features mt-4">
-                    <h4 className="sub-heading fw-bold mb-3">Key Features:</h4>
-                    <ul className="list-unstyled features-list">
-                      {product.features.map((feature, index) => (
-                        <li key={index} className="paragraph">
-                          <i className="fas fa-check-circle me-2"></i>{" "}
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {product.specifications &&
-                  Object.keys(product.specifications).length > 0 && (
-                    <div className="product-specifications mt-4">
-                      <h4 className="sub-heading fw-bold mb-3">
-                        Specifications:
-                      </h4>
-                      <ul className="list-unstyled specifications-list">
-                        {Object.entries(product.specifications).map(
-                          ([key, value]) => (
-                            <li key={key} className="paragraph">
-                              <strong>{key}:</strong> {value}
-                            </li>
-                          )
-                        )}
-                      </ul>
-                    </div>
-                  )}
                 {/* Link back to category or all products */}
                 <div className="mt-5 text-center text-lg-start">
                   <Link
