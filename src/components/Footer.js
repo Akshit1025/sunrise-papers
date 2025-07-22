@@ -2,8 +2,6 @@
 
 import React from "react";
 import { Link } from "react-router-dom"; // Import Link for navigation
-// import { collection, addDoc } from "firebase/firestore"; // For Newsletter Storage
-// import { db } from "../firebaseConfig"; // Import Firebase configuration
 
 const Footer = () => {
   return (
