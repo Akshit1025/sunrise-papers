@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './QuoteModal.css'; // We'll update this CSS file next
+import './QuoteModal.css';
+import { collection, addDoc } from 'firebase/firestore'; // Import Firestore functions
+import { db } from '../firebaseConfig'; // Import your Firestore database instance
 
 // Define form fields and their properties for each category
 const categoryFormDefinitions = {
@@ -39,34 +41,33 @@ const QuoteModal = ({ show, handleClose, categorySlug }) => {
         name: '',
         email: '',
         message: '', // Keeping message for default or general use if needed
-        // Add new fields for category-specific data
-        product: '',
-        gsm: '',
-        kitValue: '',
-        rollOrSheet: '',
-        colour: '',
-        size: '',
-        purpose: '',
-        moq: '',
+        // Add new fields for category-specific data (initialized in useEffect)
     });
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false); // State for submission loading
+    const [submissionError, setSubmissionError] = useState(null); // State for submission errors
 
     // Effect to reset form data and errors when modal is shown or category changes
     useEffect(() => {
-        // Get the definition for the current category to initialize form data correctly
-        const currentDefinition = categoryFormDefinitions[categorySlug] || categoryFormDefinitions['default'];
-        const initialFormData = {
-            name: '',
-            email: '',
-            message: '',
-        };
-        // Add fields from the definition to the initial form data
-        currentDefinition.forEach(field => {
-            initialFormData[field.name] = '';
-        });
+        if (show) {
+            // Get the definition for the current category to initialize form data correctly
+            const currentDefinition = categoryFormDefinitions[categorySlug] || categoryFormDefinitions['default'];
+            const initialFormData = {
+                name: '',
+                email: '',
+                message: '', // Include message by default, it might be used even if not in definition
+            };
+            // Add fields from the definition to the initial form data
+            currentDefinition.forEach(field => {
+                initialFormData[field.name] = '';
+            });
 
-        setFormData(initialFormData);
-        setErrors({});
+            setFormData(initialFormData);
+            setErrors({});
+            setSubmissionError(null); // Clear submission errors when modal opens
+        }
+
+
     }, [show, categorySlug]); // Depend on 'show' and 'categorySlug'
 
     const handleChange = (e) => {
@@ -74,17 +75,30 @@ const QuoteModal = ({ show, handleClose, categorySlug }) => {
         setFormData({ ...formData, [name]: value });
         // Optionally, clear error for the field when it's changed
         setErrors({ ...errors, [name]: '' });
+        // Clear submission error if user starts typing again
+        if (submissionError) {
+            setSubmissionError(null);
+        }
     };
 
     const validateForm = () => {
         const newErrors = {};
-        const requiredFields = getRequiredFields(categorySlug);
+        // Ensure name and email are always validated
+        if (!formData.name) newErrors.name = 'Name is mandatory';
+        if (!formData.email) {
+            newErrors.email = 'Email address is mandatory';
+        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(formData.email)) {
+            newErrors.email = 'Invalid email address';
+        }
 
+
+        // Validate category-specific required fields
+        const requiredFields = getRequiredFields(categorySlug);
         requiredFields.forEach(field => {
-            if (!formData[field]) {
-                newErrors[field] = `${categoryFormDefinitions[categorySlug]?.find(f => f.name === field)?.label || field} is mandatory`; // More specific error message
-            } else if (field === 'email' && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(formData[field])) { // Basic email validation
-                newErrors[field] = 'Invalid email address';
+            if (field !== 'name' && field !== 'email' && !formData[field]) { // Avoid double-checking name/email
+                // Find the label from the definition for a better error message
+                const fieldDefinition = categoryFormDefinitions[categorySlug]?.find(f => f.name === field);
+                newErrors[field] = `${fieldDefinition?.label || field} is mandatory`;
             }
         });
 
@@ -93,78 +107,125 @@ const QuoteModal = ({ show, handleClose, categorySlug }) => {
     };
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => { // Made the function async
         e.preventDefault();
         if (validateForm()) {
-            // Handle form submission logic here (e.g., sending email, saving to database)
-            console.log('Quote form submitted:', formData);
-            handleClose(); // Close the modal after submission
+            console.log('Form data to save:', formData);
+
+            setLoading(true); // Set loading state for submission
+            setSubmissionError(null); // Clear previous submission errors
+
+            try {
+                // Get a reference to the 'quoteRequests' collection in Firestore
+                const quoteRequestsCollectionRef = collection(db, 'quoteRequests');
+
+                // Add a new document to the 'quoteRequests' collection with the form data
+                const docRef = await addDoc(quoteRequestsCollectionRef, {
+                    ...formData, // Spread all form data
+                    timestamp: new Date(), // Add a timestamp
+                    categorySlug: categorySlug, // Store the category slug
+                    status: 'new', // Add a status field (e.g., 'new', 'read', 'closed')
+                });
+
+                console.log('Quote request saved to Firestore with ID:', docRef.id);
+
+                // Handle success (e.g., show a success message, clear form)
+                alert("Your quote request has been submitted successfully!");
+
+                // Reset form after successful submission
+                const currentDefinition = categoryFormDefinitions[categorySlug] || categoryFormDefinitions['default'];
+                const initialFormData = {
+                    name: '', email: '', message: '', // Always include these
+                };
+                currentDefinition.forEach(field => {
+                    initialFormData[field.name] = ''; // Reset category specific fields
+                });
+                setFormData(initialFormData); // Update state
+
+
+                handleClose(); // Close the modal on success
+            } catch (error) {
+                console.error('Error saving quote request to Firestore:', error);
+                // Handle error (e.g., show an error message)
+                setSubmissionError(`Failed to submit quote request: ${error.message}`);
+                alert(`Failed to submit quote request: ${error.message}`); // Alert user about the error
+            } finally {
+                setLoading(false); // Turn off loading state
+            }
         } else {
             console.log('Form validation failed', errors);
+            setSubmissionError('Please fix the errors in the form.'); // Indicate validation failed
         }
     };
 
     // Helper function to get required fields based on category slug
     const getRequiredFields = (slug) => {
         const definition = categoryFormDefinitions[slug] || categoryFormDefinitions['default'];
-        return definition.filter(field => field.required).map(field => field.name);
+        // Ensure name and email are always considered required for the purpose of validation logic here
+        const alwaysRequired = ['name', 'email'];
+        const categorySpecificRequired = definition.filter(field => field.required).map(field => field.name);
+        // Combine and ensure uniqueness
+        return [...new Set([...alwaysRequired, ...categorySpecificRequired])];
     };
 
 
-    // Function to render category-specific form fields dynamically
+    // Function to render category-specific form fields dynamically from the definition
     const renderFormFields = (slug) => {
         const definition = categoryFormDefinitions[slug] || categoryFormDefinitions['default'];
 
         return (
             <>
                 {definition.map(field => (
-                    <div className="mb-3" key={field.name}>
-                        <label htmlFor={`quote${field.name}`} className="form-label">
-                            {field.label} {field.required && <span className="text-danger">*</span>}
-                            {field.tooltip && (
-                                <span className="tooltip-container">
-                                    <i className="fas fa-info-circle info-icon"></i>
-                                    <span className="tooltip-text">{field.tooltip}</span>
-                                </span>
+                    // Only render fields that are not 'name' or 'email' as they are rendered separately
+                    (field.name !== 'name' && field.name !== 'email') && (
+                        <div className="mb-3" key={field.name}>
+                            <label htmlFor={`quote${field.name}`} className="form-label">
+                                {field.label} {field.required && <span className="text-danger">*</span>}
+                                {field.tooltip && (
+                                    <span className="tooltip-container">
+                                        <i className="fas fa-info-circle info-icon"></i>
+                                        <span className="tooltip-text">{field.tooltip}</span>
+                                    </span>
+                                )}
+                            </label>
+                            {field.type === 'select' ? (
+                                <select
+                                    className={`form-select ${errors[field.name] ? 'is-invalid' : ''}`}
+                                    id={`quote${field.name}`}
+                                    name={field.name}
+                                    value={formData[field.name] || ''} // Use '' for initial empty state
+                                    onChange={handleChange}
+                                    required={field.required}
+                                >
+                                    <option value="">Select {field.label}</option>
+                                    {field.options && field.options.map(option => (
+                                        <option key={option} value={option}>{option}</option>
+                                    ))}
+                                </select>
+                            ) : field.type === 'textarea' ? (
+                                <textarea
+                                    className={`form-control ${errors[field.name] ? 'is-invalid' : ''}`}
+                                    id={`quote${field.name}`}
+                                    name={field.name}
+                                    rows="3"
+                                    value={formData[field.name] || ''} // Use '' for initial empty state
+                                    onChange={handleChange}
+                                    required={field.required}
+                                ></textarea>
+                            ) : ( // Default to text input
+                                <input
+                                    type={field.type}
+                                    className={`form-control ${errors[field.name] ? 'is-invalid' : ''}`}
+                                    id={`quote${field.name}`}
+                                    name={field.name}
+                                    value={formData[field.name] || ''} // Use '' for initial empty state
+                                    onChange={handleChange}
+                                    required={field.required}
+                                />
                             )}
-                        </label>
-                        {field.type === 'select' ? (
-                            <select
-                                className={`form-select ${errors[field.name] ? 'is-invalid' : ''}`}
-                                id={`quote${field.name}`}
-                                name={field.name}
-                                value={formData[field.name]}
-                                onChange={handleChange}
-                                required={field.required}
-                            >
-                                <option value="">Select {field.label}</option>
-                                {field.options.map(option => (
-                                    <option key={option} value={option}>{option}</option>
-                                ))}
-                            </select>
-                        ) : field.type === 'textarea' ? (
-                            <textarea
-                                className={`form-control ${errors[field.name] ? 'is-invalid' : ''}`}
-                                id={`quote${field.name}`}
-                                name={field.name}
-                                rows="3"
-                                value={formData[field.name]}
-                                onChange={handleChange}
-                                required={field.required}
-                            ></textarea>
-                        ) : ( // Default to text input
-                            <input
-                                type={field.type}
-                                className={`form-control ${errors[field.name] ? 'is-invalid' : ''}`}
-                                id={`quote${field.name}`}
-                                name={field.name}
-                                value={formData[field.name]}
-                                onChange={handleChange}
-                                required={field.required}
-                            />
-                        )}
-                        {errors[field.name] && <div className="invalid-feedback">{errors[field.name]}</div>}
-                    </div>
+                            {errors[field.name] && <div className="invalid-feedback">{errors[field.name]}</div>}
+                        </div>
+                    )
                 ))}
             </>
         );
@@ -203,14 +264,28 @@ const QuoteModal = ({ show, handleClose, categorySlug }) => {
                             {/* Render category-specific fields */}
                             {renderFormFields(categorySlug)}
 
+                            {/* Submission Error Message */}
+                            {submissionError && (
+                                <div className="alert alert-danger mt-3" role="alert">
+                                    {submissionError}
+                                </div>
+                            )}
+
                             {/* Spam Protection Placeholder */}
                             {/* You would typically integrate a backend service or a third-party library for CAPTCHA here */}
+                            {/* Before saving to Firestore, you would verify the CAPTCHA response */}
                             {/* <div className="mb-3">
                 Add your spam protection/CAPTCHA here
               </div> */}
 
-                            <div className="d-flex justify-content-center mt-3"> {/* Added centering div and margin */}
-                                <button type="submit" className="btn btn-outline-dark btn-lg rounded-pill product-back-btn">Submit Quote Request</button>
+                            <div className="d-flex justify-content-center mt-3"> {/* Centering container for the button */}
+                                <button
+                                    type="submit"
+                                    className="btn btn-outline-dark btn-lg rounded-pill product-back-btn"
+                                    disabled={loading} // Disable button while loading
+                                >
+                                    {loading ? 'Submitting...' : 'Submit Quote Request'} {/* Button text changes while loading */}
+                                </button>
                             </div>
                         </form>
                     </div>
