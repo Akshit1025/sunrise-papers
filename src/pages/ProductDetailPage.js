@@ -134,7 +134,7 @@ const ProductDetailPage = ({ authReady }) => {
                 <div className="mt-5 text-center text-lg-start">
                   <Link
                     to={`/products/${product.category_slug}`}
-                    className="btn btn-outline-secondary rounded-pill me-3 product-back-btn"
+                    className="btn btn-outline-dark rounded-pill me-3 product-back-btn"
                   >
                     <i className="fas fa-arrow-left me-2"></i> Back to{" "}
                     {product.category_slug
@@ -146,7 +146,7 @@ const ProductDetailPage = ({ authReady }) => {
                   </Link>
                   <Link
                     to="/products"
-                    className="btn btn-outline-secondary rounded-pill product-back-btn"
+                    className="btn btn-outline-dark rounded-pill product-back-btn"
                   >
                     <i className="fas fa-th-large me-2"></i> View All Categories
                   </Link>
