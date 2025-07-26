@@ -124,6 +124,32 @@ const CategoryProductsPage = ({ authReady }) => {
   }, [authReady, loading]); // Depend on authReady and loading
 
 
+  // Create an array of multimedia items for the carousel (only for !hasSubProducts)
+  const allMediaItems = [];
+
+  if (categoryData && !categoryData.hasSubProducts) {
+    // Add the main category image if it exists
+    if (categoryData.image_url) {
+      allMediaItems.push({ type: 'image', url: categoryData.image_url, alt: categoryData.name });
+    }
+
+    // Add gallery images if they exist
+    if (categoryData.galleryImages && categoryData.galleryImages.length > 0) {
+      categoryData.galleryImages.forEach((imageUrl, index) => {
+        allMediaItems.push({ type: 'image', url: imageUrl, alt: `${categoryData.name} Gallery Image ${index + 1}` });
+      });
+    }
+
+    // Add videos if they exist
+    if (categoryData.videos && categoryData.videos.length > 0) {
+      categoryData.videos.forEach((video, index) => {
+        // Assuming video.url is an embeddable URL (e.g., YouTube embed)
+        allMediaItems.push({ type: 'video', url: video.url, caption: video.caption, title: video.caption || `${categoryData.name} Video ${index + 1}` });
+      });
+    }
+  }
+
+
   return (
     <>
       {/* Category Products Hero Section - Displays dynamic title based on category */}
@@ -162,42 +188,127 @@ const CategoryProductsPage = ({ authReady }) => {
 
           {!loading && !error && categoryData && (
             <>
-              {/* Conditionally render content based on whether the category has sub-products */}
-              {categoryData.hasSubProducts ? (
-                // --- Content for Categories with Sub-Products (e.g., Food Grade Papers) ---
-                <>
-                  {/* Display the existing Long Description and Benefits/Applications sections if they exist */}
+              {/* --- Content for ALL Categories (Two-Column Layout) --- */}
+
+              {/* Two-column layout for multimedia (Image or Carousel) and long description */}
+              <div className="row mb-5 align-items-center"> {/* Use align-items-center to vertically align content */}
+                {/* Left Column: Multimedia (Image or Carousel) */}
+                <div className="col-md-6 animate__animated animate__fadeInLeft">
+                  {categoryData.hasSubProducts ? (
+                    // If hasSubProducts is true, show only the main image
+                    categoryData.image_url ? (
+                      <img
+                        src={categoryData.image_url}
+                        alt={categoryData.name}
+                        className="img-fluid rounded shadow-sm category-detail-image" // Reusing the class for consistent styling
+                      />
+                    ) : (
+                      // Placeholder if no main image for a product category
+                      <img
+                        src="https://placehold.co/600x400/dddddd/333333?text=Category+Image"
+                        alt="Category Placeholder"
+                        className="img-fluid rounded shadow-sm category-detail-image"
+                      />
+                    )
+                  ) : (
+                    // If hasSubProducts is false, show the multimedia carousel
+                    allMediaItems.length > 0 ? (
+                      <div id="categoryMediaCarousel" className="carousel slide rounded shadow-sm" data-bs-ride="carousel">
+                        <div className="carousel-inner rounded">
+                          {allMediaItems.map((item, index) => (
+                            <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
+                              {item.type === 'image' ? (
+                                <img src={item.url} className="d-block w-100 category-carousel-image" alt={item.alt} style={{ height: '400px', objectFit: 'cover' }} />
+                              ) : ( // Must be a video
+                                <div className="category-carousel-video-container embed-responsive embed-responsive-16by9">
+                                  <iframe
+                                    className="embed-responsive-item d-block w-100 category-carousel-video"
+                                    src={item.url}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    title={item.title}
+                                    style={{ height: '400px' }}
+                                  ></iframe>
+                                </div>
+                                // If using <video> tag for self-hosted:
+                                // <video controls className="d-block w-100 category-carousel-video" style={{ height: '400px', objectFit: 'cover' }}>
+                                //    <source src={item.url} type="video/mp4" />
+                                //    Your browser does not support the video tag.
+                                // </video>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                        {/* Carousel Controls (Previous/Next buttons) */}
+                        {allMediaItems.length > 1 && ( // Only show controls if more than one item
+                          <>
+                            <button className="carousel-control-prev" type="button" data-bs-target="#categoryMediaCarousel" data-bs-slide="prev">
+                              <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span className="visually-hidden">Previous</span>
+                            </button>
+                            <button className="carousel-control-next" type="button" data-bs-target="#categoryMediaCarousel" data-bs-slide="next">
+                              <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span className="visually-hidden">Next</span>
+                            </button>
+                          </>
+                        )}
+
+                        {/* REMOVED: Carousel Indicators */}
+
+                      </div>
+                    ) : (
+                      // Fallback if no media items for a non-product category
+                      <div className="text-center py-5">
+                        <p>No media available for this category.</p>
+                      </div>
+                    )
+                  )}
+                </div>
+
+                {/* Right Column: What is this Category About? (Long Description) */}
+                <div className="col-md-6 animate__animated animate__fadeInRight">
                   {categoryData.longDescription && (
-                    <div className="category-info-section mb-5 p-4 rounded-3 shadow-sm bg-light-beige animate__animated animate__fadeInUp">
-                      <h2 className="sub-heading text-center mb-4">
+                    <div className="category-info-content">
+                      <h2 className="sub-heading mb-3">
                         What is {categoryData.name} About?
                       </h2>
-                      <p className="paragraph text-center">
+                      <p className="paragraph">
                         {categoryData.longDescription}
                       </p>
                     </div>
                   )}
+                  {/* Optional: Add short description here if needed */}
+                  {/* {categoryData.description && (
+                       <p className="paragraph lead">{categoryData.description}</p>
+                   )} */}
+                </div>
+              </div> {/* End of two-column row */}
 
-                  {categoryData.benefits && categoryData.benefits.length > 0 && (
-                    <div className="category-benefits-applications-section mb-5 p-4 rounded-3 shadow-sm bg-white animate__animated animate__fadeInUp animate__delay-0-3s">
-                      <h2 className="sub-heading text-center mb-4">
-                        Benefits and Applications:
-                      </h2>
-                      <ul className="list-unstyled combined-list row row-cols-1 row-cols-md-2 g-3">
-                        {categoryData.benefits.map((item, index) => (
-                          <li
-                            key={`item-${index}`}
-                            className="col d-flex align-items-start animate__animated animate__fadeInUp"
-                          >
-                            <i className="fas fa-gem me-3 mt-1 category-list-icon"></i>{" "}
-                            <span className="paragraph">{item}</span>{" "}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+              {/* --- Content Below the Two-Column Layout --- */}
 
+              {/* Benefits and Applications Section (Below the two-column layout, irrespective of hasSubProducts) */}
+              {categoryData.benefits && categoryData.benefits.length > 0 && (
+                <div className="category-benefits-applications-section mb-5 p-4 rounded-3 shadow-sm bg-white animate__animated animate__fadeInUp">
+                  <h2 className="sub-heading text-center mb-4">
+                    Benefits and Applications:
+                  </h2>
+                  <ul className="list-unstyled combined-list row row-cols-1 row-cols-md-2 g-3">
+                    {categoryData.benefits.map((item, index) => (
+                      <li
+                        key={`item-${index}`}
+                        className="col d-flex align-items-start animate__animated animate__fadeInUp"
+                      >
+                        <i className="fas fa-gem me-3 mt-1 category-list-icon"></i>{" "}
+                        <span className="paragraph">{item}</span>{" "}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
+              {/* Products Heading and Listing (Rendered ONLY if hasSubProducts is true) */}
+              {categoryData.hasSubProducts && (
+                <>
                   {/* Products Heading for the current category */}
                   <h2 className="page-title text-center mb-5">
                     {categoryData.name} Products
@@ -250,112 +361,29 @@ const CategoryProductsPage = ({ authReady }) => {
                     </div>
                   )}
                 </>
-              ) : (
-                // --- Content for Categories WITHOUT Sub-Products (e.g., Carbonless, Coated) ---
-                <>
-                  {/* Display the existing Long Description and Benefits/Applications sections if they exist */}
-                  {categoryData.longDescription && (
-                    <div className="category-info-section mb-5 p-4 rounded-3 shadow-sm bg-light-beige animate__animated animate__fadeInUp">
-                      <h2 className="sub-heading text-center mb-4">
-                        What is {categoryData.name} About?
-                      </h2>
-                      <p className="paragraph text-center">
-                        {categoryData.longDescription}
-                      </p>
-                    </div>
+              )}
+
+              {/* The combined View All Categories and Get a Quote button container */}
+              {/* This appears below all content sections */}
+              {categoryData && !loading && !error && (
+                <div className="d-flex flex-column flex-md-row justify-content-center mt-5">
+                  {/* View All Categories Button */}
+                  <Link
+                    to="/products"
+                    className="btn btn-outline-dark btn-lg rounded-pill product-back-btn mb-3 mb-md-0 me-md-3"
+                  >
+                    View All Categories
+                  </Link>
+
+                  {(categorySlug === 'carbonless-paper' || categorySlug === 'coated-paper') && (
+                    <>
+                      {/* Get a Quote Button */}
+                      <button type="button" className="btn btn-outline-dark btn-lg rounded-pill product-back-btn" onClick={handleShowQuoteModal}>
+                        Get a Quote
+                      </button>
+                    </>
                   )}
-
-                  {categoryData.benefits && categoryData.benefits.length > 0 && (
-                    <div className="category-benefits-applications-section mb-5 p-4 rounded-3 shadow-sm bg-white animate__animated animate__fadeInUp animate__delay-0-3s">
-                      <h2 className="sub-heading text-center mb-4">
-                        Benefits and Applications:
-                      </h2>
-                      <ul className="list-unstyled combined-list row row-cols-1 row-cols-md-2 g-3">
-                        {categoryData.benefits.map((item, index) => (
-                          <li
-                            key={`item-${index}`}
-                            className="col d-flex align-items-start animate__animated animate__fadeInUp"
-                          >
-                            <i className="fas fa-gem me-3 mt-1 category-list-icon"></i>{" "}
-                            <span className="paragraph">{item}</span>{" "}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-
-                  {/* New: Image Gallery Section */}
-                  {categoryData.galleryImages && categoryData.galleryImages.length > 0 && (
-                    <div className="category-gallery-section mb-5 p-4 rounded-3 shadow-sm bg-light-beige animate__animated animate__fadeInUp animate__delay-0-5s">
-                      <h2 className="sub-heading text-center mb-4">Gallery</h2>
-                      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4"> {/* Responsive grid for images */}
-                        {categoryData.galleryImages.map((imageUrl, index) => (
-                          <div key={`gallery-img-${index}`} className="col">
-                            {/* You can wrap this in a link or button to trigger a lightbox */}
-                            <img
-                              src={imageUrl}
-                              alt={`${categoryData.name} Pic ${index + 1}`}
-                              className="img-fluid rounded shadow-sm" // Bootstrap classes for responsive images
-                              style={{ width: '100%', height: '200px', objectFit: 'cover' }} // Consistent image size (adjust as needed)
-                            // Add onClick to open lightbox/modal here
-                            />
-                          </div>
-                        ))}
-                      </div>
-                      {/* Implement Lightbox/Modal here if desired */}
-                    </div>
-                  )}
-
-                  {/* New: Video Section */}
-                  {categoryData.videos && categoryData.videos.length > 0 && (
-                    <div className="category-videos-section mb-5 p-4 rounded-3 shadow-sm bg-white animate__animated animate__fadeInUp animate__delay-0-7s">
-                      <h2 className="sub-heading text-center mb-4">Videos</h2>
-                      <div className="row justify-content-center g-4"> {/* Center videos and add spacing */}
-                        {categoryData.videos.map((video, index) => (
-                          <div key={`video-${index}`} className="col-12 col-md-10 col-lg-8"> {/* Responsive column size */}
-                            {/* Example for embedding YouTube/Vimeo - adjust src format */}
-                            {/* For self-hosted videos, use <video> tag */}
-                            <div className="embed-responsive embed-responsive-16by9"> {/* Optional: For 16:9 aspect ratio */}
-                              <iframe
-                                className="embed-responsive-item rounded shadow-sm"
-                                src={video.url} // Ensure URL is embeddable (e.g., YouTube embed URL)
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                                title={video.caption || `${categoryData.name} Video ${index + 1}`}
-                                style={{ width: '100%', height: '400px' }} // Adjust height as needed
-                              ></iframe>
-                            </div>
-                            {video.caption && (
-                              <p className="text-center mt-2 paragraph">{video.caption}</p> // Display caption
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* The combined View All Categories and Get a Quote button container */}
-                  <div className="d-flex flex-column flex-md-row justify-content-center mt-5"> {/* Adjusted for stacking on small screens */}
-                    {/* View All Categories Button */}
-                    <Link
-                      to="/products"
-                      className="btn btn-outline-dark btn-lg rounded-pill product-back-btn mb-3 mb-md-0 me-md-3" // Added mb-3 for small screens, me-md-3 for medium and up
-                    >
-                      View All Categories
-                    </Link>
-
-                    {(categorySlug === 'carbonless-paper' || categorySlug === 'coated-paper') && ( // Keep conditional rendering based on slug for the quote button
-                      <>
-                        {/* Get a Quote Button */}
-                        <button type="button" className="btn btn-outline-dark btn-lg rounded-pill product-back-btn" onClick={handleShowQuoteModal}>
-                          Get a Quote
-                        </button>
-                      </>
-                    )}
-                  </div>
-
-                </>
+                </div>
               )}
             </>
           )}
