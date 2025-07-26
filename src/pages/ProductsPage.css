@@ -449,7 +449,7 @@
 /* Style for carousel items (individual slides) */
 #categoryMediaCarousel .carousel-item {
     /* Uses Bootstrap's .carousel-item */
-    height: 400px;
+    height: 350px;
     /* Set a fixed height for all slides (images and videos) */
     /* Optional: Background color if media doesn't cover the whole item */
     background-color: var(--royal-dark-brown);
@@ -464,7 +464,7 @@
     width: 100%;
     height: 100%;
     /* Fill the carousel-item height */
-    object-fit: cover;
+    object-fit: fill;
     /* Crop image to fit */
     border-radius: 8px;
     /* Match parent rounded corners */
@@ -493,13 +493,12 @@
 }
 
 /* Style for carousel controls (optional color adjustments) */
-/* Removed as per user request */
-/*
+/* Re-added as per user request */
 #categoryMediaCarousel .carousel-control-prev-icon,
 #categoryMediaCarousel .carousel-control-next-icon {
     filter: invert(1) grayscale(100);
+    /* Example: Make them white */
 }
-*/
 
 /* Style for carousel indicators (optional color adjustments) */
 /* Removed as per user request */
@@ -678,8 +677,16 @@
 
     /* Adjust carousel height on tablet */
     #categoryMediaCarousel .carousel-item {
-        height: 300px;
+        height: 280px;
         /* Smaller carousel height on tablet */
+    }
+
+    /* Adjust image/video height within carousel on tablet */
+    #categoryMediaCarousel .carousel-item .category-carousel-image,
+    #categoryMediaCarousel .carousel-item .category-carousel-video-container iframe,
+    #categoryMediaCarousel .carousel-item .category-carousel-video-container video {
+        height: 100%;
+        /* Still fill the adjusted item height */
     }
 
 
@@ -832,8 +839,16 @@
 
     /* Adjust carousel height on mobile */
     #categoryMediaCarousel .carousel-item {
-        height: 250px;
+        height: 300px;
         /* Smaller carousel height on mobile */
+    }
+
+    /* Adjust image/video height within carousel on mobile */
+    #categoryMediaCarousel .carousel-item .category-carousel-image,
+    #categoryMediaCarousel .carousel-item .category-carousel-video-container iframe,
+    #categoryMediaCarousel .carousel-item .category-carousel-video-container video {
+        height: 100%;
+        /* Still fill the adjusted item height */
     }
 
 
@@ -893,7 +908,15 @@
 
     /* Adjust carousel height on very small screens if needed */
     #categoryMediaCarousel .carousel-item {
-        height: 200px;
+        height: 250px;
         /* Example: Even smaller height on very small screens */
+    }
+
+    /* Adjust image/video height within carousel on very small screens */
+    #categoryMediaCarousel .carousel-item .category-carousel-image,
+    #categoryMediaCarousel .carousel-item .category-carousel-video-container iframe,
+    #categoryMediaCarousel .carousel-item .category-carousel-video-container video {
+        height: 100%;
+        /* Still fill the adjusted item height */
     }
 }

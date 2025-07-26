@@ -193,7 +193,7 @@ const CategoryProductsPage = ({ authReady }) => {
               {/* Two-column layout for multimedia (Image or Carousel) and long description */}
               <div className="row mb-5 align-items-center"> {/* Use align-items-center to vertically align content */}
                 {/* Left Column: Multimedia (Image or Carousel) */}
-                <div className="col-md-6 animate__animated animate__fadeInLeft">
+                <div className="col-md-6 mb-md-0 mb-4 animate__animated animate__fadeInLeft">
                   {categoryData.hasSubProducts ? (
                     // If hasSubProducts is true, show only the main image
                     categoryData.image_url ? (
@@ -218,16 +218,14 @@ const CategoryProductsPage = ({ authReady }) => {
                           {allMediaItems.map((item, index) => (
                             <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
                               {item.type === 'image' ? (
-                                <img src={item.url} className="d-block w-100 category-carousel-image" alt={item.alt} style={{ height: '400px', objectFit: 'cover' }} />
+                                <img src={item.url} className="d-block w-100 category-carousel-image" alt={item.alt} />
                               ) : ( // Must be a video
                                 <div className="category-carousel-video-container embed-responsive embed-responsive-16by9">
                                   <iframe
                                     className="embed-responsive-item d-block w-100 category-carousel-video"
                                     src={item.url}
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
+                                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope"
                                     title={item.title}
-                                    style={{ height: '400px' }}
                                   ></iframe>
                                 </div>
                                 // If using <video> tag for self-hosted:
@@ -266,7 +264,7 @@ const CategoryProductsPage = ({ authReady }) => {
                 </div>
 
                 {/* Right Column: What is this Category About? (Long Description) */}
-                <div className="col-md-6 animate__animated animate__fadeInRight">
+                <div className="col-md-6 mb-md-0 mb-4 animate__animated animate__fadeInRight">
                   {categoryData.longDescription && (
                     <div className="category-info-content">
                       <h2 className="sub-heading mb-3">
