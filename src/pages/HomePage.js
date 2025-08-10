@@ -77,7 +77,7 @@ const HomePage = () => {
           {/* Carousel Item 1 */}
           <div className="carousel-item active" data-bs-interval="5000">
             <img
-              src="https://placehold.co/1920x600/212529/ffffff?text=Quality+Paper+Products"
+              src="images/home/product-banner.jpeg"
               className="d-block w-100 carousel-img"
               alt="Quality Paper Products"
             />
@@ -100,7 +100,7 @@ const HomePage = () => {
           {/* Carousel Item 2 */}
           <div className="carousel-item" data-bs-interval="5000">
             <img
-              src="https://placehold.co/1920x600/495057/ffffff?text=Sustainable+Paper+Solutions"
+              src="images/home/about-us-banner.jpeg"
               className="d-block w-100 carousel-img"
               alt="Sustainable Paper Solutions"
             />
@@ -123,7 +123,7 @@ const HomePage = () => {
           {/* Carousel Item 3 */}
           <div className="carousel-item" data-bs-interval="5000">
             <img
-              src="https://placehold.co/1920x600/f8f9fa/212529?text=Your+Trusted+Paper+Partner"
+              src="images/home/contact-us-banner.png"
               className="d-block w-100 carousel-img"
               alt="Your Trusted Paper Partner"
             />
