@@ -24,7 +24,7 @@
     /* Light background for content */
     box-shadow: 0 4px 12px rgba(74, 44, 42, 0.1);
     /* Subtle shadow using royal-dark-brown rgba */
-    font-family: var(--font-playfair-body);
+    font-family: var(--font-inter-body);
     /* Apply body font to modal content */
     color: var(--royal-medium-brown);
     /* Default text color within modal */
@@ -42,7 +42,7 @@
 
 /* Style for the modal title */
 .modal-header .modal-title {
-    font-family: var(--font-playfair-heading);
+    font-family: var(--font-georgia-heading);
     /* Apply heading font to title */
     color: var(--royal-dark-brown);
     /* Dark brown color for title */
@@ -63,14 +63,14 @@
     /* Dark brown for labels */
     margin-bottom: 8px;
     /* Space below label */
-    font-family: var(--font-playfair-body);
+    font-family: var(--font-inter-body);
     /* Body font for labels */
 }
 
 /* Style for form controls (input, select, textarea) */
 .form-control,
 .form-select {
-    font-family: var(--font-playfair-body);
+    font-family: var(--font-inter-body);
     /* Body font for input text */
     color: var(--royal-dark-brown);
     /* Dark brown for input text */
@@ -121,7 +121,7 @@
     /* Theme gold border */
     color: var(--royal-dark-brown);
     /* Dark brown text on gold button */
-    font-family: var(--font-playfair-heading);
+    font-family: var(--font-georgia-heading);
     /* Heading font for button text */
     font-weight: bold;
     padding: 10px 20px;
@@ -198,7 +198,7 @@
     /* Allow text to wrap */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     /* More prominent shadow */
-    font-family: var(--font-playfair-body);
+    font-family: var(--font-inter-body);
     /* Apply body font to tooltip text */
 }
 

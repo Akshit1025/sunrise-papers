@@ -10,8 +10,8 @@
   --royal-white: #FFFFFF;        /* Pure white for strong contrast */
 
   /* --- New Font Variables --- */
-  --font-playfair-heading: 'Playfair Display', serif; /* For headings and important elements */
-  --font-playfair-body: 'Playfair', serif;           /* For body text and general content */
+  --font-georgia-heading: 'Georgia', serif; /* For headings and important elements */
+  --font-inter-body: 'Inter', serif;           /* For body text and general content */
 }
 
 /* --- Global Box Sizing and Overflow Control --- */

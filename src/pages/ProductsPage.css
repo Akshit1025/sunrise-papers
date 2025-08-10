@@ -57,7 +57,7 @@
 }
 
 .products-hero-title {
-    font-family: var(--font-playfair-heading);
+    font-family: var(--font-georgia-heading);
     /* Apply heading font */
     font-size: 3.5em;
     font-weight: bold;
@@ -69,7 +69,7 @@
 }
 
 .products-hero-subtitle {
-    font-family: var(--font-playfair-body);
+    font-family: var(--font-inter-body);
     /* Apply body font */
     font-size: 1.5em;
     color: var(--royal-medium-brown);
@@ -128,7 +128,7 @@
 
 .category-title,
 .product-title {
-    font-family: var(--font-playfair-heading);
+    font-family: var(--font-georgia-heading);
     /* Apply heading font */
     font-size: 1.3em;
     font-weight: bold;
@@ -138,7 +138,7 @@
 
 .category-description,
 .product-short-description {
-    font-family: var(--font-playfair-body);
+    font-family: var(--font-inter-body);
     /* Apply body font */
     font-size: 0.95em;
     color: var(--royal-medium-brown);
@@ -168,7 +168,7 @@
 }
 
 .product-detail-name {
-    font-family: var(--font-playfair-heading);
+    font-family: var(--font-georgia-heading);
     /* Apply heading font */
     color: var(--royal-dark-brown);
     /* Dark brown */
@@ -178,7 +178,7 @@
 }
 
 .product-detail-description {
-    font-family: var(--font-playfair-body);
+    font-family: var(--font-inter-body);
     /* Apply body font */
     font-size: 1.1em;
     /* Slightly larger text for main description */
@@ -197,7 +197,7 @@
 
 .features-list li,
 .specifications-list li {
-    font-family: var(--font-playfair-body);
+    font-family: var(--font-inter-body);
     /* Apply body font */
     margin-bottom: 8px;
     color: var(--royal-medium-brown);
@@ -238,7 +238,7 @@
 }
 
 .category-benefits-applications-section .sub-heading {
-    font-family: var(--font-playfair-heading);
+    font-family: var(--font-georgia-heading);
     /* Apply heading font */
     color: var(--royal-dark-brown);
     /* Dark brown for headings */
@@ -265,7 +265,7 @@
 
 .combined-list li {
     /* Styling for list items in combined section */
-    font-family: var(--font-playfair-body);
+    font-family: var(--font-inter-body);
     /* Apply body font */
     font-size: 1.05em;
     color: var(--royal-medium-brown);
@@ -301,7 +301,7 @@
 }
 
 .category-gallery-section .sub-heading {
-    font-family: var(--font-playfair-heading);
+    font-family: var(--font-georgia-heading);
     color: var(--royal-dark-brown);
     border-bottom: 2px solid var(--royal-gold);
     display: inline-block;
@@ -343,7 +343,7 @@
 }
 
 .category-videos-section .sub-heading {
-    font-family: var(--font-playfair-heading);
+    font-family: var(--font-georgia-heading);
     color: var(--royal-dark-brown);
     border-bottom: 2px solid var(--royal-gold);
     display: inline-block;
@@ -404,7 +404,7 @@
 
 /* Style for video captions within the videos section */
 .category-videos-section .paragraph {
-    font-family: var(--font-playfair-body);
+    font-family: var(--font-inter-body);
     text-align: center;
     margin-top: 10px;
     font-style: italic;

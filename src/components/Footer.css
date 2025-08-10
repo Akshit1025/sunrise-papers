@@ -21,6 +21,7 @@
 }
 
 .footer-company-name {
+  font-family: 'Georgia', serif;
   font-size: 1.8em;
   line-height: 1;
   color: var(--royal-dark-brown); /* Changed to dark brown */

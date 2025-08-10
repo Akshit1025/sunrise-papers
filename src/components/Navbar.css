@@ -58,6 +58,10 @@
   transform: scale(1.05);
 }
 
+.logo-text {
+  font-family: 'Georgia', serif;
+}
+
 .main-nav-links .nav-item {
   position: relative;
   margin: 0 15px;
