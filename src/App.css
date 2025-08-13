@@ -2,119 +2,121 @@
 
 /* --- Custom CSS Variables (Royal Brown and Golden Theme) --- */
 :root {
-  --royal-dark-brown: #4A2C2A;    /* Very deep, rich coffee/chocolate brown (replaces --sp-dark-primary, black, bg-dark) */
-  --royal-medium-brown: #8B6B5F; /* Warm, mid-tone brown (replaces --sp-dark-secondary) */
-  --royal-light-beige: #F8F5ED;  /* Creamy, warm light beige (replaces --sp-light-background) */
-  --royal-gold: #B8860B;         /* Vibrant, rich golden color (replaces --sp-accent-brown) */
-  --royal-light-gold: #E0D3B3;   /* Very subtle, light golden tone for borders (replaces --sp-border-light, grey) */
-  --royal-white: #FFFFFF;        /* Pure white for strong contrast */
+  --royal-dark-brown: #4A2C2A;
+  --royal-medium-brown: #8B6B5F;
+  --royal-light-beige: #F8F5ED;
+  --royal-gold: #B8860B;
+  --royal-light-gold: #E0D3B3;
+  --royal-white: #FFFFFF;
 
-  /* --- New Font Variables --- */
-  --font-georgia-heading: 'Georgia', serif; /* For headings and important elements */
-  --font-inter-body: 'Inter', serif;           /* For body text and general content */
+  --font-georgia-heading: 'Georgia', serif;
+  --font-inter-body: 'Inter', serif;
+
+  --loader-size: clamp(110px, 14vw, 170px);
+  --logo-scale: 0.68;
 }
 
 /* --- Global Box Sizing and Overflow Control --- */
 html {
-  overflow-x: hidden; /* Ensure horizontal overflow is hidden for html element */
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
-  font-family: var(--font-playfair-body); /* Applied Playfair to body */
-  font-size: 1.125rem; /* Increased base font size further (was 1.05rem) */
+  font-family: var(--font-inter-body);
+  font-size: 1.125rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--royal-light-beige); /* Main page background color (wooden color) */
-  color: var(--royal-medium-brown); /* Default body text color */
-  overflow-x: hidden; /* Ensure horizontal overflow is hidden for body element */
-  position: relative; /* Sometimes needed for overflow-x: hidden to be effective */
+  background-color: var(--royal-light-beige);
+  color: var(--royal-medium-brown);
+  overflow-x: hidden;
+  position: relative;
 }
 
-/* Apply border-box globally for consistent sizing */
-*, *::before, *::after {
+/* Apply border-box globally */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
-
 
 .app-wrapper {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   padding: 0;
-  box-sizing: border-box;
   width: 100%;
   margin: 0;
-  overflow: hidden; /* Also hide overflow here for app wrapper */
+  overflow: hidden;
+  opacity: 0;
+  /* Page fade-in start */
+  transition: opacity 0.6s ease;
 }
 
-/* Common container styling for content within pages/sections */
+.app-wrapper.fade-in {
+  opacity: 1;
+}
+
+/* Common container styling */
 .container {
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 15px; /* Default Bootstrap padding */
-  padding-right: 15px; /* Default Bootstrap padding */
-  /* Ensure container itself doesn't cause overflow */
-  width: 100%; /* Ensure it takes full available width */
+  padding-left: 15px;
+  padding-right: 15px;
+  width: 100%;
 }
 
-/* Generic typographic styles used across multiple pages */
 .page-title {
-  font-family: var(--font-playfair-heading); /* Applied Playfair Display */
-  color: var(--royal-dark-brown); /* Updated */
-  font-size: 2.8em; /* Increased for more prominence (was 2.5em) */
+  font-family: var(--font-georgia-heading);
+  color: var(--royal-dark-brown);
+  font-size: 2.8em;
   margin-bottom: 25px;
-  border-bottom: 2px solid var(--royal-light-gold); /* Updated */
+  border-bottom: 2px solid var(--royal-light-gold);
   padding-bottom: 10px;
   text-align: center;
 }
 
 .paragraph {
-  font-family: var(--font-playfair-body); /* Applied Playfair */
-  line-height: 1.75; /* Reduced line-height (was 1.9) */
+  font-family: var(--font-inter-body);
+  line-height: 1.75;
   margin-bottom: 15px;
-  color: var(--royal-medium-brown); /* Updated */
+  color: var(--royal-medium-brown);
 }
 
-/* Specifically target lead paragraphs for a bit more size */
 .paragraph.lead {
-    font-size: 1.25em; /* Increased further (was 1.15em) */
-    line-height: 1.85; /* Reduced line-height (was 2) */
+  font-size: 1.25em;
+  line-height: 1.85;
 }
 
 .sub-heading {
-  font-family: var(--font-playfair-heading); /* Applied Playfair Display */
-  color: var(--royal-dark-brown); /* Updated */
-  font-size: 2em; /* Increased for better hierarchy (was 1.8em) */
+  font-family: var(--font-georgia-heading);
+  color: var(--royal-dark-brown);
+  font-size: 2em;
 }
 
-/* Reusable message box styles for alerts (e.g., form submissions, loading/error states) */
 .message-box {
-  font-family: var(--font-playfair-body); /* Applied Playfair */
+  font-family: var(--font-inter-body);
   margin-top: 20px;
   padding: 15px;
   border-radius: 8px;
-  font-size: 1.05em; /* Adjusted relative to new body font size (was 1em) */
+  font-size: 1.05em;
   text-align: center;
 }
 
-/* Keeping these as they are functional, but their colors might be overridden by Bootstrap's theming or specific component styles */
 .alert-success {
-  background-color: #e6ffe6; /* Light green */
-  color: #27ae60; /* Dark green */
+  background-color: #e6ffe6;
+  color: #27ae60;
   border: 1px solid #27ae60;
 }
 
 .alert-danger {
-  background-color: #ffe6e6; /* Light red */
-  color: #e74c3c; /* Dark red */
+  background-color: #ffe6e6;
+  color: #e74c3c;
   border: 1px solid #e74c3c;
 }
 
-/* --- Themed Button Styles --- */
-
-/* Style for outline dark buttons using theme color */
+/* --- Button Styles --- */
 .btn-outline-dark {
   color: var(--royal-dark-brown);
   border-color: var(--royal-dark-brown);
@@ -122,106 +124,181 @@ body {
 
 .btn-outline-dark:hover {
   color: var(--royal-white);
-  /* White text on hover */
   background-color: var(--royal-dark-brown);
-  /* Dark brown background on hover */
   border-color: var(--royal-dark-brown);
-  /* Dark brown border on hover */
 }
 
 .btn-outline-dark:focus,
 .btn-outline-dark.focus {
   box-shadow: 0 0 0 0.25rem rgba(74, 44, 42, 0.5);
-  /* Focus shadow using royal-dark-brown rgba */
 }
 
 .btn-outline-dark.disabled,
 .btn-outline-dark:disabled {
   color: var(--royal-medium-brown);
-  /* Slightly lighter color for disabled state */
   border-color: var(--royal-medium-brown);
   background-color: transparent;
 }
 
-/* --- Preloader Styles --- */
+/* ========================
+   PRELOADER STYLES
+======================== */
 .preloader-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: var(--royal-light-beige); /* Updated */
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background-color: var(--royal-light-beige);
   z-index: 9999;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 1s ease,
+    transform 1s ease,
+    visibility 1s ease;
 }
 
-.custom-loader {
+.preloader-container.fade-out {
+  opacity: 0;
+  transform: scale(0.98);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader {
   position: relative;
-  width: 150px;
-  height: 150px;
-  border: 8px solid var(--royal-gold); /* Updated */
-  border-top-color: transparent;
-  border-radius: 50%;
-  animation: spin 1.5s linear infinite; /* Changed animation from 'roll' to 'spin' */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Subtle shadow, can keep or adjust to a brown shadow */
+  display: grid;
+  place-items: center;
+  width: var(--loader-size);
+  height: var(--loader-size);
 }
 
-.custom-loader-logo {
-  max-width: 70%;
-  max-height: 70%;
+.preloader-container img {
+  max-width: none;
+}
+
+.loader-logo {
+  grid-area: 1 / 1;
+  width: calc(var(--loader-size) * var(--logo-scale));
+  height: calc(var(--loader-size) * var(--logo-scale));
   object-fit: contain;
-  animation: spin 1.5s linear infinite reverse; /* Changed animation from 'counter-roll' to 'spin' and added reverse */
+  display: block;
+  animation: logo-pulse 2.4s ease-in-out infinite;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
+@keyframes logo-pulse {
+
+  0%,
+  60%,
   100% {
-    transform: rotate(360deg);
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(1.08);
   }
 }
 
-/* Removed counter-roll keyframes as it's no longer used */
+.loader-waves {
+  grid-area: 1 / 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
 
-/* --- Import Component and Page Specific Styles --- */
-/* Components */
-@import "./components/Navbar.css";
-@import "./components/Footer.css";
+.loader-waves span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50% / 55%;
+  background: radial-gradient(circle,
+      rgba(184, 134, 11, 0.9) 0%,
+      rgba(184, 134, 11, 0.6) 50%,
+      rgba(184, 134, 11, 0) 100%);
+  -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 99%, rgba(0, 0, 0, 0) 100%);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: cover;
+  transform: translate(-50%, -50%);
+  animation-name: wave-expand, gold-shimmer, ripple-rotate;
+  animation-duration: 2.4s, 2.4s, 6s;
+  animation-timing-function: ease-out, ease-in-out, linear;
+  animation-iteration-count: infinite, infinite, infinite;
+}
 
-/* Pages */
-@import "./pages/HomePage.css";
-@import "./pages/AboutPage.css";
-@import "./pages/ProductsPage.css";
-@import "./pages/ContactPage.css";
+.loader-waves span:nth-child(2) {
+  animation-delay: 0.8s, 0.8s, 0s;
+}
 
-/* --- Responsive Adjustments (Global overrides or common container adjustments) --- */
+.loader-waves span:nth-child(3) {
+  animation-delay: 1.6s, 1.6s, 0s;
+}
+
+@keyframes wave-expand {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 0.6;
+  }
+
+  100% {
+    width: calc(var(--loader-size) * 2.0);
+    height: calc(var(--loader-size) * 1.75);
+    opacity: 0;
+  }
+}
+
+@keyframes gold-shimmer {
+
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+
+  50% {
+    filter: brightness(1.35);
+  }
+}
+
+@keyframes ripple-rotate {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* --- Responsive Adjustments --- */
 @media (max-width: 991.98px) {
   .container {
     padding-left: 20px;
     padding-right: 20px;
   }
+
   .page-title {
-    font-size: 2.5em; /* Adjusted for tablet (was 2.2em) */
+    font-size: 2.5em;
   }
+
   .sub-heading {
-    font-size: 1.8em; /* Adjusted for tablet (was 1.6em) */
+    font-size: 1.8em;
   }
+
   body {
-    font-size: 1.05rem; /* Slightly smaller base font on tablet (was 1rem) */
+    font-size: 1.05rem;
   }
+
   .paragraph.lead {
-    font-size: 1.15em; /* Adjusted for tablet (was 1.1em) */
-  }
-  .custom-loader {
-    width: 120px;
-    height: 120px;
-    border-width: 6px;
+    font-size: 1.15em;
   }
 }
 
@@ -229,21 +306,36 @@ body {
   .container {
     padding: 15px;
   }
+
   .page-title {
-    font-size: 2.2em; /* Adjusted for mobile (was 1.8em) */
+    font-size: 2.2em;
   }
+
   .sub-heading {
-    font-size: 1.6em; /* Adjusted for mobile (was 1.4em) */
+    font-size: 1.6em;
   }
+
   body {
-    font-size: 1rem; /* Even smaller base font on mobile (was 0.95rem) */
+    font-size: 1rem;
   }
+
   .paragraph.lead {
-    font-size: 1.1em; /* Adjusted for mobile (was 1.05em) */
-  }
-  .custom-loader {
-    width: 100px;
-    height: 100px;
-    border-width: 5px;
+    font-size: 1.1em;
   }
 }
+
+/* Mobile-specific preloader scaling */
+@media (max-width: 600px) {
+  :root {
+    --loader-size: 120px;
+    --logo-scale: 0.6;
+  }
+}
+
+/* --- Import Component and Page Specific Styles --- */
+@import "./components/Navbar.css";
+@import "./components/Footer.css";
+@import "./pages/HomePage.css";
+@import "./pages/AboutPage.css";
+@import "./pages/ProductsPage.css";
+@import "./pages/ContactPage.css";

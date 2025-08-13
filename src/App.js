@@ -34,6 +34,7 @@ const ScrollToTop = () => {
 const App = () => {
   const [userId, setUserId] = useState(null);
   const [authReady, setAuthReady] = useState(false);
+  const [preloaderVisible, setPreloaderVisible] = useState(true);
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -62,25 +63,36 @@ const App = () => {
     initializeAuth();
   }, []);
 
+  useEffect(() => {
+    if (authReady) {
+      const timer = setTimeout(() => setPreloaderVisible(false), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [authReady])
+
   // New Preloader UI
-  if (!authReady) {
+  if (preloaderVisible) {
     return (
-      <div className="preloader-container">
-        <div className="custom-loader">
+      <div className={`preloader-container ${authReady ? "fade-out" : ""}`}>
+        <div className="loader">
           <img
-            src="https://sunrise-papers.vercel.app/images/logo-no-bg.png" // Company logo URL
-            alt="Sunrise Papers Logo"
+            src="https://sunrise-papers.vercel.app/images/logo-no-bg.png"
+            alt="Sunrise Paers Logo"
             className="custom-loader-logo"
           />
+          <div className="loader-waves">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="app-wrapper">
+    <div className={`app-wrapper ${!preloaderVisible ? "fade-in" : ""}`}>
       <Navbar />
-      {/* Render ScrollToTop component here */}
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
