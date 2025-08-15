@@ -36,6 +36,7 @@
 }
 
 .about-hero-title {
+    font-family: var(--font-georgia-heading);
     font-size: 3.5em;
     font-weight: bold;
     margin-bottom: 10px;
