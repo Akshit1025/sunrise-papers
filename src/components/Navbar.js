@@ -56,14 +56,6 @@ const Navbar = () => {
               {/* Changed from fa-twitter to fa-linkedin */}
             </a>
             <a
-              href="https://github.com/Akshit1025/sunrise-papers"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="social-icon-link text-muted me-3"
-            >
-              <i className="fab fa-github"></i>
-            </a>
-            <a
               href="https://wa.me/919810087126"
               target="_blank"
               rel="noopener noreferrer"

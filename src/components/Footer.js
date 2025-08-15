@@ -37,14 +37,6 @@ const Footer = () => {
                   {/* Changed from fa-twitter to fa-linkedin */}
                 </a>
                 <a
-                  href="https://github.com/Akshit1025/sunrise-papers"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-icon-link me-3"
-                >
-                  <i className="fab fa-github"></i>
-                </a>
-                <a
                   href="https://wa.me/919810087126"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -149,7 +141,15 @@ const Footer = () => {
         <div className="container d-md-flex justify-content-between align-items-center">
           <small className="mb-2 mb-md-0">
             &copy; {new Date().getFullYear()} Sunrise Papers. All Rights
-            Reserved.
+            Reserved.&nbsp;
+            <a
+              href="https://instagram.com/akshitthecoder"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-decoration-none footer-bottom-link"
+            >
+              Made by Akshit Gupta
+            </a>
           </small>
           <ul className="list-inline mb-0 footer-policy-links">
             <li className="list-inline-item me-3">
