@@ -78,7 +78,7 @@ const App = () => {
           <img
             src="https://sunrise-papers.vercel.app/images/logo-no-bg.png"
             alt="Sunrise Paers Logo"
-            className="custom-loader-logo"
+            className="loader-logo"
           />
           <div className="loader-waves">
             <span></span>

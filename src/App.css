@@ -183,6 +183,7 @@ body {
   height: calc(var(--loader-size) * var(--logo-scale));
   object-fit: contain;
   display: block;
+  z-index: 9999;
   animation: logo-pulse 2.4s ease-in-out infinite;
 }
 
