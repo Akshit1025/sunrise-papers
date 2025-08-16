@@ -1,68 +1,79 @@
-// api/send-quote.js
-const sgMail = require('@sendgrid/mail');
+// /api/send-quote.js
+import { Resend } from "resend";
 
-sgMail.setApiKey(process.env.REACT_APP_SENDGRID_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req, res) {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ message: 'Method Not Allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method Not Allowed" });
+  }
+
+  try {
+    const { name, email, message, ...otherFields } = req.body || {};
+
+    if (!name || !email) {
+      return res.status(400).json({ message: "Name and Email are required." });
     }
 
-    try {
-        const { name, email, message, ...otherFields } = req.body;
+    // Plain text body
+    const textBody = `
+New Quote Request
 
-        // Basic validation (consider more robust validation)
-        if (!name || !email) {
-            return res.status(400).json({ message: 'Name and Email are required.' });
-        }
+Name: ${name}
+Email: ${email}
+${Object.entries(otherFields)
+  .map(([k, v]) => `${k}: ${v}`)
+  .join("\n")}
+${message ? `Message: ${message}` : ""}
+    `;
 
-        // Basic email format validation
-        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-            return res.status(400).json({ message: 'Invalid email address.' });
-        }
+    // HTML body (simple table)
+    const htmlBody = `
+      <div style="font-family:Arial,Helvetica,sans-serif; line-height:1.6; color:#333;">
+        <h2>New Quote Request</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        ${Object.entries(otherFields)
+          .map(([k, v]) => `<p><strong>${k}:</strong> ${v}</p>`)
+          .join("")}
+        ${message ? `<p><strong>Message:</strong> ${message}</p>` : ""}
+        <hr />
+        <small>Received on ${new Date().toLocaleString()}</small>
+      </div>
+    `;
 
+    // 1) Send to you
+    await resend.emails.send({
+      from: "quotes@sunrisepapers.co.in", // must match your verified domain
+      to: "dineshgupta@sunrisepapers.co.in", // your receiving email
+      replyTo: email, // customer email for direct reply
+      subject: `New Quote Request — ${name}`,
+      text: textBody,
+      html: htmlBody,
+    });
 
-        // Format the email content based on the received data
-        let emailBodyHtml = `
-           <h2>New Quote Request</h2>
-           <p><strong>Name:</strong> ${name}</p>
-           <p><strong>Email:</strong> ${email}</p>
-         `;
+    // 2) Confirmation to customer
+    await resend.emails.send({
+      from: "quotes@sunrisepapers.co.in",
+      to: email,
+      subject: "We received your quote request!",
+      text: `Hi ${name},\n\nThanks for reaching out to Sunrise Papers. We’ve received your quote request and will get back to you soon.\n\n— Sunrise Papers`,
+      html: `
+        <div style="font-family:Arial,Helvetica,sans-serif; line-height:1.6; color:#333;">
+          <h2>Thank you, ${name}!</h2>
+          <p>We’ve received your quote request and our team will get back to you soon.</p>
+          <p><em>— Sunrise Papers</em></p>
+        </div>
+      `,
+    });
 
-        let emailBodyText = `
-           New Quote Request\n\n
-           Name: ${name}\n
-           Email: ${email}\n
-         `;
-
-        for (const field in otherFields) {
-            if (otherFields.hasOwnProperty(field)) {
-                const formattedFieldName = field.replace(/([A-Z])/g, ' $1').trim().replace(/^\w/, c => c.toUpperCase());
-                emailBodyHtml += `<p><strong>${formattedFieldName}:</strong> ${otherFields[field]}</p>`;
-                emailBodyText += `${formattedFieldName}: ${otherFields[field]}\n`;
-            }
-        }
-
-        if (message && message.trim()) {
-            emailBodyHtml += `<p><strong>Message:</strong> ${message}</p>`;
-            emailBodyText += `Message: ${message}\n`;
-        }
-
-
-        const msg = {
-            to: 'YOUR_RECEIVING_EMAIL@example.com', // Your email address to receive quotes
-            from: 'YOUR_VERIFIED_SENDER_EMAIL@yourdomain.com', // Your verified sender email in SendGrid
-            subject: `New Quote Request from ${name} (${email})`,
-            text: emailBodyText,
-            html: emailBodyHtml,
-        };
-
-        await sgMail.send(msg);
-
-        res.status(200).json({ success: true, message: 'Your quote request has been sent successfully!' });
-
-    } catch (error) {
-        console.error('Error sending email:', error);
-        res.status(500).json({ message: 'Failed to send quote request.', error: error.message });
-    }
+    return res
+      .status(200)
+      .json({ success: true, message: "Quote email(s) sent." });
+  } catch (err) {
+    console.error("Resend error:", err);
+    return res
+      .status(500)
+      .json({ message: "Failed to send quote request.", error: err.message });
+  }
 }

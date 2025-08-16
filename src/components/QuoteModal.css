@@ -3,126 +3,83 @@
 /* Ensure the modal is visible and has a backdrop when 'show' class is applied */
 .modal.show {
     display: block;
-    /* Bootstrap provides a backdrop div, but if you're manually controlling, */
-    /* you might need to style a backdrop element if you added one in HTML. */
-    /* The modalStyle in JS handles the background color and display */
 }
 
-/* Style for the modal dialog itself */
-.modal-dialog {
-    /* Bootstrap's .modal-dialog-centered and .modal-lg handle centering and size */
-}
-
-
-/* Style for the modal content box */
+/* Modal content box */
 .modal-content {
     border-radius: 10px;
-    /* Consistent with other rounded elements like cards */
     border: 1px solid var(--royal-light-gold);
-    /* Theme border color */
     background-color: var(--royal-white);
-    /* Light background for content */
     box-shadow: 0 4px 12px rgba(74, 44, 42, 0.1);
-    /* Subtle shadow using royal-dark-brown rgba */
     font-family: var(--font-inter-body);
-    /* Apply body font to modal content */
     color: var(--royal-medium-brown);
-    /* Default text color within modal */
 }
 
-/* Style for the modal header */
+/* Modal header */
 .modal-header {
     border-bottom: 1px solid var(--royal-light-gold);
-    /* Theme border color */
     padding: 15px 25px;
-    /* Add some padding */
     background-color: var(--royal-light-beige);
-    /* Use light beige for header background */
 }
 
-/* Style for the modal title */
 .modal-header .modal-title {
     font-family: var(--font-georgia-heading);
-    /* Apply heading font to title */
     color: var(--royal-dark-brown);
-    /* Dark brown color for title */
     font-size: 1.5em;
-    /* Adjust size as needed */
 }
 
-/* Style for the modal body */
+/* Modal body */
 .modal-body {
     padding: 25px;
-    /* Add generous padding */
 }
 
-/* Style for form labels */
+/* Form labels */
 .form-label {
     font-weight: bold;
     color: var(--royal-dark-brown);
-    /* Dark brown for labels */
     margin-bottom: 8px;
-    /* Space below label */
     font-family: var(--font-inter-body);
-    /* Body font for labels */
 }
 
-/* Style for form controls (input, select, textarea) */
+/* Inputs */
 .form-control,
 .form-select {
     font-family: var(--font-inter-body);
-    /* Body font for input text */
     color: var(--royal-dark-brown);
-    /* Dark brown for input text */
     border: 1px solid var(--royal-light-gold);
-    /* Theme border color */
     border-radius: 5px;
-    /* Slightly rounded corners */
     padding: 10px 12px;
-    /* Adjust padding */
     transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .form-control:focus,
 .form-select:focus {
     border-color: var(--royal-gold);
-    /* Highlight with gold on focus */
     box-shadow: 0 0 0 0.25rem rgba(184, 134, 11, 0.25);
-    /* Gold box shadow with transparency */
     outline: 0;
-    /* Remove default outline */
 }
 
-/* Style for invalid form controls (validation error) */
+/* Invalid fields */
 .form-control.is-invalid,
 .form-select.is-invalid,
 .form-control.is-invalid:focus,
 .form-select.is-invalid:focus {
     border-color: #e74c3c;
-    /* Bootstrap danger color */
     box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25);
-    /* Danger box shadow */
 }
 
-/* Style for invalid feedback messages */
 .invalid-feedback {
     color: #e74c3c;
-    /* Bootstrap danger color */
     font-size: 0.875em;
     margin-top: 5px;
 }
 
-
-/* Style for the submit button */
+/* Submit button */
 .btn-primary {
     background-color: var(--royal-gold);
-    /* Theme gold for primary button */
     border-color: var(--royal-gold);
-    /* Theme gold border */
     color: var(--royal-dark-brown);
-    /* Dark brown text on gold button */
     font-family: var(--font-georgia-heading);
-    /* Heading font for button text */
     font-weight: bold;
     padding: 10px 20px;
     border-radius: 5px;
@@ -131,22 +88,17 @@
 
 .btn-primary:hover {
     background-color: var(--royal-dark-brown);
-    /* Dark brown on hover */
     border-color: var(--royal-dark-brown);
-    /* Dark brown border on hover */
     color: var(--royal-white);
-    /* White text on dark brown hover */
 }
 
 .btn-primary:focus {
     box-shadow: 0 0 0 0.25rem rgba(184, 134, 11, 0.5);
-    /* Stronger gold shadow on focus */
 }
 
-/* Style for the close button */
+/* Close button */
 .btn-close {
-    /* Bootstrap's default close button styling is usually fine */
-    /* You can override color if needed, e.g., filter: invert(0.2) sepia(1) saturate(5) hue-rotate(175deg); to make it match a color */
+    /* Keep Bootstrap default */
 }
 
 /* --- Tooltip Styles --- */
@@ -155,60 +107,44 @@
     display: inline-block;
     margin-left: 5px;
     cursor: pointer;
-    /* Remove text decoration on hover if it's a link */
     text-decoration: none;
 }
 
 .info-icon {
     color: var(--royal-medium-brown);
-    /* Medium brown for info icon */
     font-size: 0.9em;
     vertical-align: middle;
-    /* Align icon nicely with text */
 }
 
-/* Styles for the tooltip text */
-.tooltip-text {
+/* Tooltip text (hidden by default) */
+.tooltip-container .tooltip-text {
     visibility: hidden;
-    /* Hidden by default */
+    opacity: 0;
     width: 200px;
-    /* Adjust width as needed */
     background-color: var(--royal-dark-brown);
-    /* Dark brown background for tooltip */
     color: var(--royal-white);
-    /* White text on dark brown */
     text-align: center;
     border-radius: 6px;
     padding: 7px 10px;
-    /* More padding */
     position: absolute;
     z-index: 1050;
-    /* Higher z-index than modal backdrop (1040) */
     bottom: 125%;
-    /* Position above the icon */
     left: 50%;
     margin-left: -100px;
-    /* Center the tooltip */
-    opacity: 0;
     transition: opacity 0.3s ease-in-out;
-    /* Smooth fade in */
     font-size: 0.8em;
-    /* Adjusted font size */
     white-space: normal;
-    /* Allow text to wrap */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    /* More prominent shadow */
     font-family: var(--font-inter-body);
-    /* Apply body font to tooltip text */
 }
 
-/* Show the tooltip text when the container is hovered */
+/* Show tooltip ONLY when hovering over icon */
 .tooltip-container:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
 }
 
-/* Arrow for the tooltip */
+/* Tooltip arrow */
 .tooltip-text::after {
     content: "";
     position: absolute;
@@ -218,48 +154,39 @@
     border-width: 5px;
     border-style: solid;
     border-color: var(--royal-dark-brown) transparent transparent transparent;
-    /* Dark brown arrow */
 }
 
-/* Responsive adjustments (Bootstrap's grid and form classes handle most) */
-/* Adjusting modal width for smaller screens might be necessary */
+/* Spinner inside button */
+button .spinner-border {
+    color: var(--royal-gold);
+    vertical-align: middle;
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.15em;
+}
+
+/* Responsive adjustments */
 @media (max-width: 767.98px) {
     .modal-dialog.modal-lg {
         max-width: 95%;
-        /* Make modal slightly smaller on small screens */
         margin: 1rem auto;
-        /* Adjust margin */
     }
-
     .modal-header {
         padding: 10px 15px;
-        /* Reduce padding in header */
     }
-
     .modal-body {
         padding: 15px;
-        /* Reduce padding in body */
     }
-
     .tooltip-text {
         width: 180px;
-        /* Adjust tooltip width on mobile */
         margin-left: -90px;
-        /* Recalculate for centering */
         bottom: 135%;
-        /* Adjust position slightly */
-    }
-
-    .tooltip-text::after {
-        margin-left: -5px;
-        /* Keep arrow centered */
     }
 }
 
 @media (max-width: 575.98px) {
     .tooltip-text {
         width: 160px;
-        /* Further adjust tooltip width on extra small screens */
         margin-left: -80px;
     }
 }

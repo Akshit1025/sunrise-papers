@@ -165,7 +165,7 @@ const ProductDetailPage = ({ authReady }) => {
           )}
         </div>
       </section>
-      <QuoteModal show={showQuoteModal} handleClose={handleCloseQuoteModal} categorySlug={product ? product.category_slug : ''} />
+      <QuoteModal show={showQuoteModal} handleClose={handleCloseQuoteModal} category_slug={product ? product.category_slug : ''} />
     </>
   );
 };
