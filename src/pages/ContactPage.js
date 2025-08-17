@@ -18,39 +18,35 @@ const ContactPage = ({ userId, authReady }) => {
     setStatusMessage("");
     setIsSubmitting(true);
 
-    if (!authReady || !userId) {
-      setStatusMessage(
-        "Authentication not ready. Please wait a moment and try again."
-      );
-      setSubmissionStatus("error");
-      setIsSubmitting(false);
-      return;
-    }
-
     if (!name || !email || !message) {
-      setStatusMessage("All fields are required.");
+      setStatusMessage("Please fill in all fields.");
       setSubmissionStatus("error");
       setIsSubmitting(false);
       return;
     }
 
     try {
-      const messagesCollectionPath = "contact_messages";
-      await addDoc(collection(db, messagesCollectionPath), {
-        name,
-        email,
-        message,
-        timestamp: new Date(),
-        userId: userId,
+      const response = await fetch("/api/send-contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({name, email, message}),
       });
-      setStatusMessage("Your message has been sent successfully!");
-      setSubmissionStatus("success");
-      setName("");
-      setEmail("");
-      setMessage("");
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setStatusMessage("Your message has been sent successfully!");
+        setSubmissionStatus("success");
+        setName("");
+        setEmail("");
+        setMessage("");
+      } else {
+        setStatusMessage(result.message || "Failed to send message.");
+        setSubmissionStatus("error");
+      }
     } catch (error) {
       console.error("Error sending message:", error);
-      setStatusMessage("Failed to send message. Please try again.");
+      setStatusMessage("Failed to send message. Please try again later");
       setSubmissionStatus("error");
     } finally {
       setIsSubmitting(false);

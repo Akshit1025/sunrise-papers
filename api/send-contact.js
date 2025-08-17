@@ -1,4 +1,4 @@
-// api/send-quote.js
+// api/send-contact.js
 
 import { Resend } from "resend";
 
@@ -10,8 +10,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, email, product, quantity, message } = req.body;
-    if (!name || !email || !product || !quantity) {
+    const { name, email, subject, message } = req.body;
+    if (!name || !email || !message) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
   <!-- Body -->
   <div style="padding:25px;">
     <h2 style="color:#004aad;margin-top:0;">📩 ${
-      isAdmin ? "New Quote Request" : "Thank You for Your Quote Request"
+      isAdmin ? "New Contact Message" : "Thank You for Contacting Us"
     }</h2>
     
     ${
@@ -41,8 +41,8 @@ export default async function handler(req, res) {
             You’ve received a new <strong>${type}</strong> from <strong>${name}</strong>.
           </p>`
         : `<p style="font-size:16px;line-height:1.6;margin:0 0 15px;">
-            Hi <strong>${name}</strong>, thank you for reaching out to <strong>Sunrise Papers</strong>.
-            We have received your request for <strong>${product}</strong> (Qty: ${quantity}) and will get back to you soon.
+            Hi <strong>${name}</strong>, thank you for contacting <strong>Sunrise Papers</strong>.
+            We have received your message and our team will respond to you shortly.
           </p>`
     }
 
@@ -52,11 +52,12 @@ export default async function handler(req, res) {
             <tbody>
               <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold;">Name</td><td style="padding:8px;border:1px solid #eee;">${name}</td></tr>
               <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold;">Email</td><td style="padding:8px;border:1px solid #eee;">${email}</td></tr>
-              <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold;">Product</td><td style="padding:8px;border:1px solid #eee;">${product}</td></tr>
-              <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold;">Quantity</td><td style="padding:8px;border:1px solid #eee;">${quantity}</td></tr>
-              <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold;">Message</td><td style="padding:8px;border:1px solid #eee;">${
-                message || "N/A"
-              }</td></tr>
+              ${
+                subject
+                  ? `<tr><td style="padding:8px;border:1px solid #eee;font-weight:bold;">Subject</td><td style="padding:8px;border:1px solid #eee;">${subject}</td></tr>`
+                  : ""
+              }
+              <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold;">Message</td><td style="padding:8px;border:1px solid #eee;">${message}</td></tr>
             </tbody>
           </table>`
         : ""
@@ -89,19 +90,19 @@ export default async function handler(req, res) {
 
     // 🔹 Send to Admin
     await resend.emails.send({
-      from: "Sunrise Papers <quotes@sunrisepapers.co.in>",
+      from: "Sunrise Papers <contact@sunrisepapers.co.in>",
       to: "dineshgupta@sunrisepapers.co.in",
       replyTo: email,
-      subject: `📩 New Quote Request from ${name}`,
-      html: generateEmailHTML("Quote Request", true),
+      subject: `📩 New Contact Form Submission from ${name}`,
+      html: generateEmailHTML("Contact Form", true),
     });
 
     // 🔹 Send to Customer
     await resend.emails.send({
-      from: "Sunrise Papers <quotes@sunrisepapers.co.in>",
+      from: "Sunrise Papers <contact@sunrisepapers.co.in>",
       to: email,
-      subject: "✅ We received your quote request",
-      html: generateEmailHTML("Quote Request", false),
+      subject: "✅ We received your message",
+      html: generateEmailHTML("Contact Form", false),
     });
 
     return res.status(200).json({ success: true });
