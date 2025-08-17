@@ -53,7 +53,6 @@ const CategoryProductsPage = ({ authReady }) => {
         if (!categorySnapshot.empty) {
           const fetchedCategoryData = categorySnapshot.docs[0].data();
           setCategoryData(fetchedCategoryData); // Store the fetched category data in state
-          console.log("Fetched category details:", fetchedCategoryData);
 
           // --- Step 2: Conditionally Fetch Products for this Category ---
           // Only fetch products if the category is marked as having sub-products
@@ -69,16 +68,9 @@ const CategoryProductsPage = ({ authReady }) => {
               ...doc.data(),
             }));
             setProducts(fetchedProducts);
-            console.log(
-              `Fetched products for category "${categorySlug}":`,
-              fetchedProducts
-            );
           } else {
             // If hasSubProducts is false, no need to fetch products, so set products to empty array
             setProducts([]);
-            console.log(
-              `Category "${categorySlug}" does not have sub-products. Displaying category details.`
-            );
           }
           setError(null); // Clear any errors if category was fetched successfully
         } else {
@@ -129,9 +121,7 @@ const CategoryProductsPage = ({ authReady }) => {
 
   if (categoryData && !categoryData.hasSubProducts) {
     // Add the main category image if it exists
-    if (categoryData.image_url) {
-      allMediaItems.push({ type: 'image', url: categoryData.image_url, alt: categoryData.name });
-    }
+    
 
     // Add gallery images if they exist
     if (categoryData.galleryImages && categoryData.galleryImages.length > 0) {
@@ -389,7 +379,7 @@ const CategoryProductsPage = ({ authReady }) => {
       </section>
 
       {/* Quote Modal */}
-      <QuoteModal show={showQuoteModal} handleClose={handleCloseQuoteModal} categorySlug={categorySlug} />
+      <QuoteModal show={showQuoteModal} handleClose={handleCloseQuoteModal} category_slug={categorySlug} />
     </>
   );
 };

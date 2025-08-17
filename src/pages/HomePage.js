@@ -29,7 +29,6 @@ const HomePage = () => {
         setCategories(categoriesList); // Set categories state
         setLoading(false);
         setError(null);
-        console.log("Homepage Categories fetched:", categoriesList);
       },
       (err) => {
         console.error("Error fetching homepage categories:", err);

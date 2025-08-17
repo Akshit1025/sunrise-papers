@@ -35,7 +35,6 @@ const ProductsPage = ({ authReady }) => {
             (a.order || 0) - (b.order || 0) || a.name.localeCompare(b.name)
         );
         setCategories(fetchedCategories);
-        console.log("Fetched categories:", fetchedCategories);
         setError(null);
       } catch (err) {
         console.error("Error fetching categories:", err);

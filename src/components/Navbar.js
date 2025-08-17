@@ -47,7 +47,7 @@ const Navbar = () => {
           </div>
           <div className="social-icons">
             <a
-              href="https://www.linkedin.com/in/dinesh-gupta-57b513374" // Updated LinkedIn URL (example)
+              href="http://www.linkedin.com/in/dineshgupta-sunriise" // Updated LinkedIn URL (example)
               target="_blank"
               rel="noopener noreferrer"
               className="social-icon-link text-muted me-3"
