@@ -10,10 +10,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, email, message="", categorySlug = "", ...rest } = req.body;
+    const { name, email, message, ...otherFields } = req.body || {};
     if (!name || !email) {
       return res.status(400).json({ error: "Missing required fields" });
     }
+
+    // Extract product + quantity safely from otherFields
+    const product = otherFields.product || "N/A";
+    const quantity = otherFields.quantity || otherFields.moq || "N/A";
 
     const dateStr = new Date().toLocaleString("en-IN", {
       timeZone: "Asia/Kolkata",
@@ -52,8 +56,12 @@ export default async function handler(req, res) {
             <tbody>
               <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold;">Name</td><td style="padding:8px;border:1px solid #eee;">${name}</td></tr>
               <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold;">Email</td><td style="padding:8px;border:1px solid #eee;">${email}</td></tr>
-              <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold;">Product</td><td style="padding:8px;border:1px solid #eee;">${product}</td></tr>
-              <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold;">Quantity</td><td style="padding:8px;border:1px solid #eee;">${quantity}</td></tr>
+              ${Object.entries(otherFields)
+                .map(
+                  ([key, val]) =>
+                    `<tr><td style="padding:8px;border:1px solid #eee;font-weight:bold;">${key}</td><td style="padding:8px;border:1px solid #eee;">${val}</td></tr>`
+                )
+                .join("")}
               <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold;">Message</td><td style="padding:8px;border:1px solid #eee;">${
                 message || "N/A"
               }</td></tr>
