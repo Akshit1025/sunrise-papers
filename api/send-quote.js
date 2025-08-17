@@ -10,8 +10,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, email, product, quantity, message } = req.body;
-    if (!name || !email || !product || !quantity) {
+    const { name, email, message="", categorySlug = "", ...rest } = req.body;
+    if (!name || !email) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
