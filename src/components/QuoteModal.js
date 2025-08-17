@@ -207,7 +207,13 @@ const QuoteModal = ({ show, handleClose, category_slug }) => {
         await fetch("/api/send-quote", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+            categorySlug: category_slug,
+            ...formData, // include all other category-specific fields too
+          }),
         });
 
         setSubmissionSuccess(
