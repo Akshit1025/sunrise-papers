@@ -1,15 +1,11 @@
 // src/App.js
-
 import React, { useState, useEffect } from "react";
 import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
-import { Routes, Route, useLocation } from "react-router-dom"; // Import useLocation
+import { Routes, Route, useLocation } from "react-router-dom";
 
-// Import Firebase config and instances
 import { auth } from "./firebaseConfig";
-// Import main CSS file
 import "./App.css";
 
-// Import components and pages
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
@@ -19,44 +15,38 @@ import CategoryProductsPage from "./pages/CategoryProductsPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import ContactPage from "./pages/ContactPage";
 
-// New ScrollToTop component
 const ScrollToTop = () => {
-  const { pathname } = useLocation(); // Get the current path from React Router
-
+  const { pathname } = useLocation();
   useEffect(() => {
-    // Scroll to top whenever the pathname changes (i.e., route changes)
     window.scrollTo(0, 0);
-  }, [pathname]); // Dependency array: re-run effect when pathname changes
-
-  return null; // This component doesn't render anything itself
+  }, [pathname]);
+  return null;
 };
 
 const App = () => {
   const [userId, setUserId] = useState(null);
   const [authReady, setAuthReady] = useState(false);
-  const [preloaderVisible, setPreloaderVisible] = useState(true);
+  const [showPreloader, setShowPreloader] = useState(true);
+  const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        // Attempt to sign in anonymously.
         await signInAnonymously(auth);
         console.log("Signed in anonymously.");
 
-        // Set up an authentication state listener to update userId
         onAuthStateChanged(auth, (user) => {
           if (user) {
             setUserId(user.uid);
             console.log("Firebase user ID:", user.uid);
           } else {
-            console.log("No user signed in.");
             setUserId(null);
           }
-          setAuthReady(true); // Mark authentication as ready regardless of user status
+          setAuthReady(true);
         });
       } catch (error) {
         console.error("Error during initial Firebase authentication:", error);
-        setAuthReady(true); // Ensure authReady is set to true even if an error occurs
+        setAuthReady(true);
       }
     };
 
@@ -64,20 +54,38 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    // Always keep loader for at least 3s
+    const timer = setTimeout(() => {
+      if (authReady) {
+        // Trigger fade-out after 3s
+        setFadeOut(true);
+
+        // Remove preloader after fade-out finishes (1s CSS transition)
+        setTimeout(() => setShowPreloader(false), 1000);
+      }
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [authReady]);
+
+  useEffect(() => {
+    // If auth wasn't ready at 3s, wait until it becomes ready
     if (authReady) {
-      const timer = setTimeout(() => setPreloaderVisible(false), 500);
+      const timer = setTimeout(() => {
+        setFadeOut(true);
+        setTimeout(() => setShowPreloader(false), 1000);
+      }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [authReady])
+  }, [authReady]);
 
-  // New Preloader UI
-  if (preloaderVisible) {
+  if (showPreloader) {
     return (
-      <div className={`preloader-container ${authReady ? "fade-out" : ""}`}>
+      <div className={`preloader-container ${fadeOut ? "fade-out" : ""}`}>
         <div className="loader">
           <img
-            src="https://sunrise-papers.vercel.app/images/logo-no-bg.png"
-            alt="Sunrise Paers Logo"
+            src="https://sunrise-papers.vercel.app/images/logo-no-shadow.png"
+            alt="Sunrise Papers Logo"
             className="loader-logo"
           />
           <div className="loader-waves">
@@ -91,7 +99,7 @@ const App = () => {
   }
 
   return (
-    <div className={`app-wrapper ${!preloaderVisible ? "fade-in" : ""}`}>
+    <div className={`app-wrapper fade-in`}>
       <Navbar />
       <ScrollToTop />
       <Routes>
