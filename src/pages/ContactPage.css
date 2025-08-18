@@ -201,9 +201,9 @@
   }
 
   /* HIDE ONLY THE CONTACT DETAILS LIST ON MOBILE */
-  .contact-details-list {
+  /* .contact-details-list {
     display: none;
-  }
+  } */
 
   .contact-info-card .paragraph,
   .contact-info-card .sub-heading {

@@ -64,14 +64,18 @@ export default async function handler(req, res) {
     }
 
     <div style="text-align:center;margin:30px 0;">
-      <a href="https://sunrisepapers.com" 
+      ${
+        isAdmin
+          ? ""
+          : `<a href="https://sunrisepapers.com" 
          style="display:inline-block;background:#004aad;color:#fff;text-decoration:none;padding:12px 25px;border-radius:30px;margin:5px;font-weight:bold;">
          🌐 Visit Website
       </a>
       <a href="https://wa.me/919810087126" 
          style="display:inline-block;background:#25d366;color:#fff;text-decoration:none;padding:12px 25px;border-radius:30px;margin:5px;font-weight:bold;">
          💬 Chat on WhatsApp
-      </a>
+      </a>`
+      }
     </div>
 
     <p style="font-size:13px;color:#555;text-align:center;">

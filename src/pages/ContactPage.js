@@ -183,13 +183,14 @@ const ContactPage = ({ userId, authReady }) => {
                     <i className="fas fa-map-marker-alt me-3 fa-lg"></i>
                     <span className="contact-text">
                       <a
-                        href="https://maps.app.goo.gl/zFrzmgSPvqrrL79Z9"
+                        href="https://maps.app.goo.gl/dnWGFT5NEYQBvkfc9"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-decoration-none"
                         style={{ color: "var(--sp-dark-primary)" }}
                       >
-                        Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka, Delhi, 110078, India
+                        Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka,
+                        Delhi, 110078, India
                       </a>
                     </span>
                   </li>
@@ -226,6 +227,18 @@ const ContactPage = ({ userId, authReady }) => {
                       </a>
                     </span>
                   </li>
+                  <li className="mb-3 contact-detail-item">
+                    <i className="fas fa-tty me-3 fa-lg"></i>
+                    <span className="contact-text">
+                      <a
+                        href="tel:+911169952451"
+                        className="text-decoration-none"
+                        style={{ color: "var(--sp-dark-primary)" }}
+                      >
+                        011 6995 2451
+                      </a>
+                    </span>
+                  </li>
                 </ul>
                 <h4 className="sub-heading fw-bold mt-5 mb-3">
                   Business Hours
@@ -240,7 +253,7 @@ const ContactPage = ({ userId, authReady }) => {
                 <h4 className="sub-heading fw-bold mt-5 mb-3">Find Us Here</h4>
                 <div className="map-container rounded-3 overflow-hidden shadow-sm">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2795.9882920818955!2d77.02699707434387!3d28.600752085525215!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1dd61eb460af%3A0xe89377d97456bc5e!2sVegas%20Mall!5e1!3m2!1sen!2sin!4v1750858738212!5m2!1sen!2sin"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.9434620915536!2d77.02744837454031!3d28.601472885492168!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1ba519ad564f%3A0xe2d9a71052183dde!2sSunrise%20Papers!5e0!3m2!1sen!2sin!4v1755530280369!5m2!1sen!2sin"
                     width="100%"
                     height="300"
                     style={{ border: 0 }}
