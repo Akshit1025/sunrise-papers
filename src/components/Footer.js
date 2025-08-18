@@ -141,7 +141,7 @@ const Footer = () => {
         <div className="container d-md-flex justify-content-between align-items-center">
           <small className="mb-2 mb-md-0">
             &copy; {new Date().getFullYear()} Sunrise Papers. All Rights
-            Reserved.&nbsp;
+            Reserved.<br />
             <a
               href="https://instagram.com/akshitthecoder"
               target="_blank"

@@ -235,7 +235,7 @@ const ContactPage = ({ userId, authReady }) => {
                         className="text-decoration-none"
                         style={{ color: "var(--sp-dark-primary)" }}
                       >
-                        011 6995 2451
+                        011-6995-2451
                       </a>
                     </span>
                   </li>
