@@ -456,6 +456,12 @@
     /* Dark background for media area */
 }
 
+.product-detail-media {
+    height: 350px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
 /* Style for images within the carousel */
 #categoryMediaCarousel .carousel-item .category-carousel-image {
     /* Uses Bootstrap's .d-block and .w-100 */
@@ -681,6 +687,11 @@
         /* Smaller carousel height on tablet */
     }
 
+    .product-detail-media {
+        height: 280px;
+        /* Adjust image height on tablet */
+    }
+
     /* Adjust image/video height within carousel on tablet */
     #categoryMediaCarousel .carousel-item .category-carousel-image,
     #categoryMediaCarousel .carousel-item .category-carousel-video-container iframe,
@@ -843,6 +854,11 @@
         /* Smaller carousel height on mobile */
     }
 
+    .product-detail-media {
+        height: 300px;
+        /* Adjust image height on mobile */
+    }
+
     /* Adjust image/video height within carousel on mobile */
     #categoryMediaCarousel .carousel-item .category-carousel-image,
     #categoryMediaCarousel .carousel-item .category-carousel-video-container iframe,
@@ -908,6 +924,11 @@
 
     /* Adjust carousel height on very small screens if needed */
     #categoryMediaCarousel .carousel-item {
+        height: 250px;
+        /* Example: Even smaller height on very small screens */
+    }
+
+    .product-detail-media {
         height: 250px;
         /* Example: Even smaller height on very small screens */
     }

@@ -1,23 +1,22 @@
 // src/pages/ProductDetailPage.js
 
 import React, { useState, useEffect } from "react";
-import { collection, getDocs, query, where, limit } from "firebase/firestore"; // Import necessary Firestore functions
+import { collection, getDocs, query, where, limit } from "firebase/firestore";
 import { useParams, Link } from "react-router-dom";
-import { db } from "../firebaseConfig"; // Import db directly
-import "./ProductsPage.css"; // Shared CSS for product-related pages
-import QuoteModal from '../components/QuoteModal';
+import { db } from "../firebaseConfig";
+import "./ProductsPage.css";
+import QuoteModal from "../components/QuoteModal";
 
 const ProductDetailPage = ({ authReady }) => {
-  // authReady is passed as a prop
   const { productSlug } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showQuoteModal, setShowQuoteModal] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
       if (!authReady) {
-        // Wait for Firebase auth (and thus db) to be ready
         setLoading(true);
         return;
       }
@@ -33,7 +32,7 @@ const ProductDetailPage = ({ authReady }) => {
           where("slug", "==", productSlug),
           limit(1)
         );
-        const querySnapshot = await getDocs(q); // Use getDocs for queries
+        const querySnapshot = await getDocs(q);
 
         if (!querySnapshot.empty) {
           const productData = querySnapshot.docs[0].data();
@@ -52,20 +51,16 @@ const ProductDetailPage = ({ authReady }) => {
     };
 
     if (productSlug) {
-      // Ensure productSlug is available before attempting to fetch
       fetchProduct();
     }
-  }, [authReady, productSlug]); // Depend on authReady and productSlug
-
-  const [showQuoteModal, setShowQuoteModal] = useState(false);
+  }, [authReady, productSlug]);
 
   const handleShowQuoteModal = () => setShowQuoteModal(true);
   const handleCloseQuoteModal = () => setShowQuoteModal(false);
 
-
   return (
     <>
-      {/* Product Detail Hero Section */}
+      {/* Hero */}
       <section className="products-hero-section py-5 text-center d-flex align-items-center justify-content-center">
         <div className="container animate__animated animate__fadeIn">
           <h1 className="display-3 fw-bold mb-3 products-hero-title">
@@ -80,7 +75,7 @@ const ProductDetailPage = ({ authReady }) => {
         </div>
       </section>
 
-      {/* Main Content Area - Product Details */}
+      {/* Main Content */}
       <section className="py-5 bg-white">
         <div className="container">
           {loading && (
@@ -99,29 +94,62 @@ const ProductDetailPage = ({ authReady }) => {
             </div>
           )}
 
-          {!loading && !product && !error && (
-            <div className="alert alert-info text-center message-box animate__animated animate__fadeIn">
-              No product details found.
-            </div>
-          )}
-
           {product && (
             <div className="product-detail-content row g-5">
-              <div className="col-lg-6 animate__animated animate__fadeInLeft">
-                <img
-                  src={
-                    product.image_url ||
-                    "https://placehold.co/800x600/dddddd/333333?text=Product+Image"
-                  }
-                  alt={product.name}
-                  className="img-fluid rounded-3 shadow-lg product-detail-image"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src =
-                      "https://placehold.co/800x600/dddddd/333333?text=Image+Error";
-                  }}
-                />
+              {/* ✅ Carousel for images */}
+              <div className="col-md-6 col-lg-6 justify-content-center align-items-center animate__animated animate__fadeInLeft">
+                <div
+                  id="productCarousel"
+                  className="carousel slide shadow-lg rounded"
+                  data-bs-ride="carousel"
+                >
+                  <div className="carousel-inner rounded product-detail-media">
+                    {/* First Image */}
+                    <div className="carousel-item active">
+                      <img
+                        src={
+                          product.image_url ||
+                          "https://placehold.co/800x600/dddddd/333333?text=Product+Image"
+                        }
+                        alt={product.name}
+                        className="d-block w-100 rounded product-detail-media"
+                      />
+                    </div>
+
+                    {/* Extra Images */}
+                    {product.image_gallery &&
+                      product.image_gallery.map((img, index) => (
+                        <div className="carousel-item" key={`img-${index}`}>
+                          <img
+                            src={img}
+                            alt={`${product.name} ${index + 1}`}
+                            className="d-block w-100 rounded-3 product-detail-media"
+                          />
+                        </div>
+                      ))}
+                  </div>
+
+                  {/* Controls */}
+                  <button
+                    className="carousel-control-prev"
+                    type="button"
+                    data-bs-target="#productCarousel"
+                    data-bs-slide="prev"
+                  >
+                    <span className="carousel-control-prev-icon"></span>
+                  </button>
+                  <button
+                    className="carousel-control-next"
+                    type="button"
+                    data-bs-target="#productCarousel"
+                    data-bs-slide="next"
+                  >
+                    <span className="carousel-control-next-icon"></span>
+                  </button>
+                </div>
               </div>
+
+              {/* Product Info */}
               <div className="col-lg-6 animate__animated animate__fadeInRight">
                 <h2 className="product-detail-name sub-heading mb-3">
                   {product.name}
@@ -130,8 +158,7 @@ const ProductDetailPage = ({ authReady }) => {
                   {product.long_description || product.short_description}
                 </p>
 
-                {/* Link back to category or all products */}
-                <div className="mt-5 text-center text-lg-start">
+                <div className="mt-5 text-center">
                   <Link
                     to={`/products/${product.category_slug}`}
                     className="btn btn-outline-dark rounded-pill me-3 product-back-btn"
@@ -139,33 +166,40 @@ const ProductDetailPage = ({ authReady }) => {
                     <i className="fas fa-arrow-left me-2"></i> Back to{" "}
                     {product.category_slug
                       ? product.category_slug
-                        .replace(/-/g, " ")
-                        .replace(/\b\w/g, (s) => s.toUpperCase()) +
-                      " Products"
+                          .replace(/-/g, " ")
+                          .replace(/\b\w/g, (s) => s.toUpperCase()) +
+                        " Products"
                       : "Categories"}
-                  </Link>
+                  </Link>{" "}
                   <Link
                     to="/products"
                     className="btn btn-outline-dark rounded-pill product-back-btn"
                   >
                     <i className="fas fa-th-large me-2"></i> View All Categories
                   </Link>
-                  {product && product.category_slug === 'food-grade-papers' && (
+                  {product.category_slug === "food-grade-papers" && (
                     <div className="mt-4 text-center">
-                      <button type="button" className="btn btn-outline-dark btn-lg rounded-pill product-back-btn" onClick={handleShowQuoteModal}>
+                      <button
+                        type="button"
+                        className="btn btn-outline-dark btn-lg rounded-pill product-back-btn"
+                        onClick={handleShowQuoteModal}
+                      >
                         Get a Quote
                       </button>
                     </div>
                   )}
-
-
                 </div>
               </div>
             </div>
           )}
         </div>
       </section>
-      <QuoteModal show={showQuoteModal} handleClose={handleCloseQuoteModal} category_slug={product ? product.category_slug : ''} />
+
+      <QuoteModal
+        show={showQuoteModal}
+        handleClose={handleCloseQuoteModal}
+        category_slug={product ? product.category_slug : ""}
+      />
     </>
   );
 };
