@@ -1,9 +1,27 @@
 // src/components/Navbar.js
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom"; // Import Link for navigation
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 const Navbar = () => {
+  const [s, setS] = useState({
+    contactEmail: "dineshgupta@sunrisepapers.co.in",
+    phone1: "+91 95555 09507",
+    phone2: "+91 98100 87126",
+    linkedinUrl: "https://www.linkedin.com/in/dineshgupta-sunriise",
+    whatsappUrl: "https://wa.me/919810087126",
+    googleUrl: "https://g.co/kgs/WDyBz11"
+  });
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "settings", "site"), (snap) => {
+      if (snap.exists()) setS((p) => ({ ...p, ...snap.data() }));
+    });
+    return () => unsub();
+  }, []);
+
   const handleNavLinkClick = () => {
     const navbarToggler = document.querySelector(".navbar-toggler");
     const navbarCollapse = document.querySelector("#mainNavbarContent");
@@ -24,30 +42,30 @@ const Navbar = () => {
         <div className="container d-flex justify-content-between align-items-center">
           <div className="contact-info text-muted small">
             <a
-              href="mailto:dineshgupta@sunrisepapers.co.in"
+              href={`mailto:${s.contactEmail}`}
               className="text-muted text-decoration-none"
             >
               <i className="fas fa-envelope me-2"></i>
-              dineshgupta@sunrisepapers.co.in
+              {s.contactEmail}
             </a>
             <i className="fas fa-phone ms-4 me-2"></i>
             <a
-              href="tel:+919555509507"
+              href={`tel:${s.phone1.replace(/\s+/g, "")}`}
               className="text-muted text-decoration-none"
             >
-              +91 95555 09507
+              {s.phone1}
             </a>
             <span className="text-muted mx-1">/</span>
             <a
-              href="tel:+919810087126"
+              href={`tel:${s.phone2.replace(/\s+/g, "")}`}
               className="text-muted text-decoration-none"
             >
-              +91 98100 87126
+              {s.phone2}
             </a>
           </div>
           <div className="social-icons">
             <a
-              href="http://www.linkedin.com/in/dineshgupta-sunriise" // Updated LinkedIn URL (example)
+              href={s.linkedinUrl} // Updated LinkedIn URL (example)
               target="_blank"
               rel="noopener noreferrer"
               className="social-icon-link text-muted me-3"
@@ -56,7 +74,7 @@ const Navbar = () => {
               {/* Changed from fa-twitter to fa-linkedin */}
             </a>
             <a
-              href="https://wa.me/919810087126"
+              href={s.whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="social-icon-link text-muted me-3"
@@ -64,7 +82,7 @@ const Navbar = () => {
               <i className="fab fa-whatsapp"></i>
             </a>
             <a
-              href="https://g.co/kgs/WDyBz11" // Updated Google Business URL (example)
+              href={s.googleUrl} // Updated Google Business URL (example)
               target="_blank"
               rel="noopener noreferrer"
               className="social-icon-link text-muted"

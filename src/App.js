@@ -14,6 +14,7 @@ import ProductsPage from "./pages/ProductsPage";
 import CategoryProductsPage from "./pages/CategoryProductsPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import ContactPage from "./pages/ContactPage";
+import AdminApp from "./admin/AdminApp";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -28,6 +29,8 @@ const App = () => {
   const [authReady, setAuthReady] = useState(false);
   const [showPreloader, setShowPreloader] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -53,7 +56,18 @@ const App = () => {
     initializeAuth();
   }, []);
 
+  // Disable preloader on admin routes
   useEffect(() => {
+    if (isAdminRoute) {
+      setShowPreloader(false);
+      setFadeOut(false);
+    }
+  }, [isAdminRoute]);
+
+  useEffect(() => {
+    // Skip preloader behaviour on admin routes
+    if (isAdminRoute) return;
+
     // Always keep loader for at least 3s
     const timer = setTimeout(() => {
       if (authReady) {
@@ -66,9 +80,12 @@ const App = () => {
     }, 3000);
 
     return () => clearTimeout(timer);
-  }, [authReady]);
+  }, [authReady, isAdminRoute]);
 
   useEffect(() => {
+    // Skip preloader behaviour on admin routes
+    if (isAdminRoute) return;
+
     // If auth wasn't ready at 3s, wait until it becomes ready
     if (authReady) {
       const timer = setTimeout(() => {
@@ -77,9 +94,9 @@ const App = () => {
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [authReady]);
+  }, [authReady, isAdminRoute]);
 
-  if (showPreloader) {
+  if (showPreloader && !isAdminRoute) {
     return (
       <div className={`preloader-container ${fadeOut ? "fade-out" : ""}`}>
         <div className="loader">
@@ -100,9 +117,13 @@ const App = () => {
 
   return (
     <div className={`app-wrapper fade-in`}>
-      <Navbar />
+      {!isAdminRoute && <Navbar />}
       <ScrollToTop />
       <Routes>
+        {/* Admin */}
+        <Route path="/admin/*" element={<AdminApp />} />
+
+        {/* Public */}
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route
@@ -122,7 +143,7 @@ const App = () => {
           element={<ContactPage userId={userId} authReady={authReady} />}
         />
       </Routes>
-      <Footer />
+      {!isAdminRoute && <Footer />}
     </div>
   );
 };

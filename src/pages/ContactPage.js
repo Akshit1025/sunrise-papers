@@ -29,12 +29,25 @@ const ContactPage = ({ userId, authReady }) => {
       const response = await fetch("/api/send-contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({name, email, message}),
+        body: JSON.stringify({ name, email, message })
       });
 
       const result = await response.json();
 
       if (response.ok) {
+        // Save to Firestore for admin panel
+        try {
+          await addDoc(collection(db, "contact_messages"), {
+            name,
+            email,
+            message,
+            createdAt: new Date(),
+            status: "new"
+          });
+        } catch (e) {
+          console.error("Failed to store contact message:", e);
+        }
+
         setStatusMessage("Your message has been sent successfully!");
         setSubmissionStatus("success");
         setName("");

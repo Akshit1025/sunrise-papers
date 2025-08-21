@@ -1,9 +1,30 @@
 // src/components/Footer.js
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; // Import Link for navigation
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 const Footer = () => {
+  const [s, setS] = useState({
+    contactEmail: "dineshgupta@sunrisepapers.co.in",
+    phone1: "+91 95555 09507",
+    phone2: "+91 98100 87126",
+    linkedinUrl: "https://www.linkedin.com/in/dineshgupta-sunriise",
+    whatsappUrl: "https://wa.me/919810087126",
+    googleUrl: "https://g.co/kgs/WDyBz11",
+    addressText:
+      "Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka, Delhi, 110078, India",
+    mapsUrl: "https://maps.app.goo.gl/zFrzmgSPvqrrL79Z9"
+  });
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "settings", "site"), (snap) => {
+      if (snap.exists()) setS((p) => ({ ...p, ...snap.data() }));
+    });
+    return () => unsub();
+  }, []);
+
   return (
     <>
       {/* Main Footer */}
@@ -28,7 +49,7 @@ const Footer = () => {
               </p>
               <div className="footer-social-icons mt-4">
                 <a
-                  href="http://www.linkedin.com/in/dineshgupta-sunriise" // Updated LinkedIn URL (example)
+                  href={s.linkedinUrl} // Updated LinkedIn URL (example)
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-icon-link me-3"
@@ -37,7 +58,7 @@ const Footer = () => {
                   {/* Changed from fa-twitter to fa-linkedin */}
                 </a>
                 <a
-                  href="https://wa.me/919810087126"
+                  href={s.whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-icon-link me-3"
@@ -45,7 +66,7 @@ const Footer = () => {
                   <i className="fab fa-whatsapp"></i>
                 </a>
                 <a
-                  href="https://g.co/kgs/WDyBz11" // Updated Google Business URL (example)
+                  href={s.googleUrl} // Updated Google Business URL (example)
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-icon-link"
@@ -97,38 +118,37 @@ const Footer = () => {
                 <p className="footer-contact-item">
                   <i className="fas fa-map-marker-alt me-2 footer-icon"></i>
                   <a
-                    href="https://maps.app.goo.gl/zFrzmgSPvqrrL79Z9"
+                    href={s.mapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-decoration-none footer-link"
                   >
-                    Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka,
-                    Delhi, 110078, India
+                    {s.addressText}
                   </a>
                 </p>
                 <p className="footer-contact-item">
                   <i className="fas fa-envelope me-2 footer-icon"></i>
                   <a
-                    href="mailto:dineshgupta@sunrisepapers.co.in"
+                    href={`mailto:${s.contactEmail}`}
                     className="text-decoration-none footer-link"
                   >
-                    dineshgupta@sunrisepapers.co.in
+                    {s.contactEmail}
                   </a>
                 </p>
                 <p className="footer-contact-item">
                   <i className="fas fa-phone me-2 footer-icon"></i>
                   <a
-                    href="tel:+919555509507"
+                    href={`tel:${s.phone1.replace(/\s+/g, "")}`}
                     className="text-decoration-none footer-link"
                   >
-                    +91 95555 09507
+                    {s.phone1}
                   </a>
                   &nbsp;|&nbsp;
                   <a
-                    href="tel:+919810087126"
+                    href={`tel:${s.phone2.replace(/\s+/g, "")}`}
                     className="text-decoration-none footer-link"
                   >
-                    +91 98100 87126
+                    {s.phone2}
                   </a>
                 </p>
               </address>
@@ -141,7 +161,8 @@ const Footer = () => {
         <div className="container d-md-flex justify-content-between align-items-center">
           <small className="mb-2 mb-md-0">
             &copy; {new Date().getFullYear()} Sunrise Papers. All Rights
-            Reserved.<br />
+            Reserved.
+            <br />
             <a
               href="https://instagram.com/akshitthecoder"
               target="_blank"
