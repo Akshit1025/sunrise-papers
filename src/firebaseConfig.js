@@ -4,6 +4,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
+import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration from environment variables
 // These variables are injected during the build process from your .env file
@@ -31,5 +32,8 @@ const db = getFirestore(app);
 // Get the Authentication instance
 const auth = getAuth(app);
 
+// Get the storage instance
+const storage = getStorage(app);
+
 // Export the initialized Firebase instances for use throughout your application
-export { app, db, auth, analytics };
+export { app, db, auth, analytics, storage };
