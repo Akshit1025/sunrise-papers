@@ -27,48 +27,71 @@ const Login = () => {
   };
 
   return (
-    <div className="container py-5" style={{ maxWidth: 420 }}>
-      <h1 className="h3 mb-4">Admin Login</h1>
-      {error && <div className="alert alert-danger mb-3">{error}</div>}
+    <div className="container py-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6 col-lg-5">
+          <div className="card">
+            <div className="card-body">
+              <h1 className="h3 mb-4 text-center">Admin Login</h1>
+              {error && <div className="alert alert-danger mb-3">{error}</div>}
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label className="form-label">Email</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="username"
+                    required
+                    disabled={submitting}
+                  />
+                </div>
 
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label className="form-label">Email</label>
-          <input
-            type="email"
-            className="form-control"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoComplete="username"
-            required
-            disabled={submitting}
-          />
+                <div className="mb-4">
+                  <label className="form-label">Password</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="current-password"
+                    required
+                    disabled={submitting}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn btn-dark w-100"
+                  disabled={submitting}
+                >
+                  {submitting ? (
+                    <>
+                      <span
+                        className="spinner-border spinner-border-sm me-1"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Signing in...
+                    </>
+                  ) : (
+                    <>
+                      <i className="fas fa-sign-in-alt me-1"></i>
+                      Sign In
+                    </>
+                  )}
+                </button>
+              </form>
+              <div className="mt-3 text-center">
+                {" "}
+                {/* Center the back link */}
+                <Link to="/">Back to Main Website</Link>
+                {/* Updated text for clarity */}
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div className="mb-4">
-          <label className="form-label">Password</label>
-          <input
-            type="password"
-            className="form-control"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-            required
-            disabled={submitting}
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="btn btn-dark w-100"
-          disabled={submitting}
-        >
-          {submitting ? "Signing in..." : "Sign In"}
-        </button>
-      </form>
-
-      <div className="mt-3">
-        <Link to="/admin">Back to Admin</Link>
       </div>
     </div>
   );

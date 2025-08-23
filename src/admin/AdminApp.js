@@ -8,7 +8,6 @@ import Categories from "./pages/Categories";
 import Login from "./pages/Login";
 import RequireAdmin from "./auth/RequireAdmin";
 import QuoteRequests from "./pages/QuoteRequests";
-import Contacts from "./pages/Contacts";
 import Settings from "./pages/Settings";
 
 const AdminApp = () => {
@@ -23,87 +22,163 @@ const AdminApp = () => {
   const isLoginRoute = location.pathname === "/admin/login";
 
   return (
-    <div className="container py-4">
-      <header className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="h3 m-0">Admin Panel</h1>
-        {!isLoginRoute && (
-          <nav className="d-flex gap-3 align-items-center">
-            <Link to="/admin">Dashboard</Link>
-            <Link to="/admin/products">Products</Link>
-            <Link to="/admin/categories">Categories</Link>
-            <Link to="/admin/quotes">Quotes</Link>
-            <Link to="/admin/contacts">Contacts</Link>
-            <Link to="/admin/settings">Settings</Link>
-            {user && !user.isAnonymous ? (
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-dark ms-2"
-                onClick={() => signOut(auth)}
-              >
-                Logout
-              </button>
-            ) : (
-              <Link to="/admin/login" className="btn btn-sm btn-dark ms-2">
-                Login
-              </Link>
-            )}
-          </nav>
-        )}
-      </header>
+    <div className="admin-panel-wrapper">
+      {!isLoginRoute && (
+        <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
+          <div className="container-fluid">
+            <Link className="navbar-brand h3 m-0" to="/admin">
+              <img src="images/logo-no-bg.png" alt="Official logo" />
+              Admin Panel
+            </Link>
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNavDropdown"
+              aria-controls="navbarNavDropdown"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className="collapse navbar-collapse" id="navbarNavDropdown">
+              <ul className="navbar-nav ms-auto">
+                <li className="nav-item me-2">
+                  <Link
+                    className={`nav-link ${
+                      location.pathname === "/admin" ? "active" : ""
+                    }`}
+                    to="/admin"
+                  >
+                    <i className="fas fa-tachometer-alt me-1"></i>{" "}
+                    {/* Dashboard icon */}
+                    Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item me-2">
+                  <Link
+                    className={`nav-link ${
+                      location.pathname === "/admin/products" ? "active" : ""
+                    }`}
+                    to="/admin/products"
+                  >
+                    <i className="fas fa-box-open me-1"></i>{" "}
+                    {/* Products icon */}
+                    Products
+                  </Link>
+                </li>
+                <li className="nav-item me-2">
+                  <Link
+                    className={`nav-link ${
+                      location.pathname === "/admin/categories" ? "active" : ""
+                    }`}
+                    to="/admin/categories"
+                  >
+                    <i className="fas fa-folder me-1"></i>{" "}
+                    {/* Categories icon */}
+                    Categories
+                  </Link>
+                </li>
+                <li className="nav-item me-2">
+                  <Link
+                    className={`nav-link ${
+                      location.pathname === "/admin/quotes" ? "active" : ""
+                    }`}
+                    to="/admin/quotes"
+                  >
+                    <i className="fas fa-quote-right me-1"></i>{" "}
+                    {/* Quotes icon */}
+                    Quotes
+                  </Link>
+                </li>
+                <li className="nav-item me-2">
+                  <Link
+                    className={`nav-link ${
+                      location.pathname === "/admin/settings" ? "active" : ""
+                    }`}
+                    to="/admin/settings"
+                  >
+                    <i className="fas fa-cog me-1"></i> {/* Settings icon */}
+                    Settings
+                  </Link>
+                </li>
+                {/* Add more nav items here */}
+                <li className="nav-item">
+                  {user && !user.isAnonymous ? (
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-outline-dark m-2"
+                      onClick={() => signOut(auth)}
+                    >
+                      <i className="fas fa-sign-out-alt me-1"></i>{" "}
+                      {/* Logout icon */}
+                      Logout
+                    </button>
+                  ) : (
+                    <Link
+                      to="/admin/login"
+                      className="btn btn-sm btn-dark ms-2"
+                    >
+                      <i className="fas fa-sign-in-alt me-1"></i>{" "}
+                      {/* Login icon */}
+                      Login
+                    </Link>
+                  )}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      )}
+      {/* Wrap content in a container for spacing */}
+      <div className="container py-4">
+        {/* The Routes component stays here */}
+        <Routes>
+          <Route path="login" element={<Login />} />
 
-      <Routes>
-        <Route path="login" element={<Login />} />
-
-        <Route
-          index
-          element={
-            <RequireAdmin>
-              <Dashboard />
-            </RequireAdmin>
-          }
-        />
-        <Route
-          path="products"
-          element={
-            <RequireAdmin>
-              <Products />
-            </RequireAdmin>
-          }
-        />
-        <Route
-          path="categories"
-          element={
-            <RequireAdmin>
-              <Categories />
-            </RequireAdmin>
-          }
-        />
-        <Route
-          path="quotes"
-          element={
-            <RequireAdmin>
-              <QuoteRequests />
-            </RequireAdmin>
-          }
-        />
-        <Route
-          path="contacts"
-          element={
-            <RequireAdmin>
-              <Contacts />
-            </RequireAdmin>
-          }
-        />
-        <Route
-          path="settings"
-          element={
-            <RequireAdmin>
-              <Settings />
-            </RequireAdmin>
-          }
-        />
-        <Route path="*" element={<Navigate to="/admin" replace />} />
-      </Routes>
+          <Route
+            index
+            element={
+              <RequireAdmin>
+                <Dashboard />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="products"
+            element={
+              <RequireAdmin>
+                <Products />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="categories"
+            element={
+              <RequireAdmin>
+                <Categories />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="quotes"
+            element={
+              <RequireAdmin>
+                <QuoteRequests />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="settings"
+            element={
+              <RequireAdmin>
+                <Settings />
+              </RequireAdmin>
+            }
+          />
+          <Route path="*" element={<Navigate to="/admin" replace />} />
+        </Routes>
+      </div>
     </div>
   );
 };

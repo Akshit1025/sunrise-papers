@@ -155,7 +155,20 @@ const Settings = () => {
               </div>
 
               <button className="btn btn-dark" disabled={saving}>
-                {saving ? "Saving..." : "Save Settings"}
+                {saving ? (
+                  <>
+                    <span
+                      className="spinner-border spinner-border-sm me-1"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>{" "}
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <i className="fas fa-save me-1"></i> Save Settings
+                  </>
+                )}
               </button>
             </form>
           </div>

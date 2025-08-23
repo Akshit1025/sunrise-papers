@@ -8,14 +8,18 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { db, storage } from "../../firebaseConfig";
-import RequireAdmin from "../auth/RequireAdmin";
+import { db } from "../../firebaseConfig"; // Ensure storage is not imported here
+import RequireAdmin from "../auth/RequireAdmin"; // Assuming you have this for protection
+
+// Import Cloudinary
+import { Cloudinary } from "cloudinary-core"; // Assuming you'll use core for now
+
+const cloudinaryCore = new Cloudinary({
+  cloud_name: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.REACT_APP_CLOUDINARY_API_KEY,
+  api_secret: process.env.REACT_APP_CLOUDINARY_API_SECRET, // INSECURE for frontend in production
+  secure: true, // Use HTTPS
+});
 
 const slugify = (text) =>
   text
@@ -34,7 +38,7 @@ const initialForm = {
   short_description: "",
   long_description: "",
   image_url: "",
-  image_gallery: [],
+  image_gallery: [""],
   order: 0,
 };
 
@@ -47,6 +51,7 @@ const Products = () => {
   const [error, setError] = useState("");
   const [form, setForm] = useState(initialForm);
   const [imageFiles, setImageFiles] = useState([]);
+  const [originalProductData, setOriginalProductData] = useState(null); // Store original data for comparison
 
   const [mode, setMode] = useState("create"); // "create" | "edit"
   const [editingId, setEditingId] = useState(null);
@@ -115,7 +120,16 @@ const Products = () => {
   };
 
   const handleImageFileChange = (e) => {
-    setImageFiles([...e.target.files]);
+    const selectedFiles = Array.from(e.target.files);
+    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+    const validFiles = selectedFiles.filter((file) => {
+      if (file.size > maxSize) {
+        alert(`File ${file.name} is too large. Max size is 10 MB.`);
+        return false;
+      }
+      return true;
+    });
+    setImageFiles(validFiles);
   };
 
   const changeGallery = (index, val) => {
@@ -147,16 +161,55 @@ const Products = () => {
     setImageFiles([]);
   };
 
+  // --- Modified uploadImages function to use Cloudinary ---
   const uploadImages = async (files) => {
     const imageUrls = [];
-    for (const file of files) {
-      const storageRef = ref(storage, `product_images/${file.name}`);
-      await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(storageRef);
-      imageUrls.push(downloadURL);
+    const uploadPromises = Array.from(files).map((file) => {
+      // Using a direct upload URL to Cloudinary.
+      // Replace 'YOUR_CLOUD_NAME' with your actual Cloudinary cloud name.
+      // This is a simplified approach for an admin panel.
+      // For a production app, consider using signed uploads with a backend.
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append(
+        "upload_preset",
+        process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
+      ); // Use your Cloudinary upload preset from .env
+      formData.append("folder", "product_images");
+
+      return fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.secure_url) {
+            console.log("Uploaded to Cloudinary:", data.secure_url);
+            return data.secure_url;
+          } else {
+            console.error("Cloudinary upload failed:", data);
+            throw new Error("Cloudinary upload failed");
+          }
+        })
+        .catch((error) => {
+          console.error("Error uploading to Cloudinary:", error);
+          setError(`Image upload failed: ${error.message}`);
+          throw error; // Re-throw to be caught by Promise.all
+        });
+    });
+
+    try {
+      const results = await Promise.all(uploadPromises);
+      return results.filter(Boolean); // Filter out any failed uploads
+    } catch (error) {
+      // Errors are already logged in the individual promises
+      return []; // Return empty array on overall failure
     }
-    return imageUrls;
   };
+  // --- End uploadImages function ---
 
   const buildPayload = (uploadedImageUrls = []) => ({
     name: form.name.trim(),
@@ -166,11 +219,11 @@ const Products = () => {
     long_description: form.long_description.trim(),
     image_url:
       form.image_url.trim() ||
-      (uploadedImageUrls.length > 0 ? uploadedImageUrls[0] : ""),
+      (uploadedImageUrls.length > 0 ? uploadedImageUrls[0] : ""), // Use first uploaded as main if none specified
     image_gallery: [
-      ...(form.image_gallery || []).map((u) => u.trim()).filter(Boolean),
-      ...uploadedImageUrls,
-    ].filter(Boolean),
+      ...(form.image_gallery || []).map((u) => u.trim()).filter(Boolean), // Existing gallery URLs
+      ...uploadedImageUrls, // Newly uploaded URLs
+    ].filter(Boolean), // Ensure no empty strings
     order: Number.isFinite(Number(form.order)) ? Number(form.order) : 0,
   });
 
@@ -181,11 +234,13 @@ const Products = () => {
     if (!form.slug.trim()) return setError("Slug is required.");
     if (!form.category_slug.trim()) return setError("Category is required.");
     setSubmitting(true);
+
     try {
       let uploadedImageUrls = [];
       if (imageFiles.length > 0) {
         uploadedImageUrls = await uploadImages(imageFiles);
       }
+
       await addDoc(collection(db, "products"), buildPayload(uploadedImageUrls));
       resetForm();
       await fetchProducts();
@@ -200,6 +255,7 @@ const Products = () => {
   const startEdit = (p) => {
     setMode("edit");
     setEditingId(p.id);
+    setOriginalProductData(p);
     setForm({
       name: p.name || "",
       slug: p.slug || "",
@@ -207,41 +263,133 @@ const Products = () => {
       short_description: p.short_description || "",
       long_description: p.long_description || "",
       image_url: p.image_url || "",
-      image_gallery:
-        Array.isArray(p.image_gallery) && p.image_gallery.length
-          ? p.image_gallery
-          : [],
+      image_gallery: Array.isArray(p.image_gallery) ? p.image_gallery : [], // Ensure it's an array
       order: typeof p.order === "number" ? p.order : 0,
     });
-    setImageFiles([]);
+    setImageFiles([]); // Clear selected image files when starting edit
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    if (!editingId) return;
+    if (!editingId || !originalProductData) return;
     setError("");
     if (!form.name.trim()) return setError("Name is required.");
     if (!form.slug.trim()) return setError("Slug is required.");
     if (!form.category_slug.trim()) return setError("Category is required.");
     setSubmitting(true);
+
     try {
+      // --- 1. Identify images to delete ---
+      const imageUrlsToDelete = [];
+
+      // Check original main image vs current main image URL
+      if (
+        originalProductData.image_url &&
+        originalProductData.image_url.startsWith("https://res.cloudinary.com/")
+      ) {
+        if (originalProductData.image_url !== form.image_url) {
+          imageUrlsToDelete.push(originalProductData.image_url);
+        }
+      }
+
+      // Check original gallery images vs current gallery images
+      const originalGalleryImageUrls = new Set(
+        originalProductData.image_gallery || []
+      );
+      const currentGalleryImageUrls = new Set(form.image_gallery || []);
+
+      originalGalleryImageUrls.forEach((url) => {
+        // If an image was in the original gallery, is a Cloudinary URL, and is NOT in the current form gallery
+        if (
+          url.startsWith("https://res.cloudinary.com/") &&
+          !currentGalleryImageUrls.has(url)
+        ) {
+          imageUrlsToDelete.push(url); // This image was removed during editing
+        }
+      });
+
+      // --- 2. Delete identified images from Cloudinary ---
+      for (const imageUrl of imageUrlsToDelete) {
+        try {
+          const urlParts = imageUrl.split("/");
+          const uploadIndex = urlParts.indexOf("upload");
+          if (uploadIndex === -1 || uploadIndex >= urlParts.length - 1) {
+            console.warn(
+              "Could not extract public ID from Cloudinary URL for deletion during update:",
+              imageUrl
+            );
+            continue; // Skip to the next image if public ID cannot be extracted
+          }
+          let publicIdParts = urlParts.slice(uploadIndex + 2);
+          if (publicIdParts.length === 0) {
+            publicIdParts = urlParts.slice(uploadIndex + 1);
+          }
+          const publicId = publicIdParts.join("/").split(".")[0];
+
+          // Call Cloudinary API to delete (frontend deletion - INSECURE for production)
+          const timestamp = new Date().getTime();
+          const signature = cloudinaryCore.utils.api_sign_request(
+            {
+              timestamp: timestamp,
+              public_id: publicId,
+              resource_type: "image", // Explicitly set resource type
+            },
+            process.env.REACT_APP_CLOUDINARY_API_SECRET
+          );
+
+          const deleteUrl = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/destroy`;
+          const deleteFormData = new FormData();
+          deleteFormData.append("public_id", publicId);
+          deleteFormData.append("timestamp", timestamp);
+          deleteFormData.append(
+            "api_key",
+            process.env.REACT_APP_CLOUDINARY_API_KEY
+          );
+          deleteFormData.append("signature", signature);
+          deleteFormData.append("resource_type", "image"); // Include resource_type
+
+          const response = await fetch(deleteUrl, {
+            method: "POST",
+            body: deleteFormData,
+          });
+
+          const data = await response.json();
+
+          if (data.result === "ok" || data.result === "not found") {
+            console.log(
+              `Cloudinary deletion result for ${publicId}:`,
+              data.result
+            );
+          } else {
+            console.error(`Cloudinary deletion failed for ${publicId}:`, data);
+            // Decide how to handle failures here - maybe log and continue?
+          }
+        } catch (e) {
+          console.error(
+            `Error deleting image ${imageUrl} from Cloudinary during update:`,
+            e
+          );
+          // Decide how to handle failures here
+        }
+      }
+
+      // --- 3. Upload new images ---
       let uploadedImageUrls = [];
       if (imageFiles.length > 0) {
         uploadedImageUrls = await uploadImages(imageFiles);
       }
 
-      // Merge existing gallery Urls with newly uploaded ones
-      const updatedGallery = [
-        ...(form.image_gallery || []).map((u) => u.trim()).filter(Boolean),
-        ...uploadedImageUrls,
-      ].filter(Boolean);
+      // --- 4. Build payload from current form state + uploaded images ---
+      // The current form state already reflects locally removed images.
+      // buildPayload adds newly uploaded images to the gallery and sets main_image_url if needed.
+      const payload = buildPayload(uploadedImageUrls);
 
-      await updateDoc(doc(db, "products", editingId), {
-        ...buildPayload(uploadedImageUrls),
-        image_gallery: updatedGallery,
-      });
-      resetForm();
-      await fetchProducts();
+      // --- 5. Update Firestore document ---
+      await updateDoc(doc(db, "products", editingId), payload);
+
+      resetForm(); // Reset form and clear file inputs
+      setOriginalProductData(null); // Clear original data state
+      await fetchProducts(); // Refresh the list
     } catch (e) {
       console.error(e);
       setError(e.message || "Failed to update product.");
@@ -250,134 +398,132 @@ const Products = () => {
     }
   };
 
+  // --- Modified handleDeleteImage function to use Cloudinary ---
   const handleDeleteImage = async (imageUrlToDelete, productId) => {
     setError("");
-    setSubmitting(true);
+    // setSubmitting(true);
     try {
-      const imageRef = ref(storage, imageUrlToDelete);
-      await deleteObject(imageRef);
-
-      const productRef = doc(db, "products", productId);
-      const productToUpdate = products.find((p) => p.id === productId);
-      if (productToUpdate) {
-        const updatedImages = (productToUpdate.image_gallery || []).filter(
-          (url) => url !== imageUrlToDelete
-        );
-        const updatedMainImageUrl =
-          productToUpdate.image_url === imageUrlToDelete
-            ? ""
-            : productToUpdate.image_url;
-        await updateDoc(productRef, {
-          image_gallery: updatedImages,
-          image_url: updatedMainImageUrl,
-        });
-
-        setProducts(
-          products.map((p) =>
-            p.id === productId
-              ? {
-                  ...p,
-                  image_gallery: updatedImages,
-                  image_url: updatedMainImageUrl,
-                }
-              : p
-          )
-        );
-        if (editingId === productId) {
-          setForm((prevForm) => ({
-            ...prevForm,
-            image_gallery: updatedImages,
-            image_url: updatedMainImageUrl,
-          }));
-        }
-      }
-
-      console.log("Image Deleted Successfully from the Storage and Document");
-    } catch (storageError) {
-      if (storageError.code === "storage/object-not-found") {
-        console.warn(
-          `Image not found in storage: ${imageUrlToDelete}. Removing from document.`
-        );
-        // If image not found in storage, still remove from document
-        const productRef = doc(db, "products", productId);
-        const productToUpdate = products.find((p) => p.id === productId);
-        if (productToUpdate) {
-          const updatedImages = (productToUpdate.image_gallery || []).filter(
+      // --- Check if we are in edit mode with a product ID ---
+      if (productId) {
+        // This function is called from the UI delete button in edit mode
+        console.log("Removing image URL from local state:", imageUrlToDelete);
+        setForm((prev) => {
+          const updatedGalleryImages = (prev.image_gallery || []).filter(
             (url) => url !== imageUrlToDelete
           );
           const updatedMainImageUrl =
-            productToUpdate.image_url === imageUrlToDelete
-              ? ""
-              : productToUpdate.image_url;
-
-          await updateDoc(productRef, {
-            image_gallery: updatedImages,
+            prev.image_url === imageUrlToDelete ? "" : prev.image_url; // Clear main image if it was the one deleted
+          return {
+            ...prev,
+            image_gallery: updatedGalleryImages,
             image_url: updatedMainImageUrl,
-          });
-
-          // Update local state
-          setProducts(
-            products.map((p) =>
-              p.id === productId
-                ? {
-                    ...p,
-                    image_gallery: updatedImages,
-                    image_url: updatedMainImageUrl,
-                  }
-                : p
-            )
-          );
-          if (editingId === productId) {
-            setForm((prevForm) => ({
-              ...prevForm,
-              image_gallery: updatedImages,
-              image_url: updatedMainImageUrl,
-            }));
-          }
-        }
+          };
+        });
+        // NOTE: Cloudinary and Firestore deletion will happen in handleUpdate now
       } else {
-        console.error("Error deleting image:", storageError);
-        setError(`Failed to delete image: ${storageError.message}`);
+        console.warn(
+          "handleDeleteImage called without productId. This might indicate an issue."
+        );
+        // For safety, we'll still perform local state update
+        setForm((prev) => {
+          const updatedGalleryImages = (prev.image_gallery || []).filter(
+            (url) => url !== imageUrlToDelete
+          );
+          const updatedMainImageUrl =
+            prev.image_url === imageUrlToDelete ? "" : prev.image_url; // Clear main image if it was the one deleted
+          return {
+            ...prev,
+            image_gallery: updatedGalleryImages,
+            image_url: updatedMainImageUrl,
+          };
+        });
       }
+    } catch (e) {
+      console.error("Unexpected error in handleDeleteImage:", e);
+      setError(`An error occurred while trying to remove image locally.`);
     } finally {
-      setSubmitting(false);
+      // setSubmitting(false);
     }
   };
+  // --- End handleDeleteImage function ---
 
+  // --- Modified handleDelete function to use Cloudinary ---
   const handleDelete = async (productToDelete) => {
     const ok = window.confirm("Delete this product? This cannot be undone.");
     if (!ok) return;
     setError("");
     setSubmitting(true);
     try {
-      // Delete images from storage first
+      // Get all image URLs associated with the product
       const imageUrlsToDelete = [
         productToDelete.image_url,
         ...(productToDelete.image_gallery || []),
       ].filter(Boolean);
 
+      // Delete images from Cloudinary first
       for (const imageUrl of imageUrlsToDelete) {
         try {
-          const imageRef = ref(storage, imageUrl);
-          await deleteObject(imageRef);
-          console.log(`Deleted image from storage: ${imageUrl}`);
-        } catch (storageError) {
-          if (storageError.code === "storage/object-not-found") {
+          const urlParts = imageUrl.split("/");
+          const uploadIndex = urlParts.indexOf("upload");
+          if (uploadIndex === -1 || uploadIndex >= urlParts.length - 1) {
             console.warn(
-              `Image not found in storage, skipping deletion: ${imageUrl}`,
-              storageError
+              "Could not extract public ID from Cloudinary URL for deletion:",
+              imageUrl
+            );
+            continue; // Skip to the next image if public ID cannot be extracted
+          }
+          let publicIdParts = urlParts.slice(uploadIndex + 2); // Get parts after /upload/ and version
+          if (publicIdParts.length === 0) {
+            // Handle cases without version
+            publicIdParts = urlParts.slice(uploadIndex + 1); // Get parts after /upload/
+          }
+          const publicId = publicIdParts.join("/").split(".")[0]; // Join parts and get the part before the extension
+
+          // Call Cloudinary API to delete the image
+          // Again, consider a backend for secure deletion in production
+          const timestamp = new Date().getTime();
+          const signature = cloudinaryCore.utils.api_sign_request(
+            {
+              timestamp: timestamp,
+              public_id: publicId,
+              // Add other parameters used in the original upload if necessary for signing
+            },
+            process.env.REACT_APP_CLOUDINARY_API_SECRET
+          );
+
+          const deleteUrl = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/destroy`;
+          const deleteFormData = new FormData();
+          deleteFormData.append("public_id", publicId);
+          deleteFormData.append("timestamp", timestamp);
+          deleteFormData.append(
+            "api_key",
+            process.env.REACT_APP_CLOUDINARY_API_KEY
+          );
+          deleteFormData.append("signature", signature);
+
+          const response = await fetch(deleteUrl, {
+            method: "POST",
+            body: deleteFormData,
+          });
+
+          const data = await response.json();
+
+          if (data.result === "ok" || data.result === "not found") {
+            console.log(
+              `Cloudinary deletion result for ${publicId}:`,
+              data.result
             );
           } else {
-            console.error(
-              `Error deleting image from storage: ${imageUrl}`,
-              storageError
-            );
-            // Continue with other images and product deletion
+            console.error(`Cloudinary deletion failed for ${publicId}:`, data);
+            // Continue with other images and product deletion even if one image fails
           }
+        } catch (e) {
+          console.error(`Error deleting image ${imageUrl} from Cloudinary:`, e);
+          // Continue with other images and product deletion even if one image fails
         }
       }
 
-      // Delete product document
+      // Delete product document from Firestore
       await deleteDoc(doc(db, "products", productToDelete.id));
       if (editingId === productToDelete.id) resetForm();
       await fetchProducts();
@@ -411,6 +557,7 @@ const Products = () => {
                       onClick={resetForm}
                       disabled={submitting}
                     >
+                      <i className="fas fa-times me-1"></i>
                       Cancel Edit
                     </button>
                   )}
@@ -498,6 +645,7 @@ const Products = () => {
                     />
                   </div>
 
+                  {/* Existing Image URL input - keep for manual entry or initial migration */}
                   <div className="mb-3">
                     <label className="form-label">
                       Main Image URL (Manual Entry)
@@ -509,13 +657,21 @@ const Products = () => {
                       value={form.image_url}
                       onChange={onChange}
                       placeholder="https://..."
-                      disabled={submitting}
+                      disabled={
+                        submitting ||
+                        (form.image_url &&
+                          form.image_url.startsWith(
+                            "https://res.cloudinary.com/"
+                          ))
+                      }
                     />
                     <div className="form-text">
                       Entering a URL here will override any uploaded main image.
+                      Manual editing is disabled for uploaded images.
                     </div>
                   </div>
 
+                  {/* New File Input for Images */}
                   <div className="mb-3">
                     <label htmlFor="imageFiles" className="form-label">
                       Upload Images
@@ -591,14 +747,18 @@ const Products = () => {
                           // Disable input if the URL came from an uploaded image
                           onChange={(e) => changeGallery(i, e.target.value)}
                           placeholder={`Image URL #${i + 1}`}
-                          disabled={submitting || (u && u.startsWith("gs://"))} // Optionally disable manual edit for uploaded URLs
+                          disabled={
+                            submitting ||
+                            (u && u.startsWith("https://res.cloudinary.com/"))
+                          } // Disable manual edit for Cloudinary URLs
                         />
                         <button
                           type="button"
                           className="btn btn-outline-danger"
-                          onClick={() => removeGallery(i)}
+                          onClick={() => handleDeleteImage(u, editingId)}
                           disabled={submitting}
                         >
+                          <i className="fas fa-trash-alt me-1"></i>
                           Remove
                         </button>
                       </div>
@@ -609,7 +769,8 @@ const Products = () => {
                       onClick={addGallery}
                       disabled={submitting}
                     >
-                      + Add URL Field
+                      <i className="fas fa-plus me-1"></i>
+                      Add URL Field
                     </button>
                     <div className="form-text">
                       Manually add additional image URLs or edit URLs of
@@ -634,11 +795,27 @@ const Products = () => {
                   </div>
 
                   <button className="btn btn-dark w-100" disabled={submitting}>
-                    {submitting
-                      ? "Saving..."
-                      : mode === "edit"
-                      ? "Save Changes"
-                      : "Create Product"}
+                    {
+                      submitting ? (
+                        <>
+                          <span
+                            className="spinner-border spinner-border-sm me-1"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>{" "}
+                          Saving...
+                        </> // Spinner while saving
+                      ) : mode === "edit" ? (
+                        <>
+                          <i className="fas fa-save me-1"></i> Save Changes
+                        </> // Save icon
+                      ) : (
+                        <>
+                          <i className="fas fa-plus-circle me-1"></i> Create
+                          Product
+                        </>
+                      ) // Create icon
+                    }
                   </button>
                 </form>
               </div>
@@ -655,7 +832,20 @@ const Products = () => {
                     onClick={fetchProducts}
                     disabled={loadingProducts || submitting}
                   >
-                    {loadingProducts ? "Refreshing..." : "Refresh"}
+                    {loadingProducts ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-1"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>{" "}
+                        Refreshing...
+                      </>
+                    ) : (
+                      <>
+                        <i className="fas fa-sync-alt me-1"></i> Refresh
+                      </>
+                    )}
                   </button>
                 </div>
 
@@ -680,6 +870,7 @@ const Products = () => {
                         {sortedProducts.map((p) => (
                           <tr key={p.id}>
                             <td className="fw-medium">{p.name}</td>
+                            {/* Display main image or a placeholder */}
                             <td>
                               {p.image_url ? (
                                 <img
@@ -720,6 +911,7 @@ const Products = () => {
                                   onClick={() => startEdit(p)}
                                   disabled={submitting}
                                 >
+                                  <i className="fas fa-edit me-1"></i>
                                   Edit
                                 </button>
                                 <button
@@ -728,6 +920,7 @@ const Products = () => {
                                   onClick={() => handleDelete(p)}
                                   disabled={submitting}
                                 >
+                                  <i className="fas fa-trash-alt me-1"></i>
                                   Delete
                                 </button>
                               </div>
