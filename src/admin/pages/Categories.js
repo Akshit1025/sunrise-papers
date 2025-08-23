@@ -9,6 +9,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../firebaseConfig"; // Assuming db is exported from here
+import RequireAdmin from "../auth/RequireAdmin"; // Assuming you have this component
 
 // Import Cloudinary
 import { Cloudinary } from "cloudinary-core"; // Assuming you'll use core for utility functions
@@ -24,7 +25,6 @@ const cloudinaryCore = new Cloudinary({
 });
 // --- End Cloudinary Configuration ---
 
-import RequireAdmin from "../auth/RequireAdmin"; // Assuming you have this component
 
 const slugify = (text) =>
   text
