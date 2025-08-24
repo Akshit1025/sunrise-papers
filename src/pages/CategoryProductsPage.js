@@ -1,7 +1,15 @@
 // src/pages/CategoryProductsPage.js
 
 import React, { useState, useEffect } from "react";
-import { collection, getDocs, query, where, limit } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  limit,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { useParams, Link } from "react-router-dom";
 import { db } from "../firebaseConfig"; // Import db directly
 import "./ProductsPage.css"; // Shared CSS for product-related pages
@@ -15,27 +23,35 @@ const CategoryProductsPage = ({ authReady }) => {
   const [categoryData, setCategoryData] = useState(null); // State to store all details of the current category (name, description, benefits, galleryImages, videos, etc.)
   const [loading, setLoading] = useState(true); // State to manage loading status
   const [error, setError] = useState(null); // State to store any error messages
+  const [formDefinitions, setFormDefinitions] = useState({});
+  const [loadingDefinitions, setLoadingDefinitions] = useState(true);
+  const [definitionError, setDefinitionError] = useState(null);
 
   // State for the Quote Modal
   const [showQuoteModal, setShowQuoteModal] = useState(false);
   const handleShowQuoteModal = () => setShowQuoteModal(true);
-  const handleCloseQuoteModal = () => setShowQuoteModal(false);
-
+  const handleCloseQuoteModal = () => {
+    setShowQuoteModal(false);
+  };
 
   // useEffect hook to fetch data when the component mounts or dependencies change
   useEffect(() => {
-    const fetchCategoryAndProducts = async () => {
+    const fetchCategoryAndProductsAndDefinition = async () => {
       // If Firebase authentication is not yet ready, keep loading state and return
       if (!authReady) {
         setLoading(true);
+        setLoadingDefinitions(true);
         return;
       }
 
       try {
         setLoading(true); // Set loading to true at the start of fetch operation
+        setLoadingDefinitions(true);
         setError(null); // Clear any previous errors
+        setDefinitionError(null);
         setCategoryData(null); // Clear previous category data
         setProducts([]); // Clear previous products
+        setFormDefinitions({});
 
         // --- Step 1: Fetch Category Details ---
         // Get a reference to the 'categories' collection in Firestore
@@ -50,8 +66,9 @@ const CategoryProductsPage = ({ authReady }) => {
         const categorySnapshot = await getDocs(categoryQuery);
 
         // Check if a category document was found
+        let fetchedCategoryData = null;
         if (!categorySnapshot.empty) {
-          const fetchedCategoryData = categorySnapshot.docs[0].data();
+          fetchedCategoryData = categorySnapshot.docs[0].data();
           setCategoryData(fetchedCategoryData); // Store the fetched category data in state
 
           // --- Step 2: Conditionally Fetch Products for this Category ---
@@ -77,6 +94,27 @@ const CategoryProductsPage = ({ authReady }) => {
           // If no category found for the given slug, set an error and stop loading
           setError(`Category "${categorySlug}" not found.`);
         }
+
+        try {
+          const definitionRef = doc(db, "quoteFormDefinitions", categorySlug);
+          const definitionDocSnap = await getDoc(definitionRef);
+
+          if (definitionDocSnap.exists()) {
+            setFormDefinitions({ [categorySlug]: definitionDocSnap.data() });
+          } else {
+            setFormDefinitions({});
+          }
+          setDefinitionError(null);
+        } catch (defErr) {
+          console.error(
+            `Error fetching form definition for ${categorySlug}:`,
+            defErr
+          );
+          setDefinitionError("Failed to load form configuration.");
+          setFormDefinitions({});
+        } finally {
+          setLoadingDefinitions(false);
+        }
       } catch (err) {
         // Catch and log any errors during the fetch process
         console.error(
@@ -87,6 +125,8 @@ const CategoryProductsPage = ({ authReady }) => {
         setError(
           `Failed to load category details or products. Please try again later. (Error: ${err.message})`
         );
+        setFormDefinitions({});
+        setLoadingDefinitions(false);
       } finally {
         setLoading(false); // Always set loading to false after fetch attempt (success or failure)
       }
@@ -94,19 +134,22 @@ const CategoryProductsPage = ({ authReady }) => {
 
     // Only run the fetch operation if categorySlug is available and authReady is true
     if (categorySlug && authReady) {
-      fetchCategoryAndProducts();
+      fetchCategoryAndProductsAndDefinition();
     } else if (!authReady) {
       // Reset loading if auth becomes not ready after initial load
       setLoading(true);
+      setLoadingDefinitions(true);
     }
-  }, [authReady, categorySlug]); // Added authReady to dependency array
+  }, [authReady, categorySlug, db]); // Added authReady to dependency array
 
   // Effect to handle loading state when authReady changes
   useEffect(() => {
     if (authReady && loading) {
       // If auth becomes ready and we were still loading, trigger fetch
       // (This covers the case where authReady is false initially)
-      const fetchOnAuthReady = async () => { /* logic is in the other effect */ };
+      const fetchOnAuthReady = async () => {
+        /* logic is in the other effect */
+      };
       fetchOnAuthReady(); // Re-trigger the fetch in the main effect
     }
     if (!authReady) {
@@ -115,18 +158,20 @@ const CategoryProductsPage = ({ authReady }) => {
     }
   }, [authReady, loading]); // Depend on authReady and loading
 
-
   // Create an array of multimedia items for the carousel (only for !hasSubProducts)
   const allMediaItems = [];
 
   if (categoryData && !categoryData.hasSubProducts) {
     // Add the main category image if it exists
-    
 
     // Add gallery images if they exist
     if (categoryData.galleryImages && categoryData.galleryImages.length > 0) {
       categoryData.galleryImages.forEach((imageUrl, index) => {
-        allMediaItems.push({ type: 'image', url: imageUrl, alt: `${categoryData.name} Gallery Image ${index + 1}` });
+        allMediaItems.push({
+          type: "image",
+          url: imageUrl,
+          alt: `${categoryData.name} Gallery Image ${index + 1}`,
+        });
       });
     }
 
@@ -134,11 +179,15 @@ const CategoryProductsPage = ({ authReady }) => {
     if (categoryData.videos && categoryData.videos.length > 0) {
       categoryData.videos.forEach((video, index) => {
         // Assuming video.url is an embeddable URL (e.g., YouTube embed)
-        allMediaItems.push({ type: 'video', url: video.url, caption: video.caption, title: video.caption || `${categoryData.name} Video ${index + 1}` });
+        allMediaItems.push({
+          type: "video",
+          url: video.url,
+          caption: video.caption,
+          title: video.caption || `${categoryData.name} Video ${index + 1}`,
+        });
       });
     }
   }
-
 
   return (
     <>
@@ -149,7 +198,10 @@ const CategoryProductsPage = ({ authReady }) => {
           <h1 className="display-3 fw-bold mb-3 products-hero-title">
             {loading && !categoryData
               ? "Loading Category..."
-              : categoryData?.name || (categorySlug ? categorySlug.replace(/-/g, ' ').toUpperCase() : "Category")}{" "}
+              : categoryData?.name ||
+                (categorySlug
+                  ? categorySlug.replace(/-/g, " ").toUpperCase()
+                  : "Category")}{" "}
             {/* Show category name, slug, or "Category" */}
           </h1>
           {/* Optional: Add a subtitle based on categoryData */}
@@ -179,9 +231,10 @@ const CategoryProductsPage = ({ authReady }) => {
           {!loading && !error && categoryData && (
             <>
               {/* --- Content for ALL Categories (Two-Column Layout) --- */}
-
               {/* Two-column layout for multimedia (Image or Carousel) and long description */}
-              <div className="row mb-5 align-items-center"> {/* Use align-items-center to vertically align content */}
+              <div className="row mb-5 align-items-center">
+                {" "}
+                {/* Use align-items-center to vertically align content */}
                 {/* Left Column: Multimedia (Image or Carousel) */}
                 <div className="col-md-6 mb-md-0 mb-4 animate__animated animate__fadeInLeft">
                   {categoryData.hasSubProducts ? (
@@ -200,59 +253,85 @@ const CategoryProductsPage = ({ authReady }) => {
                         className="img-fluid rounded shadow-sm category-detail-image"
                       />
                     )
+                  ) : // If hasSubProducts is false, show the multimedia carousel
+                  allMediaItems.length > 0 ? (
+                    <div
+                      id="categoryMediaCarousel"
+                      className="carousel slide rounded shadow-sm"
+                      data-bs-ride="carousel"
+                    >
+                      <div className="carousel-inner rounded">
+                        {allMediaItems.map((item, index) => (
+                          <div
+                            key={index}
+                            className={`carousel-item ${
+                              index === 0 ? "active" : ""
+                            }`}
+                          >
+                            {item.type === "image" ? (
+                              <img
+                                src={item.url}
+                                className="d-block w-100 category-carousel-image"
+                                alt={item.alt}
+                              />
+                            ) : (
+                              // Must be a video
+                              <div className="category-carousel-video-container embed-responsive embed-responsive-16by9">
+                                <iframe
+                                  className="embed-responsive-item d-block w-100 category-carousel-video"
+                                  src={item.url}
+                                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope"
+                                  title={item.title}
+                                ></iframe>
+                              </div>
+                              // If using <video> tag for self-hosted:
+                              // <video controls className="d-block w-100 category-carousel-video" style={{ height: '400px', objectFit: 'cover' }}>
+                              //    <source src={item.url} type="video/mp4" />
+                              //    Your browser does not support the video tag.
+                              // </video>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      {/* Carousel Controls (Previous/Next buttons) */}
+                      {allMediaItems.length > 1 && ( // Only show controls if more than one item
+                        <>
+                          <button
+                            className="carousel-control-prev"
+                            type="button"
+                            data-bs-target="#categoryMediaCarousel"
+                            data-bs-slide="prev"
+                          >
+                            <span
+                              className="carousel-control-prev-icon"
+                              aria-hidden="true"
+                            ></span>
+                            <span className="visually-hidden">Previous</span>
+                          </button>
+                          <button
+                            className="carousel-control-next"
+                            type="button"
+                            data-bs-target="#categoryMediaCarousel"
+                            data-bs-slide="next"
+                          >
+                            <span
+                              className="carousel-control-next-icon"
+                              aria-hidden="true"
+                            ></span>
+                            <span className="visually-hidden">Next</span>
+                          </button>
+                        </>
+                      )}
+
+                      {/* REMOVED: Carousel Indicators */}
+                    </div>
                   ) : (
-                    // If hasSubProducts is false, show the multimedia carousel
-                    allMediaItems.length > 0 ? (
-                      <div id="categoryMediaCarousel" className="carousel slide rounded shadow-sm" data-bs-ride="carousel">
-                        <div className="carousel-inner rounded">
-                          {allMediaItems.map((item, index) => (
-                            <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
-                              {item.type === 'image' ? (
-                                <img src={item.url} className="d-block w-100 category-carousel-image" alt={item.alt} />
-                              ) : ( // Must be a video
-                                <div className="category-carousel-video-container embed-responsive embed-responsive-16by9">
-                                  <iframe
-                                    className="embed-responsive-item d-block w-100 category-carousel-video"
-                                    src={item.url}
-                                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope"
-                                    title={item.title}
-                                  ></iframe>
-                                </div>
-                                // If using <video> tag for self-hosted:
-                                // <video controls className="d-block w-100 category-carousel-video" style={{ height: '400px', objectFit: 'cover' }}>
-                                //    <source src={item.url} type="video/mp4" />
-                                //    Your browser does not support the video tag.
-                                // </video>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                        {/* Carousel Controls (Previous/Next buttons) */}
-                        {allMediaItems.length > 1 && ( // Only show controls if more than one item
-                          <>
-                            <button className="carousel-control-prev" type="button" data-bs-target="#categoryMediaCarousel" data-bs-slide="prev">
-                              <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                              <span className="visually-hidden">Previous</span>
-                            </button>
-                            <button className="carousel-control-next" type="button" data-bs-target="#categoryMediaCarousel" data-bs-slide="next">
-                              <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                              <span className="visually-hidden">Next</span>
-                            </button>
-                          </>
-                        )}
-
-                        {/* REMOVED: Carousel Indicators */}
-
-                      </div>
-                    ) : (
-                      // Fallback if no media items for a non-product category
-                      <div className="text-center py-5">
-                        <p>No media available for this category.</p>
-                      </div>
-                    )
+                    // Fallback if no media items for a non-product category
+                    <div className="text-center py-5">
+                      <p>No media available for this category.</p>
+                    </div>
                   )}
                 </div>
-
                 {/* Right Column: What is this Category About? (Long Description) */}
                 <div className="col-md-6 mb-md-0 mb-4 animate__animated animate__fadeInRight">
                   {categoryData.longDescription && (
@@ -270,10 +349,9 @@ const CategoryProductsPage = ({ authReady }) => {
                        <p className="paragraph lead">{categoryData.description}</p>
                    )} */}
                 </div>
-              </div> {/* End of two-column row */}
-
+              </div>{" "}
+              {/* End of two-column row */}
               {/* --- Content Below the Two-Column Layout --- */}
-
               {/* Benefits and Applications Section (Below the two-column layout, irrespective of hasSubProducts) */}
               {categoryData.benefits && categoryData.benefits.length > 0 && (
                 <div className="category-benefits-applications-section mb-5 p-4 rounded-3 shadow-sm bg-white animate__animated animate__fadeInUp">
@@ -293,7 +371,6 @@ const CategoryProductsPage = ({ authReady }) => {
                   </ul>
                 </div>
               )}
-
               {/* Products Heading and Listing (Rendered ONLY if hasSubProducts is true) */}
               {categoryData.hasSubProducts && (
                 <>
@@ -350,7 +427,6 @@ const CategoryProductsPage = ({ authReady }) => {
                   )}
                 </>
               )}
-
               {/* The combined View All Categories and Get a Quote button container */}
               {/* This appears below all content sections */}
               {categoryData && !loading && !error && (
@@ -363,10 +439,13 @@ const CategoryProductsPage = ({ authReady }) => {
                     View All Categories
                   </Link>
 
-                  {(categorySlug === 'carbonless-paper' || categorySlug === 'coated-paper') && (
+                  {categoryData && formDefinitions[categorySlug] && (
                     <>
-                      {/* Get a Quote Button */}
-                      <button type="button" className="btn btn-outline-dark btn-lg rounded-pill product-back-btn" onClick={handleShowQuoteModal}>
+                      <button
+                        type="button"
+                        className="btn btn-outline-dark btn-lg rounded-pill product-back-btn"
+                        onClick={handleShowQuoteModal}
+                      >
                         Get a Quote
                       </button>
                     </>
@@ -379,7 +458,14 @@ const CategoryProductsPage = ({ authReady }) => {
       </section>
 
       {/* Quote Modal */}
-      <QuoteModal show={showQuoteModal} handleClose={handleCloseQuoteModal} category_slug={categorySlug} />
+      <QuoteModal
+        show={showQuoteModal}
+        handleClose={handleCloseQuoteModal}
+        category_slug={categorySlug}
+        formDefinitions={formDefinitions[categorySlug]}
+        loadingDefinitions={loadingDefinitions}
+        definitionError={definitionError}
+      />
     </>
   );
 };

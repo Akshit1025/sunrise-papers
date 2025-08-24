@@ -803,6 +803,9 @@ const Categories = () => {
       await deleteDoc(doc(db, "categories", categoryToDelete.id));
       if (editingId === categoryToDelete.id) resetForm();
       await fetchCategories();
+      alert(
+        `Category "${categoryToDelete.name}" deleted successfully. Please remember to manually delete any associated products if they exist.`
+      );
     } catch (e) {
       console.error(e);
       alert(e.message || "Failed to delete category.");

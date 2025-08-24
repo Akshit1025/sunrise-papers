@@ -83,10 +83,13 @@ const Login = () => {
                   )}
                 </button>
               </form>
-              <div className="mt-3 text-center">
+              <div className="mt-3 text-center btn btn-dark w-100">
                 {" "}
                 {/* Center the back link */}
-                <Link to="/">Back to Main Website</Link>
+                <Link to="/" className="text-decoration-none text-white">
+                <i className="fas fa-arrow-left me-2"></i>
+                Back to Main Website
+                </Link>
                 {/* Updated text for clarity */}
               </div>
             </div>

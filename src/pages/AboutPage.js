@@ -1,275 +1,482 @@
 // src/pages/AboutPage.js
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { doc, getDoc } from "firebase/firestore"; // Import doc and getDoc
+import { db } from "../firebaseConfig.js"; // Import db
 
-const AboutPage = () => (
-  <>
-    {/* About Us Hero Section */}
-    <section className="about-hero-section py-5 text-center text-white d-flex align-items-center justify-content-center">
-      <div className="container animate__animated animate__fadeIn">
-        <h1 className="display-3 fw-bold mb-3 about-hero-title">About Us</h1>
-        <p className="lead about-hero-subtitle">
-          Your trusted partner in paper trading industry since 1995.
-        </p>
-      </div>
-    </section>
+// Define a default structure for the About page content (copy from ContentManagement.js)
+const defaultAboutContent = {
+  sections: [
+    {
+      name: "aboutGlance",
+      title: "A Glance at Sunrise Papers",
+      paragraphs: [
+        "Established in 1995, Sunrise Papers is a leading importer...",
+        "Our success is built...",
+        "We remain at the forefront...",
+      ],
+      image_url: "images/about/about-glance-img.jpeg",
+    },
+    {
+      name: "philosophy",
+      title: "Paper Supply Philosophy",
+      icon_class: "fas fa-lightbulb",
+      paragraph: "We believe in delivering only the best...",
+    },
+    {
+      name: "leadership",
+      title: "Our Leadership",
+      quote:
+        "\"It's not about how many years I've worked - it's about how much those years have taught me.\"", // Escaped quote
+      quote_author: "Mr. Dinesh Gupta",
+      paragraph: "Under the insightful leadership of Mr. Dinesh Gupta...",
+      image_url: "images/logo-no-bg.png",
+    },
+    {
+      name: "companyProfile",
+      title: "Company Profile",
+      image_url: "images/about/about-profile-img.jpg",
+      info_list: [
+        {
+          icon_class: "fas fa-dot-circle",
+          label: "Nature of Business",
+          value: "Trader and Importer",
+        },
+        {
+          icon_class: "fas fa-dot-circle",
+          label: "Additional Business",
+          value: "Wholesale Supplier",
+        },
+        {
+          icon_class: "fas fa-dot-circle",
+          label: "Company Owner",
+          value: "Dinesh Gupta",
+        },
+        {
+          icon_class: "fas fa-map-marker-alt",
+          label: "Registered Address",
+          value:
+            "Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka, Delhi, 110078, India",
+        },
+        {
+          icon_class: "fas fa-users",
+          label: "Total No. of Employees",
+          value: "11 to 25 people",
+        },
+        {
+          icon_class: "fas fa-calendar-alt",
+          label: "Year of Establishment",
+          value: "1995",
+        },
+        {
+          icon_class: "fas fa-balance-scale",
+          label: "Legal Status of Firm",
+          value: "Individual - Proprietor",
+        },
+        {
+          icon_class: "fas fa-wallet",
+          label: "Annual Turnover",
+          value: "Rs. 25 - 50 Crores",
+        },
+        {
+          icon_class: "fas fa-barcode",
+          label: "GST No.",
+          value: "07AAJPK3664M1Z9",
+        },
+      ],
+    },
+    {
+      name: "whyUs",
+      title: "WHY US ?",
+      icon_class: "fas fa-question-circle",
+      intro_paragraph: "Over the years, we have established a reputation...",
+      values_list: [
+        {
+          icon_class: "fas fa-shipping-fast",
+          text: "Prompt and Reliable Delivery",
+        },
+        {
+          icon_class: "fas fa-handshake",
+          text: "Ethical and Transparent Business Practices",
+        },
+        {
+          icon_class: "fas fa-tags",
+          text: "Competitive Pricing with Technically Advanced Products",
+        },
+        {
+          icon_class: "fas fa-globe",
+          text: "Widespread and Efficient Distribution Network",
+        },
+        {
+          icon_class: "fas fa-check-circle",
+          text: "Consistent Product Quality and Client Satisfaction",
+        },
+      ],
+    },
+    {
+      name: "qualityAssurance",
+      title: "Our Commitment to Quality",
+      image_url: "images/about/about-quality-img.png",
+      paragraphs: [
+        "As a dedicated wholesale supplier and importer, our foremost priority...",
+        "Our product range is crafted...",
+        "We maintain detailed oversight...",
+      ],
+    },
+  ],
+};
 
-    {/* A Glance at Sunrise Papers */}
-    <section className="glance-at-sunrise-section py-5">
-      <div className="container">
-        <h2 className="page-title text-center mb-5">
-          A Glance at Sunrise Papers
-        </h2>
-        <div className="row align-items-center g-5">
-          <div className="col-lg-6">
-            <img
-              src="images/about/about-glance-img.jpeg"
-              alt="Paper Supply"
-              className="img-fluid rounded-3 shadow-lg animate__animated animate__fadeInLeft"
-            />
-          </div>
-          <div className="col-lg-6">
-            <p className="paragraph lead animate__animated animate__fadeInRight animate__delay-0-5s">
-              Established in 1995, Sunrise Papers is a leading importer, trader,
-              and wholesale supplier of high-quality carbonless paper and
-              food-grade paper. Known for our consistent quality and
-              client-centric approach, our products are trusted across
-              industries for their reliability and performance.
-            </p>
-            <p className="paragraph animate__animated animate__fadeInRight animate__delay-1s">
-              Our success is built so strong, long-term relationships with
-              clients - a result of our unwavering commitment to quality and
-              service. Every product in our range is carefully selected and
-              offered to deliver maximum value satisfaction. From procurement to
-              supply, we maintain strict adherence to industry standards, guided
-              by a team of experience professionals with deep domain knowledge.
-            </p>
-            <p className="paragraph animate__animated animate__fadeInRight animate__delay-1-5s">
-              We remain at the forefront of the paper industry by staying
-              attuned to market trends, embracing innovation, and continually
-              refining our product offerings to meet the evolving needs of our
-              customers.
-            </p>
-          </div>
+const AboutPage = () => {
+  const [aboutContent, setAboutContent] = useState(defaultAboutContent);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAboutContent = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const docRef = doc(db, "siteContent", "about");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          // Merge with default to ensure all fields are present if not in DB
+          setAboutContent({
+            ...defaultAboutContent, // Start with defaults
+            ...docSnap.data(), // Overlay fetched data
+            sections: Array.isArray(docSnap.data().sections)
+              ? docSnap.data().sections.map((fetchedSection) => {
+                  const defaultSection = defaultAboutContent.sections.find(
+                    (ds) => ds.name === fetchedSection.name
+                  );
+                  return {
+                    ...defaultSection, // Start with default section
+                    ...fetchedSection, // Overlay fetched
+                    // Explicitly handle merging arrays within sections
+                    paragraphs: Array.isArray(fetchedSection.paragraphs)
+                      ? fetchedSection.paragraphs
+                      : defaultSection?.paragraphs || [],
+                    info_list: Array.isArray(fetchedSection.info_list)
+                      ? fetchedSection.info_list
+                      : defaultSection?.info_list || [],
+                    values_list: Array.isArray(fetchedSection.values_list)
+                      ? fetchedSection.values_list
+                      : defaultSection?.values_list || [],
+                    // Add similar checks for any other arrays within about sections
+                  };
+                })
+              : defaultAboutContent.sections, // Fallback to default about sections
+          });
+        } else {
+          // Document does not exist, use default content
+          setAboutContent(defaultAboutContent);
+        }
+      } catch (e) {
+        console.error("Error fetching About page content:", e);
+        setError("Failed to load About page content.");
+        setAboutContent(defaultAboutContent); // Fallback to default on error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAboutContent();
+  }, []); // Empty dependency array means this runs once on mount
+
+  // Helper function to find a section by name
+  const findSection = (name) =>
+    aboutContent.sections.find((s) => s.name === name);
+
+  return (
+    <>
+      {/* About Us Hero Section (Static or potentially make dynamic) */}
+      <section className="about-hero-section py-5 text-center text-white d-flex align-items-center justify-content-center">
+        <div className="container animate__animated animate__fadeIn">
+          {/* You might want to fetch hero title/subtitle if they are editable */}
+          <h1 className="display-3 fw-bold mb-3 about-hero-title">About Us</h1>
+          <p className="lead about-hero-subtitle">
+            Your trusted partner in paper trading industry since 1995.
+          </p>
         </div>
-      </div>
-    </section>
+      </section>
 
-    {/* New: Paper Supply Philosophy Section */}
-    <section className="paper-philosophy-section py-5">
-      <div className="container">
-        <h2 className="page-title text-center mb-5">Paper Supply Philosophy</h2>
-        <div className="row justify-content-center">
-          <div className="col-lg-8 text-center">
-            <i className="fas fa-lightbulb philosophy-icon animate__animated animate__fadeInDown mb-4"></i>
-            <p className="paragraph lead animate__animated animate__fadeInUp animate__delay-0-5s">
-              We believe in delivering only the best, high-grade paper products
-              that combine functionality, hygiene, and durability. Accurate
-              selection supports both food-grade and documentation needs with
-              precision and care.
-            </p>
-          </div>
+      {/* A Glance at Sunrise Papers */}
+      {loading ? (
+        <div className="text-center py-5">Loading About content...</div>
+      ) : error ? (
+        <div className="alert alert-danger text-center message-box py-5">
+          {error}
         </div>
-      </div>
-    </section>
+      ) : (
+        <>
+          {/* A Glance at Sunrise Papers Section */}
+          {findSection("aboutGlance") && (
+            <section className="glance-at-sunrise-section py-5">
+              <div className="container">
+                <h2 className="page-title text-center mb-5">
+                  {findSection("aboutGlance").title ||
+                    "A Glance at Sunrise Papers"}
+                </h2>
+                <div className="row align-items-center g-5">
+                  <div className="col-lg-6">
+                    <img
+                      src={
+                        findSection("aboutGlance").image_url ||
+                        "images/about/about-glance-img.jpeg"
+                      }
+                      alt={
+                        findSection("aboutGlance").title ||
+                        "A Glance at Sunrise Papers"
+                      } // Use title as alt text
+                      className="img-fluid rounded-3 shadow-lg animate__animated animate__fadeInLeft"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                          "https://placehold.co/600x400?text=Image+Error";
+                      }} // Error fallback
+                    />
+                  </div>
+                  <div className="col-lg-6">
+                    {(findSection("aboutGlance").paragraphs || []).map(
+                      (para, index) => (
+                        <p
+                          key={index}
+                          className={`paragraph ${
+                            index === 0 ? "lead" : ""
+                          } animate__animated animate__fadeInRight animate__delay-${
+                            index * 0.5 + 0.5
+                          }s`}
+                        >
+                          {para}
+                        </p>
+                      )
+                    )}
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
 
-    {/* Our Leadership Section (formerly Our Team Section) */}
-    <section className="our-team-section py-5 bg-light">
-      {" "}
-      {/* Retaining class for existing CSS */}
-      <div className="container">
-        <div className="row align-items-center g-5">
-          <div className="col-lg-6 order-lg-2">
-            <img
-              src="images/logo-no-bg.png"
-              alt="Our Owner"
-              className="img-fluid rounded-3 shadow-lg animate__animated animate__fadeInRight"
-            />
-          </div>
-          <div className="col-lg-6 order-lg-1">
-            <h2
-              className="page-title text-start animate__animated animate__fadeInLeft"
-              style={{
-                color: "var(--sp-dark-gray)", // This will be overridden by royal theme CSS
-                borderBottom: "none",
-                paddingBottom: "0",
-              }}
-            >
-              Our Leadership
-            </h2>
-            {/* Styled Quote */}
-            <blockquote className="leadership-quote animate__animated animate__fadeInLeft animate__delay-0-5s">
-              <p className="mb-2">
-                "It's not about how many years I've worked - it's about how much
-                those years have taught me."
-              </p>
-              <footer className="blockquote-footer mt-2">
-                Mr. Dinesh Gupta
-              </footer>
-            </blockquote>
-            {/* New Paragraph */}
-            <p className="paragraph animate__animated animate__fadeInLeft animate__delay-1s">
-              Under the insightful leadership of Mr. Dinesh Gupta, Sunrise
-              Papers has grown with purpose and vision. His experience-driven
-              guidance continues to shape our commitment to quality, trust, and
-              long-term growth.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+          {/* Paper Supply Philosophy Section */}
+          {findSection("philosophy") && (
+            <section className="paper-philosophy-section py-5">
+              <div className="container">
+                <h2 className="page-title text-center mb-5">
+                  {findSection("philosophy").title || "Paper Supply Philosophy"}
+                </h2>
+                <div className="row justify-content-center">
+                  <div className="col-lg-8 text-center">
+                    {findSection("philosophy").icon_class && (
+                      <i
+                        className={`${
+                          findSection("philosophy").icon_class
+                        } philosophy-icon animate__animated animate__fadeInDown mb-4`}
+                      ></i>
+                    )}
+                    {findSection("philosophy").paragraph && (
+                      <p className="paragraph lead animate__animated animate__fadeInUp animate__delay-0-5s">
+                        {findSection("philosophy").paragraph}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
 
-    {/* Company Profile Section */}
-    <section className="company-profile-section py-5">
-      <div className="container">
-        <h2 className="page-title text-center mb-5">Company Profile</h2>
-        <div className="row g-5">
-          <div className="col-lg-6">
-            <img
-              src="images/about/about-profile-img.jpg"
-              alt="Paper Rolls Storage"
-              className="img-fluid rounded-3 shadow-lg mb-4 animate__animated animate__fadeInLeft"
-            />
-          </div>
-          <div className="col-lg-6">
-            <ul className="list-unstyled company-info-list">
-              <li className="animate__animated animate__fadeInRight animate__delay-0-3s">
-                <i className="fas fa-dot-circle me-2"></i>{" "}
-                <strong>Nature of Business:</strong> Trader and Importer
-              </li>
-              <li className="animate__animated animate__fadeInRight animate__delay-0-6s">
-                <i className="fas fa-dot-circle me-2"></i>{" "}
-                <strong>Additional Business:</strong> Wholesale Supplier
-              </li>
-              <li className="animate__animated animate__fadeInRight animate__delay-0-9s">
-                <i className="fas fa-dot-circle me-2"></i>{" "}
-                <strong>Company Owner:</strong> Dinesh Gupta
-              </li>
-              <li className="animate__animated animate__fadeInRight animate__delay-1-2s">
-                <i className="fas fa-map-marker-alt me-2"></i>{" "}
-                <strong>Registered Address:</strong> Unit No. 390, Vegas Mall,
-                Plot No. 6, Sector 14, Dwarka, Delhi, 110078, India
-              </li>
-              <li className="animate__animated animate__fadeInRight animate__delay-1-5s">
-                <i className="fas fa-users me-2"></i>{" "}
-                <strong>Total No. of Employees:</strong> 11 to 25 people
-              </li>
-              <li className="animate__animated animate__fadeInRight animate__delay-1-8s">
-                <i className="fas fa-calendar-alt me-2"></i>{" "}
-                <strong>Year of Establishment:</strong> 1995
-              </li>
-              <li className="animate__animated animate__fadeInRight animate__delay-2-1s">
-                <i className="fas fa-balance-scale me-2"></i>{" "}
-                <strong>Legal Status of Firm:</strong> Individual - Proprietor
-              </li>
-              <li className="animate__animated animate__fadeInRight animate__delay-2-4s">
-                <i className="fas fa-wallet me-2"></i>{" "}
-                <strong>Annual Turnover:</strong> Rs. 25 - 50 Crores
-              </li>
-              <li className="animate__animated animate__fadeInRight animate__delay-2-7s">
-                <i className="fas fa-barcode me-2"></i>{" "}
-                <strong>GST No.:</strong> 07AAJPK3664M1Z9
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
+          {/* Our Leadership Section */}
+          {findSection("leadership") && (
+            <section className="our-team-section py-5 bg-light">
+              <div className="container">
+                <div className="row align-items-center g-5">
+                  <div className="col-lg-6 order-lg-2">
+                    <img
+                      src={
+                        findSection("leadership").image_url ||
+                        "images/logo-no-bg.png"
+                      }
+                      alt={findSection("leadership").title || "Our Leadership"} // Use title as alt text
+                      className="img-fluid rounded-3 shadow-lg animate__animated animate__fadeInRight"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                          "https://placehold.co/600x400?text=Image+Error";
+                      }} // Error fallback
+                    />
+                  </div>
+                  <div className="col-lg-6 order-lg-1">
+                    <h2 className="page-title text-start animate__animated animate__fadeInLeft">
+                      {findSection("leadership").title || "Our Leadership"}
+                    </h2>
+                    {findSection("leadership").quote && (
+                      <blockquote className="leadership-quote animate__animated animate__fadeInLeft animate__delay-0-5s">
+                        <p className="mb-2">
+                          {findSection("leadership").quote}
+                        </p>
+                        {findSection("leadership").quote_author && (
+                          <footer className="blockquote-footer mt-2">
+                            {findSection("leadership").quote_author}
+                          </footer>
+                        )}
+                      </blockquote>
+                    )}
+                    {findSection("leadership").paragraph && (
+                      <p className="paragraph animate__animated animate__fadeInLeft animate__delay-1s">
+                        {findSection("leadership").paragraph}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
 
-    {/* Why Us Section */}
-    <section className="why-us-section py-5">
-      <div className="container">
-        <div className="row align-items-center g-5">
-          <div className="col-lg-6 order-lg-2 text-center">
-            <i className="fas fa-question-circle fa-8x text-muted mb-4 animate__animated animate__zoomIn"></i>
-          </div>
-          <div className="col-lg-6 order-lg-1">
-            <h2
-              className="page-title text-start animate__animated animate__fadeInLeft"
-              style={{
-                borderBottom: "none",
-                paddingBottom: "0",
-                color: "var(--sp-dark-gray)", // This will be overridden by royal theme CSS
-              }}
-            >
-              WHY US ?
-            </h2>
-            <p className="paragraph lead animate__animated animate__fadeInLeft animate__delay-0-5s">
-              Over the years, we have established a reputation for providing a
-              comprehensive and reliable range of paper solutions tailored to
-              our clients' specific needs. The following key strengths drive our
-              continued success:
-            </p>
-            <ul className="list-unstyled values-list">
-              <li className="animate__animated animate__fadeInLeft animate__delay-0-7s">
-                <i className="fas fa-shipping-fast me-2"></i> Prompt and
-                Reliable Delivery
-              </li>
-              <li className="animate__animated animate__fadeInLeft animate__delay-0-9s">
-                <i className="fas fa-handshake me-2"></i> Ethical and
-                Transparent Business Practices
-              </li>
-              <li className="animate__animated animate__fadeInLeft animate__delay-1-1s">
-                <i className="fas fa-tags me-2"></i> Competitive Pricing with
-                Technically Advanced Products
-              </li>
-              <li className="animate__animated animate__fadeInLeft animate__delay-1-3s">
-                <i className="fas fa-globe me-2"></i> Widespread and Efficient
-                Distribution Network
-              </li>
-              <li className="animate__animated animate__fadeInLeft animate__delay-1-5s">
-                <i className="fas fa-check-circle me-2"></i> Consistent Product
-                Quality and Client Satisfaction
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
+          {/* Company Profile Section */}
+          {findSection("companyProfile") && (
+            <section className="company-profile-section py-5">
+              <div className="container">
+                <h2 className="page-title text-center mb-5">
+                  {findSection("companyProfile").title || "Company Profile"}
+                </h2>
+                <div className="row g-5">
+                  <div className="col-lg-6">
+                    <img
+                      src={
+                        findSection("companyProfile").image_url ||
+                        "images/about/about-profile-img.jpg"
+                      }
+                      alt={
+                        findSection("companyProfile").title || "Company Profile"
+                      } // Use title as alt text
+                      className="img-fluid rounded-3 shadow-lg mb-4 animate__animated animate__fadeInLeft"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                          "https://placehold.co/600x400?text=Image+Error";
+                      }} // Error fallback
+                    />
+                  </div>
+                  <div className="col-lg-6">
+                    <ul className="list-unstyled company-info-list">
+                      {(findSection("companyProfile").info_list || []).map(
+                        (item, index) => (
+                          <li
+                            key={index}
+                            className={`animate__animated animate__fadeInRight animate__delay-${
+                              index * 0.3
+                            }s`}
+                          >
+                            {item.icon_class && (
+                              <i className={`${item.icon_class} me-2`}></i>
+                            )}
+                            <strong>{item.label}:</strong> {item.value}
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
 
-    {/* Quality Assurance Section */}
-    <section className="quality-assurance-section py-5 bg-light">
-      <div className="container">
-        <div className="row align-items-center g-5">
-          <div className="col-lg-6 text-center">
-            <img
-              src="images/about/about-quality-img.png"
-              alt="Quality Seal"
-              className="img-fluid quality-seal-img animate__animated animate__fadeInLeft"
-            />
-          </div>
-          <div className="col-lg-6">
-            <h2
-              className="page-title text-start animate__animated animate__fadeInRight"
-              style={{
-                color: "var(--sp-dark-gray)", // This will be overridden by royal theme CSS
-                borderBottom: "none",
-                paddingBottom: "0",
-              }}
-            >
-              Our Commitment to Quality
-            </h2>
-            <p className="paragraph lead animate__animated animate__fadeInRight animate__delay-0-5s">
-              As a dedicated wholesale supplier and importer, our foremost
-              priority has always been the quality of the paper we provide.
-            </p>
-            <p className="paragraph animate__animated animate__fadeInRight animate__delay-1s">
-              Our product range is crafted using high-grade imported raw
-              materials and chemicals, handled by a skilled and experienced
-              workforce. Every batch undergoes rigorous quality checks - both
-              before and after production - to ensure defect-free delivery.
-            </p>
-            <p className="paragraph animate__animated animate__fadeInRight animate__delay-1-5s">
-              We maintain detailed oversight throughout the process, from
-              material selection to final dispatch, ensuring that only
-              precision-finished, high-performance paper products reach our
-              customers.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </>
-);
+          {/* Why Us Section */}
+          {findSection("whyUs") && (
+            <section className="why-us-section py-5">
+              <div className="container">
+                <div className="row align-items-center g-5">
+                  <div className="col-lg-6 order-lg-2 text-center">
+                    {findSection("whyUs").icon_class && (
+                      <i
+                        className={`${
+                          findSection("whyUs").icon_class
+                        } fa-8x text-muted mb-4 animate__animated animate__zoomIn`}
+                      ></i>
+                    )}
+                  </div>
+                  <div className="col-lg-6 order-lg-1">
+                    <h2 className="page-title text-start animate__animated animate__fadeInLeft">
+                      {findSection("whyUs").title || "WHY US ?"}
+                    </h2>
+                    {findSection("whyUs").intro_paragraph && (
+                      <p className="paragraph lead animate__animated animate__fadeInLeft animate__delay-0-5s">
+                        {findSection("whyUs").intro_paragraph}
+                      </p>
+                    )}
+                    <ul className="list-unstyled values-list">
+                      {(findSection("whyUs").values_list || []).map(
+                        (item, index) => (
+                          <li
+                            key={index}
+                            className={`animate__animated animate__fadeInLeft animate__delay-${
+                              index * 0.2 + 0.7
+                            }s`}
+                          >
+                            {item.icon_class && (
+                              <i className={`${item.icon_class} me-2`}></i>
+                            )}{" "}
+                            {item.text}
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Quality Assurance Section */}
+          {findSection("qualityAssurance") && (
+            <section className="quality-assurance-section py-5 bg-light">
+              <div className="container">
+                <div className="row align-items-center g-5">
+                  <div className="col-lg-6 text-center">
+                    <img
+                      src={
+                        findSection("qualityAssurance").image_url ||
+                        "images/about/about-quality-img.png"
+                      }
+                      alt={
+                        findSection("qualityAssurance").title ||
+                        "Our Commitment to Quality"
+                      } // Use title as alt text
+                      className="img-fluid quality-seal-img animate__animated animate__fadeInLeft"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                          "https://placehold.co/600x400?text=Image+Error";
+                      }} // Error fallback
+                    />
+                  </div>
+                  <div className="col-lg-6">
+                    <h2 className="page-title text-start animate__animated animate__fadeInRight">
+                      {findSection("qualityAssurance").title ||
+                        "Our Commitment to Quality"}
+                    </h2>
+                    {(findSection("qualityAssurance").paragraphs || []).map(
+                      (para, index) => (
+                        <p
+                          key={index}
+                          className={`paragraph ${
+                            index === 0 ? "lead" : ""
+                          } animate__animated animate__fadeInRight animate__delay-${
+                            index * 0.5 + 0.5
+                          }s`}
+                        >
+                          {para}
+                        </p>
+                      )
+                    )}
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+        </>
+      )}
+    </>
+  );
+};
 
 export default AboutPage;

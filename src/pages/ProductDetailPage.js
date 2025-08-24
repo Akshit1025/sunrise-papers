@@ -1,7 +1,15 @@
 // src/pages/ProductDetailPage.js
 
 import React, { useState, useEffect } from "react";
-import { collection, getDocs, query, where, limit } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  limit,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { useParams, Link } from "react-router-dom";
 import { db } from "../firebaseConfig";
 import "./ProductsPage.css";
@@ -12,19 +20,27 @@ const ProductDetailPage = ({ authReady }) => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [formDefinitions, setFormDefinitions] = useState({});
+  const [loadingDefinitions, setLoadingDefinitions] = useState(true);
+  const [definitionError, setDefinitionError] = useState(null);
+
   const [showQuoteModal, setShowQuoteModal] = useState(false);
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchProductAndDefinition = async () => {
       if (!authReady) {
         setLoading(true);
+        setLoadingDefinitions(true);
         return;
       }
 
       try {
         setLoading(true);
+        setLoadingDefinitions(true);
         setError(null);
+        setDefinitionError(null);
         setProduct(null);
+        setFormDefinitions({});
 
         const productsCollectionRef = collection(db, "products");
         const q = query(
@@ -34,29 +50,72 @@ const ProductDetailPage = ({ authReady }) => {
         );
         const querySnapshot = await getDocs(q);
 
+        let productData = null;
         if (!querySnapshot.empty) {
-          const productData = querySnapshot.docs[0].data();
+          productData = querySnapshot.docs[0].data();
           setProduct({ id: querySnapshot.docs[0].id, ...productData });
+
+          if (productData.category_slug) {
+            try {
+              const definitionDocRef = doc(
+                db,
+                "quoteFormDefinitions",
+                productData.category_slug
+              );
+              const definitionDocSnap = await getDoc(definitionDocRef);
+
+              if (definitionDocSnap.exists()) {
+                setFormDefinitions({
+                  [productData.category_slug]: definitionDocSnap.data(),
+                });
+              } else {
+                setFormDefinitions({});
+              }
+              setDefinitionError(null);
+            } catch (defErr) {
+              console.error(
+                `Error fetching form definition for ${productData.category_slug}:`,
+                defErr
+              );
+              setDefinitionError("Failed to load form configuration.");
+              setFormDefinitions({});
+            } finally {
+              setLoadingDefinitions(false);
+            }
+          } else {
+            setFormDefinitions({});
+            setLoadingDefinitions(false);
+          }
+          setError(null);
         } else {
           setError(`Product "${productSlug}" not found.`);
+          setFormDefinitions({});
+          setLoadingDefinitions(false);
         }
       } catch (err) {
         console.error(`Error fetching product "${productSlug}":`, err);
         setError(
           `Failed to load product details. Please try again later. (Error: ${err.message})`
         );
+        setFormDefinitions({});
+        setLoadingDefinitions(false);
       } finally {
         setLoading(false);
       }
     };
 
-    if (productSlug) {
-      fetchProduct();
+    if (productSlug && authReady) {
+      fetchProductAndDefinition();
+    } else if (!authReady) {
+      setLoading(true);
+      setLoadingDefinitions(true);
     }
-  }, [authReady, productSlug]);
+  }, [authReady, productSlug, db]);
 
   const handleShowQuoteModal = () => setShowQuoteModal(true);
-  const handleCloseQuoteModal = () => setShowQuoteModal(false);
+  const handleCloseQuoteModal = () => {
+    setShowQuoteModal(false);
+  };
 
   return (
     <>
@@ -177,7 +236,7 @@ const ProductDetailPage = ({ authReady }) => {
                   >
                     <i className="fas fa-th-large me-2"></i> View All Categories
                   </Link>
-                  {product.category_slug === "food-grade-papers" && (
+                  {product && product.category_slug && formDefinitions[product.category_slug] && (
                     <div className="mt-4 text-center">
                       <button
                         type="button"
@@ -199,6 +258,9 @@ const ProductDetailPage = ({ authReady }) => {
         show={showQuoteModal}
         handleClose={handleCloseQuoteModal}
         category_slug={product ? product.category_slug : ""}
+        formDefinition={product && formDefinitions[product.category_slug]}
+        loadingDefinition={loadingDefinitions}
+        definitionError={definitionError}
       />
     </>
   );

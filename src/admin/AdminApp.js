@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import RequireAdmin from "./auth/RequireAdmin";
 import QuoteRequests from "./pages/QuoteRequests";
 import Settings from "./pages/Settings";
+import ContentManagement from "./pages/ContentManagement";
 
 const AdminApp = () => {
   const [user, setUser] = useState(null);
@@ -27,7 +28,10 @@ const AdminApp = () => {
         <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
           <div className="container-fluid">
             <Link className="navbar-brand h3 m-0" to="/admin">
-              <img src="images/logo-no-bg.png" alt="Official logo" />
+              <img
+                src="https://sunrise-papers.vercel.app/images/logo-no-bg.png"
+                alt="Official logo"
+              />
               Admin Panel
             </Link>
             <button
@@ -77,6 +81,18 @@ const AdminApp = () => {
                     <i className="fas fa-folder me-1"></i>{" "}
                     {/* Categories icon */}
                     Categories
+                  </Link>
+                </li>
+                <li className="nav-item me-2">
+                  <Link
+                    className={`nav-link ${
+                      location.pathname === "/admin/content" ? "active" : ""
+                    }`}
+                    to="/admin/content"
+                  >
+                    <i className="fas fa-circle-info me-1"></i>{" "}
+                    {/* Categories icon */}
+                    Content
                   </Link>
                 </li>
                 <li className="nav-item me-2">
@@ -161,6 +177,14 @@ const AdminApp = () => {
             }
           />
           <Route
+            path="content"
+            element={
+              <RequireAdmin>
+                <ContentManagement />
+              </RequireAdmin>
+            }
+          />
+          <Route
             path="quotes"
             element={
               <RequireAdmin>
@@ -179,6 +203,24 @@ const AdminApp = () => {
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Routes>
       </div>
+        <footer>
+          <div className="text-center py-3 bg-light text-muted small">
+            {" "}
+            {/* Using Bootstrap classes for basic styling */}
+            &copy; {new Date().getFullYear()} Sunrise Papers. All Rights
+            Reserved.
+            <br />
+            Made by {/* Added space */}
+            <a
+              href="https://instagram.com/akshitthecoder"
+              target="_blank" // Open in a new tab
+              rel="noopener noreferrer" // Security best practice for target="_blank"
+              className="text-decoration-none text-muted" // Style the link to match text
+            >
+              Akshit Gupta
+            </a>
+          </div>
+        </footer>
     </div>
   );
 };
