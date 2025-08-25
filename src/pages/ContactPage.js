@@ -171,7 +171,7 @@ const ContactPage = ({ userId, authReady }) => {
     <>
       {/* Contact Us Hero Section */}
       {loading ? (
-        <div className="text-center py-5">Loading Contact content...</div>
+        <div className="text-center py-5">Loading ...</div>
       ) : error ? (
         <div className="alert alert-danger text-center message-box py-5">
           {error}

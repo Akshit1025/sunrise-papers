@@ -25,7 +25,6 @@ const cloudinaryCore = new Cloudinary({
 });
 // --- End Cloudinary Configuration ---
 
-
 const slugify = (text) =>
   text
     .toString()
@@ -47,6 +46,7 @@ const initialForm = {
   benefits: [""],
   galleryImages: [""], // Initialize as empty array for easier handling of uploaded URLs
   videos: [{ url: "", caption: "" }], // Used when hasSubProducts is false
+  isVisible: true,
 };
 
 const Categories = () => {
@@ -427,6 +427,7 @@ const Categories = () => {
       image_url:
         form.image_url.trim() ||
         (uploadedImageUrls.length > 0 ? uploadedImageUrls[0] : ""),
+      isVisible: !!form.isVisible,
     };
 
     if (!payload.hasSubProducts) {
@@ -516,6 +517,7 @@ const Categories = () => {
             caption: v.caption || "",
           }))
         : [{ url: "", caption: "" }], // Default if no videos exist
+      isVisible: cat.isVisible === undefined ? true : !!cat.isVisible,
     });
     setImageFiles([]); // Clear selected image files when starting edit
     setVideoFiles([]);
@@ -1284,6 +1286,25 @@ const Categories = () => {
                     </>
                   )}
 
+                  {/* isVisible Checkbox */}
+                  <div className="mb-4 form-check">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="isVisible"
+                      name="isVisible"
+                      checked={form.isVisible}
+                      onChange={onChange}
+                      disabled={submitting}
+                    />
+                    <label className="form-check-label" htmlFor="isVisible">
+                      Visible on Website
+                    </label>
+                    <div className="form-text">
+                      Uncheck to hide this category from the public website.
+                    </div>
+                  </div>
+
                   <div className="mb-4">
                     <label className="form-label">Order</label>
                     <input
@@ -1402,6 +1423,7 @@ const Categories = () => {
                           <th>Slug</th>
                           <th>Has Sub-Products</th>
                           <th>Order</th>
+                          <th>Visible</th>
                           <th style={{ width: 170 }}>Actions</th>
                         </tr>
                       </thead>
@@ -1442,6 +1464,19 @@ const Categories = () => {
                             </td>
                             <td>{c.hasSubProducts ? "Yes" : "No"}</td>
                             <td>{c.order || 0}</td>
+                            <td>
+                              {c.isVisible ? (
+                                <i
+                                  className="fas fa-eye text-success"
+                                  title="Visible"
+                                ></i>
+                              ) : (
+                                <i
+                                  className="fas fa-eye-slash text-danger"
+                                  title="Hidden"
+                                ></i>
+                              )}
+                            </td>
                             <td>
                               <div className="d-flex gap-2">
                                 <button

@@ -54,64 +54,80 @@ const CategoryProductsPage = ({ authReady }) => {
         setFormDefinitions({});
 
         // --- Step 1: Fetch Category Details ---
-        // Get a reference to the 'categories' collection in Firestore
+        // Keep this query as is, we need the category data even if it's hidden
         const categoriesCollectionRef = collection(db, "categories");
-        // Create a query to find the category document where 'slug' matches the the 'categorySlug' from the URL
         const categoryQuery = query(
           categoriesCollectionRef,
           where("slug", "==", categorySlug),
-          limit(1) // Limit to 1 result as slug should be unique
+          limit(1)
         );
-        // Execute the query to get the category snapshot
         const categorySnapshot = await getDocs(categoryQuery);
 
-        // Check if a category document was found
         let fetchedCategoryData = null;
         if (!categorySnapshot.empty) {
           fetchedCategoryData = categorySnapshot.docs[0].data();
-          setCategoryData(fetchedCategoryData); // Store the fetched category data in state
 
-          // --- Step 2: Conditionally Fetch Products for this Category ---
-          // Only fetch products if the category is marked as having sub-products
-          if (fetchedCategoryData.hasSubProducts) {
-            const productsCollectionRef = collection(db, "products");
-            const productsQuery = query(
-              productsCollectionRef,
-              where("category_slug", "==", categorySlug)
-            );
-            const productsSnapshot = await getDocs(productsQuery);
-            const fetchedProducts = productsSnapshot.docs.map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            }));
-            setProducts(fetchedProducts);
+          // *** Add a check if the category itself is visible before setting state ***
+          if (fetchedCategoryData.isVisible === true) {
+            // Only set and display category data if it's visible
+            setCategoryData(fetchedCategoryData); // Store the fetched category data in state
+
+            // --- Step 2: Conditionally Fetch Products for this Category ---
+            // Only fetch products if the category is marked as having sub-products AND isVisible
+            if (fetchedCategoryData.hasSubProducts) {
+              const productsCollectionRef = collection(db, "products");
+              // *** Modify the products query to filter by isVisible ***
+              const productsQuery = query(
+                productsCollectionRef,
+                where("category_slug", "==", categorySlug),
+                where("isVisible", "==", true) // Only fetch visible products
+              );
+              const productsSnapshot = await getDocs(productsQuery);
+              const fetchedProducts = productsSnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+              }));
+              setProducts(fetchedProducts);
+            } else {
+              setProducts([]);
+            }
+            setError(null); // Clear any errors if category was fetched successfully
           } else {
-            // If hasSubProducts is false, no need to fetch products, so set products to empty array
-            setProducts([]);
+            // Category is found but is hidden
+            setError(`Category "${categorySlug}" is currently hidden.`);
+            setCategoryData(null); // Clear category data if hidden
+            setProducts([]); // Ensure no products are shown for a hidden category
           }
-          setError(null); // Clear any errors if category was fetched successfully
         } else {
           // If no category found for the given slug, set an error and stop loading
           setError(`Category "${categorySlug}" not found.`);
+          setCategoryData(null); // Ensure category data is null if not found
+          setProducts([]); // Ensure no products are shown if category not found
         }
 
+        // --- Step 3: Fetch Form Definition (fetch regardless of category visibility) ---
+        // You might still want to fetch the form definition even if the category is hidden,
+        // in case you have a separate way to use the form.
+        // If not, you could wrap this in the `if (fetchedCategoryData.isVisible === true)` block above.
         try {
           const definitionRef = doc(db, "quoteFormDefinitions", categorySlug);
           const definitionDocSnap = await getDoc(definitionRef);
 
           if (definitionDocSnap.exists()) {
-            setFormDefinitions({ [categorySlug]: definitionDocSnap.data() });
+            const fetchedDefinitionData = definitionDocSnap.data(); // Capture data
+            // Set the state with the fetched data
+            setFormDefinitions({ [categorySlug]: fetchedDefinitionData });
           } else {
-            setFormDefinitions({});
+            setFormDefinitions({}); // Set to empty object
           }
-          setDefinitionError(null);
+          setDefinitionError(null); // Clear definition error if fetch was successful (even if doc doesn't exist)
         } catch (defErr) {
           console.error(
-            `Error fetching form definition for ${categorySlug}:`,
+            `ERROR during form definition fetch for ${categorySlug}:`, // More specific error log
             defErr
           );
           setDefinitionError("Failed to load form configuration.");
-          setFormDefinitions({});
+          setFormDefinitions({}); // Set to empty object on error
         } finally {
           setLoadingDefinitions(false);
         }
@@ -125,6 +141,8 @@ const CategoryProductsPage = ({ authReady }) => {
         setError(
           `Failed to load category details or products. Please try again later. (Error: ${err.message})`
         );
+        setCategoryData(null); // Ensure category data is null on error
+        setProducts([]); // Ensure products are empty on error
         setFormDefinitions({});
         setLoadingDefinitions(false);
       } finally {
@@ -140,7 +158,7 @@ const CategoryProductsPage = ({ authReady }) => {
       setLoading(true);
       setLoadingDefinitions(true);
     }
-  }, [authReady, categorySlug, db]); // Added authReady to dependency array
+  }, [authReady, categorySlug, db]);
 
   // Effect to handle loading state when authReady changes
   useEffect(() => {
@@ -462,7 +480,7 @@ const CategoryProductsPage = ({ authReady }) => {
         show={showQuoteModal}
         handleClose={handleCloseQuoteModal}
         category_slug={categorySlug}
-        formDefinitions={formDefinitions[categorySlug]}
+        formDefinition={formDefinitions[categorySlug]}
         loadingDefinitions={loadingDefinitions}
         definitionError={definitionError}
       />

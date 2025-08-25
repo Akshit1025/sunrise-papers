@@ -46,6 +46,7 @@ const ProductDetailPage = ({ authReady }) => {
         const q = query(
           productsCollectionRef,
           where("slug", "==", productSlug),
+          where("isVisible", "==", true),
           limit(1)
         );
         const querySnapshot = await getDocs(q);
@@ -88,7 +89,7 @@ const ProductDetailPage = ({ authReady }) => {
           }
           setError(null);
         } else {
-          setError(`Product "${productSlug}" not found.`);
+          setError(`Product "${productSlug}" not found or is currently hidden.`);
           setFormDefinitions({});
           setLoadingDefinitions(false);
         }

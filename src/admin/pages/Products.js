@@ -40,6 +40,7 @@ const initialForm = {
   image_url: "",
   image_gallery: [""],
   order: 0,
+  isVisible: true,
 };
 
 const Products = () => {
@@ -102,9 +103,9 @@ const Products = () => {
   }, []);
 
   const onChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setForm((prev) => {
-      const next = { ...prev, [name]: value };
+      const next = { ...prev, [name]: type === "checkbox" ? checked : value };
       if (name === "name" && !prev.slug) {
         next.slug = slugify(value);
       }
@@ -225,6 +226,7 @@ const Products = () => {
       ...uploadedImageUrls, // Newly uploaded URLs
     ].filter(Boolean), // Ensure no empty strings
     order: Number.isFinite(Number(form.order)) ? Number(form.order) : 0,
+    isVisible: !!form.isVisible,
   });
 
   const handleCreate = async (e) => {
@@ -265,6 +267,7 @@ const Products = () => {
       image_url: p.image_url || "",
       image_gallery: Array.isArray(p.image_gallery) ? p.image_gallery : [], // Ensure it's an array
       order: typeof p.order === "number" ? p.order : 0,
+      isVisible: p.isVisible === undefined ? true : !!p.isVisible,
     });
     setImageFiles([]); // Clear selected image files when starting edit
   };
@@ -779,6 +782,25 @@ const Products = () => {
                     </div>
                   </div>
 
+                  {/* isVisible Checkbox */}
+                  <div className="mb-4 form-check">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="productIsVisible"
+                      name="isVisible"
+                      checked={form.isVisible}
+                      onChange={onChange}
+                      disabled={submitting}
+                    />
+                    <label className="form-check-label" htmlFor="productIsVisible">
+                      Visible on Website
+                    </label>
+                    <div className="form-text">
+                      Uncheck to hide this product from the public website.
+                    </div>
+                  </div>
+
                   <div className="mb-4">
                     <label className="form-label">Order</label>
                     <input
@@ -863,6 +885,7 @@ const Products = () => {
                           <th>Slug</th>
                           <th>Category</th>
                           <th>Order</th>
+                          <th>Visible</th>
                           <th style={{ width: 170 }}>Actions</th>
                         </tr>
                       </thead>
@@ -903,6 +926,13 @@ const Products = () => {
                             </td>
                             <td>{p.category_slug}</td>
                             <td>{p.order || 0}</td>
+                            <td>
+                              {p.isVisible ? (
+                                <i className="fas fa-eye text-success" title="Visible"></i>
+                              ) : (
+                                <i className="fas fa-eye-slash text-danger" title="Hidden"></i>
+                              )}
+                            </td>
                             <td>
                               <div className="d-flex gap-2">
                                 <button

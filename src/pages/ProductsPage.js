@@ -1,7 +1,7 @@
 // src/pages/ProductsPage.js
 
 import React, { useState, useEffect } from "react";
-import { collection, getDocs, query } from "firebase/firestore"; // Import necessary Firestore functions
+import { collection, getDocs, query, where } from "firebase/firestore"; // Import necessary Firestore functions
 import { Link } from "react-router-dom";
 import { db } from "../firebaseConfig"; // Import db directly
 import "./ProductsPage.css"; // Shared CSS for product-related pages
@@ -23,7 +23,7 @@ const ProductsPage = ({ authReady }) => {
       try {
         setLoading(true);
         const categoriesCollectionRef = collection(db, "categories");
-        const q = query(categoriesCollectionRef);
+        const q = query(categoriesCollectionRef, where("isVisible", "==", true));
         const querySnapshot = await getDocs(q);
         const fetchedCategories = querySnapshot.docs.map((doc) => ({
           id: doc.id,

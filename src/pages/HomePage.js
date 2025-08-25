@@ -100,12 +100,13 @@ const HomePage = () => {
         snapshot.forEach((doc) => {
           categoriesList.push({ id: doc.id, ...doc.data() });
         });
+        const visibleCategories = categoriesList.filter(c => c.isVisible === true);
         // Sort categories by 'order' field, then by name if order is same/missing
-        categoriesList.sort(
+        visibleCategories.sort(
           (a, b) =>
             (a.order || 0) - (b.order || 0) || a.name.localeCompare(b.name)
         );
-        setCategories(categoriesList); // Set categories state
+        setCategories(visibleCategories); // Set categories state
         setLoadingCategories(false); // Set categories loading to false
         setErrorCategories(null); // Clear categories error
       },
@@ -192,7 +193,7 @@ const HomePage = () => {
             alignItems: "center",
           }}
         >
-          {loadingContent ? "Loading Hero..." : "Error loading Hero"}
+          {loadingContent ? "Loading ..." : "Error loading Hero"}
         </div>
       ) : (
         <div
@@ -296,7 +297,7 @@ const HomePage = () => {
 
       {/* 2. About Company Section - Use fetched content */}
       {loadingContent ? (
-        <div className="text-center py-5">Loading About Company section...</div>
+        <div className="text-center py-5">Loading ...</div>
       ) : errorContent ? (
         <div className="alert alert-danger text-center message-box py-5">
           {errorContent}
@@ -359,7 +360,7 @@ const HomePage = () => {
       {/* 3. Our Core Strengths Section - Use fetched content */}
       {loadingContent ? (
         <div className="text-center py-5">
-          Loading Core Strengths section...
+          Loading ...
         </div>
       ) : errorContent ? (
         <div className="alert alert-danger text-center message-box py-5">
@@ -381,7 +382,7 @@ const HomePage = () => {
                           <div className="feature-card text-center p-4 rounded-3 shadow-sm h-100 animate__animated animate__fadeInUp">
                             {feature.icon_class && (
                               <i
-                                className={`${feature.icon_class} fa-3x mb-3 text-primary`}
+                                className={`${feature.icon_class} fa-3x mb-3`}
                               ></i> // Use a generic text-primary or define specific colors in CSS
                             )}
                             {feature.title && (
@@ -417,7 +418,7 @@ const HomePage = () => {
         <div className="container">
           {loadingContent ? (
             <div className="text-center py-5">
-              Loading Product Categories title...
+              Loading ...
             </div>
           ) : errorContent ? (
             <div className="alert alert-danger text-center message-box py-5">

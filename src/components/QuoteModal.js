@@ -38,7 +38,7 @@ const QuoteModal = ({
   // Effect to initialize formData when the formDefinition prop changes and modal is shown
   // Or when modal is closed, reset formData
   useEffect(() => {
-    if (show && formDefinition) {
+    if (show && formDefinition && formDefinition.fields) {
       const initialFormData = {};
       (formDefinition.fields || []).forEach((field) => {
         // Initialize based on the definition
@@ -107,7 +107,7 @@ const QuoteModal = ({
 
   // ValidateForm uses the passed formDefinition prop
   const validateForm = () => {
-    if (!formDefinition) return false;
+    if (!formDefinition || !formDefinition.fields) return false;
 
     const newErrors = {};
 
@@ -138,7 +138,7 @@ const QuoteModal = ({
     e.preventDefault();
     // Prevent submission if definition is loading, there's a definition error, or form is already submitting
     if (loadingDefinition || definitionError || loading) return;
-    if (!formDefinition) return; // Also prevent if no definition loaded
+    if (!formDefinition || !formDefinition.fields) return; // Also prevent if no definition loaded
 
     if (validateForm()) {
       setLoading(true);
@@ -344,7 +344,7 @@ const QuoteModal = ({
               <div>Loading form configuration...</div>
             ) : definitionError ? (
               <div className="alert alert-warning">{definitionError}</div>
-            ) : !formDefinition ? (
+            ) : !formDefinition || !formDefinition.fields || formDefinition.fields.length === 0 ? (
               <div>No form configuration available for this category.</div>
             ) : (
               <form onSubmit={handleSubmit}>
@@ -409,7 +409,9 @@ const QuoteModal = ({
                       loading ||
                       loadingDefinition ||
                       definitionError ||
-                      !formDefinition
+                      !formDefinition ||
+                      !formDefinition.fields ||
+                      formDefinition.fields.length === 0
                     } // Disable if submitting, definition loading, or error
                   >
                     {loading ? (

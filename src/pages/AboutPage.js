@@ -202,7 +202,7 @@ const AboutPage = () => {
 
       {/* A Glance at Sunrise Papers */}
       {loading ? (
-        <div className="text-center py-5">Loading About content...</div>
+        <div className="text-center py-5">Loading ...</div>
       ) : error ? (
         <div className="alert alert-danger text-center message-box py-5">
           {error}
