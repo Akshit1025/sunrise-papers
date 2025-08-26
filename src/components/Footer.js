@@ -35,7 +35,7 @@ const Footer = () => {
             <div className="col-md-4 mb-4 mb-md-0">
               <div className="footer-brand d-flex align-items-center mb-3">
                 <img
-                  src="/images/logo-no-bg.png" // Changed logo path here
+                  src="https://res.cloudinary.com/dzrv3ssy5/image/upload/v1756204861/logo-no-bg_hodk6e.png" // Changed logo path here
                   alt="Sunrise Papers Logo"
                   className="footer-logo me-3"
                 />

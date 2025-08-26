@@ -51,11 +51,15 @@ const Products = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [form, setForm] = useState(initialForm);
-  const [imageFiles, setImageFiles] = useState([]);
+  const [mainImageFile, setMainImageFile] = useState(null);
+  const [galleryImageFiles, setGalleryImageFiles] = useState([]);
   const [originalProductData, setOriginalProductData] = useState(null); // Store original data for comparison
 
   const [mode, setMode] = useState("create"); // "create" | "edit"
   const [editingId, setEditingId] = useState(null);
+
+  const mainImageFileInputRef = React.useRef(null);
+  const galleryImageFileInputRef = React.useRef(null);
 
   const sortedProducts = useMemo(() => {
     const copy = [...products];
@@ -120,17 +124,38 @@ const Products = () => {
     }));
   };
 
-  const handleImageFileChange = (e) => {
+  // Handler for the single main image file input
+  const handleMainImageFileChange = (e) => {
+    const file = e.target.files[0]; // Get only the first file
+    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+
+    if (file) {
+      if (file.size > maxSize) {
+        alert(`File "${file.name}" is too large. Max size is 10 MB.`);
+        setMainImageFile(null); // Clear the state
+        e.target.value = null; // Clear the input
+        return;
+      }
+      setMainImageFile(file); // Set the single file state
+    } else {
+      setMainImageFile(null); // Clear the state if no file is selected
+    }
+  };
+
+  // Handler for the multiple gallery image files input
+  const handleGalleryImageFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+
     const validFiles = selectedFiles.filter((file) => {
       if (file.size > maxSize) {
-        alert(`File ${file.name} is too large. Max size is 10 MB.`);
+        alert(`File "${file.name}" is too large. Max size is 10 MB.`);
         return false;
       }
       return true;
     });
-    setImageFiles(validFiles);
+
+    setGalleryImageFiles(validFiles); // Set the multiple files state
   };
 
   const changeGallery = (index, val) => {
@@ -159,8 +184,20 @@ const Products = () => {
     setForm(initialForm);
     setMode("create");
     setEditingId(null);
-    setImageFiles([]);
+    setMainImageFile(null);
+    setGalleryImageFiles([]); 
+    setError("");
+    setOriginalProductData(null); // Clear original data
+
+    // Clear the file input element's values using the refs
+    if (mainImageFileInputRef.current) {
+      mainImageFileInputRef.current.value = "";
+    }
+    if (galleryImageFileInputRef.current) {
+      galleryImageFileInputRef.current.value = "";
+    }
   };
+
 
   // --- Modified uploadImages function to use Cloudinary ---
   const uploadImages = async (files) => {
@@ -212,22 +249,46 @@ const Products = () => {
   };
   // --- End uploadImages function ---
 
-  const buildPayload = (uploadedImageUrls = []) => ({
-    name: form.name.trim(),
-    slug: slugify(form.slug.trim()),
-    category_slug: form.category_slug.trim(),
-    short_description: form.short_description.trim(),
-    long_description: form.long_description.trim(),
-    image_url:
-      form.image_url.trim() ||
-      (uploadedImageUrls.length > 0 ? uploadedImageUrls[0] : ""), // Use first uploaded as main if none specified
-    image_gallery: [
-      ...(form.image_gallery || []).map((u) => u.trim()).filter(Boolean), // Existing gallery URLs
-      ...uploadedImageUrls, // Newly uploaded URLs
-    ].filter(Boolean), // Ensure no empty strings
-    order: Number.isFinite(Number(form.order)) ? Number(form.order) : 0,
-    isVisible: !!form.isVisible,
-  });
+  const buildPayload = (
+    uploadedMainImageUrl = "",
+    uploadedGalleryImageUrls = []
+  ) => {
+    const existingGalleryUrls = (form.image_gallery || [])
+      .map((u) => u.trim())
+      .filter(Boolean);
+
+    // Determine the final main image URL:
+    // 1. Use the manual image_url from the form if it exists and is not a placeholder.
+    // 2. Otherwise, use the uploaded main image URL if one was uploaded.
+    // 3. Otherwise, keep the existing main image URL if in edit mode and not changed.
+    // 4. Otherwise, it's empty.
+    let finalMainImageUrl = form.image_url.trim();
+
+    if (!finalMainImageUrl && uploadedMainImageUrl) {
+      finalMainImageUrl = uploadedMainImageUrl;
+    } else if (mode === "edit" && originalProductData && !finalMainImageUrl) {
+      // If in edit mode, no manual URL, and no new main image upload, retain original main URL
+      finalMainImageUrl = originalProductData.image_url || "";
+    }
+
+    // Combine existing manual/uploaded gallery URLs and the newly uploaded gallery URLs
+    const finalImageGallery = [
+      ...existingGalleryUrls,
+      ...uploadedGalleryImageUrls, // Add the uploaded gallery images directly
+    ].filter(Boolean); // Ensure no empty strings
+
+    return {
+      name: form.name.trim(),
+      slug: slugify(form.slug.trim()),
+      category_slug: form.category_slug.trim(),
+      short_description: form.short_description.trim(),
+      long_description: form.long_description.trim(),
+      image_url: finalMainImageUrl, // Use the determined final main image URL
+      image_gallery: finalImageGallery, // Use the final gallery URLs
+      order: Number.isFinite(Number(form.order)) ? Number(form.order) : 0,
+      isVisible: !!form.isVisible,
+    };
+  };
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -238,21 +299,68 @@ const Products = () => {
     setSubmitting(true);
 
     try {
-      let uploadedImageUrls = [];
-      if (imageFiles.length > 0) {
-        uploadedImageUrls = await uploadImages(imageFiles);
+      // Upload the main image file (if selected)
+      let uploadedMainImageUrl = "";
+      if (mainImageFile) {
+        // Pass the single file in an array to uploadImages
+        const urls = await uploadImages([mainImageFile]);
+        if (urls.length > 0) {
+          uploadedMainImageUrl = urls[0]; // Get the URL of the uploaded main image
+        } else {
+          // Handle case where main image upload failed
+          setError("Main image upload failed.");
+          setSubmitting(false);
+          return;
+        }
       }
 
-      await addDoc(collection(db, "products"), buildPayload(uploadedImageUrls));
-      resetForm();
+      // Upload the gallery image files (if any selected)
+      let uploadedGalleryImageUrls = [];
+      if (galleryImageFiles.length > 0) {
+        uploadedGalleryImageUrls = await uploadImages(galleryImageFiles);
+        if (
+          uploadedGalleryImageUrls.length === 0 &&
+          galleryImageFiles.length > 0 &&
+          !error
+        ) {
+          // Handle case where gallery image uploads failed
+          setError("One or more gallery image uploads failed.");
+          setSubmitting(false);
+          return;
+        }
+      }
+
+      // buildPayload now uses the separate uploaded URLs
+      const payload = buildPayload(
+        uploadedMainImageUrl,
+        uploadedGalleryImageUrls
+      );
+
+      // Add validation for minimum images if required
+      if (!payload.image_url) {
+        // Example: require at least a main image URL (manual or uploaded)
+        setError(
+          "Please provide a Main Image URL or upload a Main Image file."
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      await addDoc(collection(db, "products"), payload); // Use the payload
+      resetForm(); // This clears form state, file states, and input values
       await fetchProducts();
     } catch (e) {
       console.error(e);
-      setError(e.message || "Failed to create product.");
+      // Check if error was already set by uploads or validation
+      if (!error) {
+        // Only set a generic error if no specific error was already set
+        setError(e.message || "Failed to create product.");
+      }
     } finally {
       setSubmitting(false);
     }
   };
+
 
   const startEdit = (p) => {
     setMode("edit");
@@ -269,49 +377,58 @@ const Products = () => {
       order: typeof p.order === "number" ? p.order : 0,
       isVisible: p.isVisible === undefined ? true : !!p.isVisible,
     });
-    setImageFiles([]); // Clear selected image files when starting edit
+    setMainImageFile(null);
+    setGalleryImageFiles([]);
+    setError("");
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     if (!editingId || !originalProductData) return;
     setError("");
-    if (!form.name.trim()) return setError("Name is required.");
-    if (!form.slug.trim()) return setError("Slug is required.");
-    if (!form.category_slug.trim()) return setError("Category is required.");
+    if (!form.name.trim()) return setError("Name is required");
+    if (!form.slug.trim()) return setError("Slug is required");
+    if (!form.category_slug.trim()) return setError("Category is required");
     setSubmitting(true);
 
-    try {
-      // --- 1. Identify images to delete ---
-      const imageUrlsToDelete = [];
-
-      // Check original main image vs current main image URL
-      if (
-        originalProductData.image_url &&
-        originalProductData.image_url.startsWith("https://res.cloudinary.com/")
-      ) {
-        if (originalProductData.image_url !== form.image_url) {
-          imageUrlsToDelete.push(originalProductData.image_url);
+    try{
+      let uploadedMainImageUrl = "";
+      if (mainImageFile) {
+        const urls = await uploadImages([mainImageFile]);
+        if (urls.length > 0) {
+          uploadedMainImageUrl = urls[0];
+        } else {
+          setError("New main image upload failed.");
+          setSubmitting(false);
+          return;
         }
       }
 
-      // Check original gallery images vs current gallery images
-      const originalGalleryImageUrls = new Set(
-        originalProductData.image_gallery || []
-      );
-      const currentGalleryImageUrls = new Set(form.image_gallery || []);
+      let uploadedGalleryImageUrls = await uploadImages(galleryImageFiles);
+      if (galleryImageFiles.length > 0) {
+        uploadedGalleryImageUrls = await uploadImages(galleryImageFiles);
+        if (uploadedGalleryImageUrls.length === 0 && galleryImageFiles.length > 0 && !error) {
+          setError("One or more new gallery image uploads failed.");
+          setSubmitting(false);
+          return;
+        }
+      }
 
-      originalGalleryImageUrls.forEach((url) => {
-        // If an image was in the original gallery, is a Cloudinary URL, and is NOT in the current form gallery
-        if (
-          url.startsWith("https://res.cloudinary.com/") &&
-          !currentGalleryImageUrls.has(url)
-        ) {
-          imageUrlsToDelete.push(url); // This image was removed during editing
+      const finalPayloadCandidate = buildPayload(uploadedMainImageUrl, uploadedGalleryImageUrls);
+
+      const imageUrlsToDelete = [];
+
+      const allOriginalImageUrls = new Set([
+        originalProductData.image_url,
+        ...(originalProductData.image_gallery || []),
+      ].filter(Boolean));
+
+      allOriginalImageUrls.forEach(url => {
+        if (url.startsWith("https://res.cloudinary.com/") && !allFinalImageUrls.has(url)) {
+          imageUrlsToDelete.push(url);
         }
       });
 
-      // --- 2. Delete identified images from Cloudinary ---
       for (const imageUrl of imageUrlsToDelete) {
         try {
           const urlParts = imageUrl.split("/");
@@ -323,21 +440,28 @@ const Products = () => {
             );
             continue; // Skip to the next image if public ID cannot be extracted
           }
-          let publicIdParts = urlParts.slice(uploadIndex + 2);
-          if (publicIdParts.length === 0) {
-            publicIdParts = urlParts.slice(uploadIndex + 1);
-          }
+          let publicIdParts = urlParts.slice(uploadIndex + 2); // Get parts after /upload/ and potentially version segment
+           if (publicIdParts.length === 0) {
+              // Handle cases without version segment
+              publicIdParts = urlParts.slice(uploadIndex + 1); // Get parts after /upload/
+           }
+
+          // Join the parts and remove the file extension
           const publicId = publicIdParts.join("/").split(".")[0];
 
           // Call Cloudinary API to delete (frontend deletion - INSECURE for production)
           const timestamp = new Date().getTime();
+          // Note: api_sign_request is typically used on the backend with your API Secret.
+          // Performing this on the frontend with the secret exposed is INSECURE.
+          // Replace this with a backend call to handle deletion securely.
           const signature = cloudinaryCore.utils.api_sign_request(
             {
               timestamp: timestamp,
               public_id: publicId,
-              resource_type: "image", // Explicitly set resource type
+               resource_type: "image", // Assuming all are images, add resource_type
+              // Add other parameters used in the original upload if necessary for signing
             },
-            process.env.REACT_APP_CLOUDINARY_API_SECRET
+            process.env.REACT_APP_CLOUDINARY_API_SECRET // INSECURE on frontend!
           );
 
           const deleteUrl = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/destroy`;
@@ -349,7 +473,7 @@ const Products = () => {
             process.env.REACT_APP_CLOUDINARY_API_KEY
           );
           deleteFormData.append("signature", signature);
-          deleteFormData.append("resource_type", "image"); // Include resource_type
+           deleteFormData.append("resource_type", "image"); // Include resource_type
 
           const response = await fetch(deleteUrl, {
             method: "POST",
@@ -358,7 +482,7 @@ const Products = () => {
 
           const data = await response.json();
 
-          if (data.result === "ok" || data.result === "not found") {
+           if (data.result === "ok" || data.result === "not found") {
             console.log(
               `Cloudinary deletion result for ${publicId}:`,
               data.result
@@ -368,38 +492,28 @@ const Products = () => {
             // Decide how to handle failures here - maybe log and continue?
           }
         } catch (e) {
-          console.error(
-            `Error deleting image ${imageUrl} from Cloudinary during update:`,
-            e
-          );
-          // Decide how to handle failures here
+          console.error(`Error deleting image ${imageUrl} from Cloudinary during update:`, e);
         }
       }
-
-      // --- 3. Upload new images ---
-      let uploadedImageUrls = [];
-      if (imageFiles.length > 0) {
-        uploadedImageUrls = await uploadImages(imageFiles);
+      if (!finalPayloadCandidate.image_url) {
+        setError("Plese provide a Main Image URL or upload a Main Image File.");
+        setSubmitting(false);
+        return;
       }
 
-      // --- 4. Build payload from current form state + uploaded images ---
-      // The current form state already reflects locally removed images.
-      // buildPayload adds newly uploaded images to the gallery and sets main_image_url if needed.
-      const payload = buildPayload(uploadedImageUrls);
+      await updateDoc(dic(db, "products", editingId), finalPayloadCandidate);
 
-      // --- 5. Update Firestore document ---
-      await updateDoc(doc(db, "products", editingId), payload);
-
-      resetForm(); // Reset form and clear file inputs
-      setOriginalProductData(null); // Clear original data state
-      await fetchProducts(); // Refresh the list
-    } catch (e) {
+      resetForm();
+      await fetchProducts();
+    } catch (e){
       console.error(e);
-      setError(e.message || "Failed to update product.");
+      if (!error) {
+        setError(e.message || "Failed to update product.");
+      }
     } finally {
       setSubmitting(false);
     }
-  };
+  }
 
   // --- Modified handleDeleteImage function to use Cloudinary ---
   const handleDeleteImage = async (imageUrlToDelete, productId) => {
@@ -676,23 +790,41 @@ const Products = () => {
 
                   {/* New File Input for Images */}
                   <div className="mb-3">
-                    <label htmlFor="imageFiles" className="form-label">
-                      Upload Images
+                    <label htmlFor="mainImageFile" className="form-label">
+                      Upload Main Image (Single)
                     </label>
                     <input
                       type="file"
                       className="form-control"
-                      id="imageFiles"
-                      name="imageFiles"
-                      onChange={handleImageFileChange}
+                      id="mainImageFile"
+                      name="mainImageFile"
+                      onChange={handleMainImageFileChange}
+                      disabled={submitting}
+                      accept="image/*"
+                      ref={mainImageFileInputRef}
+                    />
+                    <div className="form-text">
+                      Select a single image file for the main product image
+                    </div>
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="galleryImageFiles" className="form-label">
+                      Upload Gallery Images (Multiple)
+                    </label>
+                    <input
+                      type="file"
+                      className="form-control"
+                      id="galleryImageFiles"
+                      name="galleryImageFiles"
+                      onChange={handleGalleryImageFileChange}
                       multiple
                       disabled={submitting}
                       accept="image/*"
+                      ref={galleryImageFileInputRef}
                     />
                     <div className="form-text">
-                      Select one or more image files to upload. The first image
-                      uploaded will be used as the Main Image if "Main Image
-                      URL" is empty.
+                      Select one or more image files for the product gallery.
                     </div>
                   </div>
 
@@ -793,7 +925,10 @@ const Products = () => {
                       onChange={onChange}
                       disabled={submitting}
                     />
-                    <label className="form-check-label" htmlFor="productIsVisible">
+                    <label
+                      className="form-check-label"
+                      htmlFor="productIsVisible"
+                    >
                       Visible on Website
                     </label>
                     <div className="form-text">
@@ -928,9 +1063,15 @@ const Products = () => {
                             <td>{p.order || 0}</td>
                             <td>
                               {p.isVisible ? (
-                                <i className="fas fa-eye text-success" title="Visible"></i>
+                                <i
+                                  className="fas fa-eye text-success"
+                                  title="Visible"
+                                ></i>
                               ) : (
-                                <i className="fas fa-eye-slash text-danger" title="Hidden"></i>
+                                <i
+                                  className="fas fa-eye-slash text-danger"
+                                  title="Hidden"
+                                ></i>
                               )}
                             </td>
                             <td>

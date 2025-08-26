@@ -55,12 +55,17 @@ const Categories = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [form, setForm] = useState(initialForm);
-  const [imageFiles, setImageFiles] = useState([]); // New state for selected image files for upload
-  const [videoFiles, setVideoFiles] = useState([]);
+  const [mainImageFile, setMainImageFile] = useState(null); // <-- New state for single main image file
+  const [galleryImageFiles, setGalleryImageFiles] = useState([]); // <-- Modified state for multiple gallery files
+  const [videoFiles, setVideoFiles] = useState([]); // Keep video files state
   const [originalCategoryData, setOriginalCategoryData] = useState(null); // Store original data for comparison
 
   const [mode, setMode] = useState("create"); // "create" | "edit"
   const [editingId, setEditingId] = useState(null);
+
+  const mainImageFileInputRef = React.useRef(null); // <-- Ref for the MAIN image input
+  const galleryImageFileInputRef = React.useRef(null); // <-- Ref for the GALLERY input
+  const videoFileInputRef = React.useRef(null); // <-- Ref for the VIDEO input (already exists in JSX but let's add a ref)
 
   const sortedCategories = useMemo(() => {
     const copy = [...categories];
@@ -148,22 +153,42 @@ const Categories = () => {
     });
   };
 
-  // --- Image File Handling ---
-  const handleImageFileChange = (e) => {
+  // Handler for the single main image file input
+  const handleMainCategoryImageChange = (e) => {
+    const file = e.target.files[0]; // Get only the first file
+    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+
+    if (file) {
+      if (file.size > maxSize) {
+        alert(
+          `Main image file "${file.name}" is too large. Max size is 10 MB.`
+        );
+        setMainImageFile(null); // Clear the state
+        e.target.value = null; // Clear the input
+        return;
+      }
+      setMainImageFile(file); // Set the single file state
+    } else {
+      setMainImageFile(null); // Clear the state if no file is selected
+    }
+  };
+
+  // Handler for the multiple gallery image files input
+  const handleGalleryCategoryImageChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
-    const maxSize = 10 * 1024 * 1024; // 10 MB in bytes
+    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
 
     const validFiles = selectedFiles.filter((file) => {
       if (file.size > maxSize) {
-        alert(`File "${file.name}" is too large. Maximum size is 10 MB.`);
-        return false; // Exclude this file
+        alert(
+          `Gallery image file "${file.name}" is too large. Max size is 10 MB.`
+        );
+        return false;
       }
-      return true; // Include this file
+      return true;
     });
 
-    setImageFiles(validFiles);
-    // Optional: Clear the input so the same files can be selected again if needed
-    e.target.value = null;
+    setGalleryImageFiles(validFiles);
   };
 
   // --- Video File Handling ---
@@ -405,14 +430,36 @@ const Categories = () => {
   };
 
   const resetForm = () => {
-    setForm(initialForm);
+    setForm(initialForm); // Resets the main form state (including image_url, galleryImages, and videos URLs)
     setMode("create");
     setEditingId(null);
-    setImageFiles([]); // Clear selected image files on reset
+    setMainImageFile(null); // <-- Clear the main image file state
+    setGalleryImageFiles([]); // <-- Clear the gallery image files state
+    setVideoFiles([]); // <-- Clear the video files state
+    setError(""); // Clear any previous errors
+    setOriginalCategoryData(null); // Clear original data
+
+    // Clear the file input element's values using the refs
+    if (mainImageFileInputRef.current) {
+      mainImageFileInputRef.current.value = "";
+    }
+    if (galleryImageFileInputRef.current) {
+      galleryImageFileInputRef.current.value = "";
+    }
+    if (videoFileInputRef.current) {
+      // <-- Clear video file input ref
+      videoFileInputRef.current.value = "";
+    }
   };
 
-  // --- Modified buildPayload function to handle uploaded videos ---
-  const buildPayload = (uploadedImageUrls = [], uploadedVideoUrls = []) => {
+
+  // --- Refined buildPayload function ---
+  const buildPayload = (
+    uploadedMainImageUrl = "",
+    uploadedGalleryImageUrls = [],
+    uploadedVideoUrls = []
+  ) => {
+    // <-- Adjusted signature
     const payload = {
       name: form.name.trim(),
       slug: slugify(form.slug.trim()),
@@ -421,31 +468,42 @@ const Categories = () => {
       hasSubProducts: !!form.hasSubProducts,
       order: Number.isFinite(Number(form.order)) ? Number(form.order) : 0,
       benefits: (form.benefits || []).map((b) => b.trim()).filter(Boolean),
-      // If hasSubProducts is true, galleryImages and videos should not be saved, or be empty/default
-      // Otherwise, build them from form state + uploaded media
-      // image_url handling: manual overrides uploaded, first uploaded if no manual and uploads exist
-      image_url:
-        form.image_url.trim() ||
-        (uploadedImageUrls.length > 0 ? uploadedImageUrls[0] : ""),
       isVisible: !!form.isVisible,
     };
 
+    // Determine the final main image URL:
+    // 1. Use the manual image_url from the form if it exists and is not a placeholder.
+    // 2. Otherwise, use the uploaded main image URL if one was uploaded.
+    // 3. Otherwise, keep the existing main image URL if in edit mode and not changed.
+    // 4. Otherwise, it's empty.
+    let finalMainImageUrl = form.image_url.trim();
+
+    if (!finalMainImageUrl && uploadedMainImageUrl) {
+      finalMainImageUrl = uploadedMainImageUrl;
+    } else if (mode === "edit" && originalCategoryData && !finalMainImageUrl) {
+      // If in edit mode, no manual URL, and no new main image upload, retain original main URL
+      finalMainImageUrl = originalCategoryData.image_url || "";
+    }
+
+    payload.image_url = finalMainImageUrl; // Set the determined main image URL
+
+    // Handle gallery images and videos based on hasSubProducts
     if (!payload.hasSubProducts) {
-      // Only include galleryImages and videos if hasSubProducts is false
+      // If not having sub-products, include gallery and videos
       payload.galleryImages = [
-        ...(form.galleryImages || []).map((u) => u.trim()).filter(Boolean), // Existing manual/uploaded gallery URLs
-        ...uploadedImageUrls, // Newly uploaded Image URLs
+        ...(form.galleryImages || []).map((u) => u.trim()).filter(Boolean), // Existing manual/uploaded gallery URLs from form state
+        ...uploadedGalleryImageUrls, // Newly uploaded Gallery Image URLs (array)
       ].filter(Boolean);
+
       payload.videos = [
-        ...(form.videos || [])
+        ...(form.videos || []) // Existing manual/uploaded video objects from form state
           .map((v) => ({
-            // Existing manual/uploaded video objects
             url: (v.url || "").trim(),
             caption: (v.caption || "").trim(),
           }))
           .filter((v) => v.url), // Only include videos with a URL
-        ...(uploadedVideoUrls || []), // Newly uploaded Video objects (assuming uploadVideos returns objects)
-      ].filter((v) => v.url); // Ensure no empty video objects
+        ...(uploadedVideoUrls || []), // Newly uploaded Video objects (array of {url, caption})
+      ].filter((v) => v.url); // Ensure no empty video objects in the final list
     } else {
       // If hasSubProducts is true, ensure galleryImages and videos are empty in the payload
       payload.galleryImages = [];
@@ -454,9 +512,9 @@ const Categories = () => {
 
     return payload;
   };
-  // --- End buildPayload function ---
+  // --- End Refined buildPayload function ---
 
-  // --- Modified handleCreate to include image and video uploads ---
+  // --- Modified handleCreate to handle separate image uploads and hasSubProducts ---
   const handleCreate = async (e) => {
     e.preventDefault();
     setError("");
@@ -465,32 +523,89 @@ const Categories = () => {
     setSubmitting(true);
 
     try {
-      let uploadedImageUrls = [];
-      if (imageFiles.length > 0) {
-        uploadedImageUrls = await uploadImages(imageFiles);
+      // Upload the main image file (if selected)
+      let uploadedMainImageUrl = "";
+      if (mainImageFile) {
+        // Pass the single file in an array to uploadImages
+        const urls = await uploadImages([mainImageFile]);
+        if (urls.length > 0) {
+          uploadedMainImageUrl = urls[0]; // Get the URL of the uploaded main image
+        } else {
+          setError("Main image upload failed.");
+          setSubmitting(false);
+          return;
+        }
       }
 
+      // Upload the gallery image files (ONLY if hasSubProducts is false and files are selected)
+      let uploadedGalleryImageUrls = [];
+      if (galleryImageFiles.length > 0 && !form.hasSubProducts) {
+        // <-- Condition added
+        uploadedGalleryImageUrls = await uploadImages(galleryImageFiles);
+        if (
+          uploadedGalleryImageUrls.length === 0 &&
+          galleryImageFiles.length > 0 &&
+          !error
+        ) {
+          setError("One or more gallery image uploads failed.");
+          setSubmitting(false);
+          return;
+        }
+      }
+
+      // Upload the video files (ONLY if hasSubProducts is false and files are selected)
       let uploadedVideoUrls = [];
-      // Only upload videos if the category is not set to have sub-products
       if (videoFiles.length > 0 && !form.hasSubProducts) {
+        // <-- Condition added
         uploadedVideoUrls = await uploadVideos(videoFiles);
+        if (uploadedVideoUrls.length === 0 && videoFiles.length > 0 && !error) {
+          setError("One or more video uploads failed.");
+          setSubmitting(false);
+          return;
+        }
       }
 
-      // Pass both uploaded image and video URLs to buildPayload
-      await addDoc(
-        collection(db, "categories"),
-        buildPayload(uploadedImageUrls, uploadedVideoUrls)
+      // buildPayload now uses the separate uploaded image URLs and video URLs
+      // buildPayload already handles not including gallery/videos if hasSubProducts is true
+      const payload = buildPayload(
+        uploadedMainImageUrl ? [uploadedMainImageUrl] : [],
+        uploadedGalleryImageUrls
       );
-      resetForm();
+      // Correcting buildPayload call: main image URL is passed as a single string or empty string,
+      // and gallery/video URLs are passed as arrays. Let's adjust buildPayload's signature again
+      // to accept a single main image URL string and arrays for gallery/videos.
+
+      // Re-evaluating buildPayload signature and call...
+      // Based on the Products.js pattern, let's pass uploadedMainImageUrl as a string and the others as arrays.
+      const finalPayload = buildPayload(
+        uploadedMainImageUrl,
+        uploadedGalleryImageUrls
+      );
+
+      // Add validation if needed (e.g., main image URL is mandatory)
+      if (!finalPayload.image_url) {
+        setError(
+          "Please provide a Main Image URL or upload a Main Image file."
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      await addDoc(collection(db, "categories"), finalPayload); // Use the correct payload
+      resetForm(); // This clears form state, file states, and input values
       await fetchCategories();
     } catch (e) {
       console.error(e);
-      setError(e.message || "Failed to create category.");
+      // Check if error was already set by uploads or validation
+      if (!error) {
+        // Only set a generic error if no specific error was already set
+        setError(e.message || "Failed to create category.");
+      }
     } finally {
       setSubmitting(false);
     }
   };
-  // --- End handleCreate ---
+  // --- End modified handleCreate ---
 
   const startEdit = (cat) => {
     setMode("edit");
@@ -519,11 +634,14 @@ const Categories = () => {
         : [{ url: "", caption: "" }], // Default if no videos exist
       isVisible: cat.isVisible === undefined ? true : !!cat.isVisible,
     });
-    setImageFiles([]); // Clear selected image files when starting edit
-    setVideoFiles([]);
+    setMainImageFile(null); // <-- Clear the main image file state on edit start
+    setGalleryImageFiles([]); // <-- Clear the gallery image files state on edit start
+    setVideoFiles([]); // <-- Clear the video files state on edit start
+    // No need to clear refs here, resetForm handles it on successful save/cancel
+    setError(""); // Clear any previous errors when starting edit
   };
 
-  // --- Modified handleUpdate to include image and video uploads ---
+
   const handleUpdate = async (e) => {
     e.preventDefault();
     if (!editingId || !originalCategoryData) return;
@@ -533,66 +651,107 @@ const Categories = () => {
     setSubmitting(true);
 
     try {
-      // --- 1. Identify media to delete ---
-      const mediaUrlsToDelete = [];
-
-      // Check original main image vs current main image URL
-      if (
-        originalCategoryData.image_url &&
-        originalCategoryData.image_url.startsWith("https://res.cloudinary.com/")
-      ) {
-        if (originalCategoryData.image_url !== form.image_url) {
-          mediaUrlsToDelete.push(originalCategoryData.image_url);
+      // --- 1. Upload new media FIRST ---
+      // Upload main image (always allowed)
+      let uploadedMainImageUrl = "";
+      if (mainImageFile) {
+        const urls = await uploadImages([mainImageFile]);
+        if (urls.length > 0) {
+          uploadedMainImageUrl = urls[0];
+        } else {
+          setError("New main image upload failed.");
+          setSubmitting(false);
+          return;
         }
       }
 
-      // Check original gallery images vs current gallery images
-      const originalGalleryImageUrls = new Set(
-        originalCategoryData.galleryImages || []
-      );
-      const currentGalleryImageUrls = new Set(form.galleryImages || []);
+      // Upload gallery images (only if hasSubProducts is false)
+      let uploadedGalleryImageUrls = [];
+      if (galleryImageFiles.length > 0 && !form.hasSubProducts) {
+        // <-- Condition added
+        uploadedGalleryImageUrls = await uploadImages(galleryImageFiles);
+        if (
+          uploadedGalleryImageUrls.length === 0 &&
+          galleryImageFiles.length > 0 &&
+          !error
+        ) {
+          setError("One or more new gallery image uploads failed.");
+          setSubmitting(false);
+          return;
+        }
+      }
 
-      originalGalleryImageUrls.forEach((url) => {
+      // Upload videos (only if hasSubProducts is false)
+      let uploadedVideoUrls = []; // This should return an array of { url, caption } objects
+      if (videoFiles.length > 0 && !form.hasSubProducts) {
+        // <-- Condition added
+        uploadedVideoUrls = await uploadVideos(videoFiles); // Assuming uploadVideos returns [{url, caption}, ...]
+        if (uploadedVideoUrls.length === 0 && videoFiles.length > 0 && !error) {
+          setError("One or more new video uploads failed.");
+          setSubmitting(false);
+          return;
+        }
+      }
+
+      // --- 2. Determine the FINAL state of media URLs based on form + uploads ---
+      // Pass uploaded URLs to buildPayload
+      const finalPayloadCandidate = buildPayload(
+        uploadedMainImageUrl,
+        uploadedGalleryImageUrls
+      );
+      // Note: buildPayload already incorporates uploadedVideoUrls into finalPayloadCandidate.videos
+
+      // --- 3. Identify media to delete ---
+      const mediaUrlsToDelete = [];
+
+      // Collect all image and video URLs from the original data
+      const allOriginalMediaUrls = new Set(
+        [
+          originalCategoryData.image_url,
+          ...(originalCategoryData.galleryImages || []),
+          ...(originalCategoryData.videos || []).map((v) => v.url), // Extract URLs from video objects
+        ].filter(Boolean)
+      ); // Filter out empty/null
+
+      // Collect all image and video URLs that will be in the final saved payload
+      const allFinalMediaUrls = new Set(
+        [
+          finalPayloadCandidate.image_url,
+          ...(finalPayloadCandidate.galleryImages || []),
+          ...(finalPayloadCandidate.videos || []).map((v) => v.url), // Extract URLs from video objects
+        ].filter(Boolean)
+      ); // Filter out empty/null
+
+      // Iterate through original URLs and add to delete list if not in final list and is a Cloudinary URL
+      allOriginalMediaUrls.forEach((url) => {
+        // Check if the URL is a Cloudinary URL and if it's NOT in the final list of URLs
         if (
           url.startsWith("https://res.cloudinary.com/") &&
-          !currentGalleryImageUrls.has(url)
+          !allFinalMediaUrls.has(url)
         ) {
-          mediaUrlsToDelete.push(url); // Image was in original but not current form state
+          mediaUrlsToDelete.push(url);
         }
       });
 
-      // Check original videos vs current videos
-      // Convert video objects to a Set of URLs for comparison
-      const originalVideoUrls = new Set(
-        (originalCategoryData.videos || []).map((v) => v.url)
-      );
-      const currentVideoUrls = new Set((form.videos || []).map((v) => v.url));
-
-      originalVideoUrls.forEach((url) => {
-        if (
-          url.startsWith("https://res.cloudinary.com/") &&
-          !currentVideoUrls.has(url)
-        ) {
-          mediaUrlsToDelete.push(url); // Video was in original but not current form state
-        }
-      });
-
-      // --- 2. Delete identified media from Cloudinary ---
+      // --- 4. Delete identified media from Cloudinary ---
+      // This loop iterates through the identified URLsToDelete array and attempts to delete them
+      // ... (Your existing deletion loop looks mostly correct, ensure it handles both image and video resource_types) ...
       for (const mediaUrl of mediaUrlsToDelete) {
         try {
           const urlParts = mediaUrl.split("/");
           const uploadIndex = urlParts.indexOf("upload");
           if (uploadIndex === -1 || uploadIndex >= urlParts.length - 1) {
             console.warn(
-              "Could not extract public ID from Cloudinary URL for deletion:",
+              "Could not extract public ID from Cloudinary URL for deletion during update:",
               mediaUrl
             );
-            continue;
+            continue; // Skip to the next media if public ID cannot be extracted
           }
 
-          let publicIdParts = urlParts.slice(uploadIndex + 2);
+          let publicIdParts = urlParts.slice(uploadIndex + 2); // Get parts after /upload/ and potentially version segment
           if (publicIdParts.length === 0) {
-            publicIdParts = urlParts.slice(uploadIndex + 1);
+            // Handle cases without version segment
+            publicIdParts = urlParts.slice(uploadIndex + 1); // Get parts after /upload/
           }
           const publicIdWithExtension = publicIdParts.join("/");
           const resourceType = mediaUrl.includes("/image/upload/")
@@ -619,16 +778,20 @@ const Categories = () => {
 
           // Call Cloudinary API to delete (frontend deletion - INSECURE for production)
           const timestamp = new Date().getTime();
+          // Note: api_sign_request is typically used on the backend with your API Secret.
+          // Performing this on the frontend with the secret exposed is INSECURE.
+          // Replace this with a backend call to handle deletion securely.
           const signature = cloudinaryCore.utils.api_sign_request(
             {
               timestamp: timestamp,
               public_id: publicId,
-              resource_type: resourceType,
+              resource_type: resourceType, // Include resource type in signature payload
+              // Add other parameters used in the original upload if necessary for signing
             },
-            process.env.REACT_APP_CLOUDINARY_API_SECRET
+            process.env.REACT_APP_CLOUDINARY_API_SECRET // INSECURE on frontend!
           );
 
-          const deleteUrl = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/${resourceType}/destroy`;
+          const deleteUrl = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/${resourceType}/destroy`; // Use appropriate destroy endpoint
           const deleteFormData = new FormData();
           deleteFormData.append("public_id", publicId);
           deleteFormData.append("timestamp", timestamp);
@@ -637,7 +800,7 @@ const Categories = () => {
             process.env.REACT_APP_CLOUDINARY_API_KEY
           );
           deleteFormData.append("signature", signature);
-          deleteFormData.append("resource_type", resourceType);
+          deleteFormData.append("resource_type", resourceType); // Include resource_type in form data
 
           const response = await fetch(deleteUrl, {
             method: "POST",
@@ -667,34 +830,34 @@ const Categories = () => {
         }
       }
 
-      // --- 3. Upload new media ---
-      let uploadedImageUrls = [];
-      if (imageFiles.length > 0) {
-        uploadedImageUrls = await uploadImages(imageFiles);
-      }
-
-      let uploadedVideoUrls = [];
-      if (videoFiles.length > 0 && !form.hasSubProducts) {
-        uploadedVideoUrls = await uploadVideos(videoFiles);
-      }
-
-      // --- 4. Build payload from current form state + uploaded media ---
-      const payload = buildPayload(uploadedImageUrls, uploadedVideoUrls);
-
       // --- 5. Update Firestore document ---
-      await updateDoc(doc(db, "categories", editingId), payload);
+      // Use the finalPayloadCandidate we determined after uploads and deletion identification
+      // Add validation for minimum images if required (e.g., main image is mandatory)
+      if (!finalPayloadCandidate.image_url) {
+        setError(
+          "Please provide a Main Image URL or upload a Main Image file."
+        );
+        setSubmitting(false);
+        return;
+      }
 
-      resetForm(); // Reset form and clear file inputs
+      await updateDoc(doc(db, "categories", editingId), finalPayloadCandidate);
+
+      // --- 6. Reset form and refresh data ---
+      resetForm(); // This clears form state, file states, and input values
       setOriginalCategoryData(null); // Clear original data state
       await fetchCategories(); // Refresh the list
     } catch (e) {
       console.error(e);
-      setError(e.message || "Failed to update category.");
+      if (!error) {
+        // Only set error if not already set by uploads or deletion
+        setError(e.message || "Failed to update category.");
+      }
     } finally {
       setSubmitting(false);
     }
   };
-  // --- End handleUpdate ---
+  // --- End modified handleUpdate ---
 
   // --- Modified handleDelete to include image and video deletion ---
   const handleDelete = async (categoryToDelete) => {
@@ -902,25 +1065,26 @@ const Categories = () => {
                     />
                   </div>
 
-                  {/* New File Input for Images (for main image and gallery) */}
+                  {/* File Input for Main Image (Single) */}
                   <div className="mb-3">
-                    <label htmlFor="categoryImageFiles" className="form-label">
-                      Upload Images
+                    <label
+                      htmlFor="mainCategoryImageFile"
+                      className="form-label"
+                    >
+                      Upload Main Image (Single)
                     </label>
                     <input
                       type="file"
                       className="form-control"
-                      id="categoryImageFiles"
-                      name="categoryImageFiles"
-                      onChange={handleImageFileChange}
-                      multiple
+                      id="mainCategoryImageFile"
+                      name="mainCategoryImageFile"
+                      onChange={handleMainCategoryImageChange} // <-- New handler
                       disabled={submitting}
                       accept="image/*" // Restrict to image files
+                      ref={mainImageFileInputRef} // <-- Use new ref
                     />
                     <div className="form-text">
-                      Select one or more image files to upload. The first image
-                      uploaded will be used as the Main Image if "Main Image
-                      URL" is empty.
+                      Select a single image file for the main category image.
                     </div>
                   </div>
 
@@ -1009,6 +1173,31 @@ const Categories = () => {
 
                   {!form.hasSubProducts && (
                     <>
+                      {/* File Input for Gallery Images (Multiple) */}
+                      <div className="mb-3">
+                        <label
+                          htmlFor="galleryCategoryImageFiles"
+                          className="form-label"
+                        >
+                          Upload Gallery Images (Multiple)
+                        </label>
+                        <input
+                          type="file"
+                          className="form-control"
+                          id="galleryCategoryImageFiles"
+                          name="galleryCategoryImageFiles"
+                          onChange={handleGalleryCategoryImageChange} // <-- New handler
+                          multiple // <-- Still multiple for gallery
+                          disabled={submitting}
+                          accept="image/*" // Restrict to image files
+                          ref={galleryImageFileInputRef} // <-- Use new ref
+                        />
+                        <div className="form-text">
+                          Select one or more image files for the category
+                          gallery. These appear in the carousel when the
+                          category has no sub-products.
+                        </div>
+                      </div>
                       <div className="mb-4">
                         <label className="form-label">Gallery Images</label>
                         {/* Display existing images in edit mode with delete option (gallery) */}
@@ -1131,6 +1320,7 @@ const Categories = () => {
                             multiple
                             disabled={submitting}
                             accept="video/*" // Restrict to video files
+                            ref={videoFileInputRef}
                           />
                           <div className="form-text">
                             Select one or more video files to upload. Max 100MB

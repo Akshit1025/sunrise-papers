@@ -29,7 +29,7 @@ export default async function handler(req, res) {
 <div style="max-width:600px;margin:0 auto;font-family:Arial,Helvetica,sans-serif;color:#333;border:1px solid #eee;border-radius:12px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,0.1)">
   <!-- Header -->
   <div style="background:#004aad;padding:20px;text-align:center;">
-    <img src="https://sunrise-papers.vercel.app/images/logo.png" alt="Sunrise Papers" style="max-height:60px;margin-bottom:10px;" />
+    <img src="https://res.cloudinary.com/dzrv3ssy5/image/upload/v1756204861/logo_xweqc3.png" alt="Sunrise Papers" style="max-height:60px;margin-bottom:10px;" />
     <h1 style="color:#fff;margin:0;font-size:22px;">Sunrise Papers</h1>
   </div>
 

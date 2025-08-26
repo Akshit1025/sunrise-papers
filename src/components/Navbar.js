@@ -104,7 +104,7 @@ const Navbar = () => {
             to="/" // Navigate to home page
           >
             <img
-              src="/images/logo-no-bg.png" // Path to your logo image in public/images/
+              src="https://res.cloudinary.com/dzrv3ssy5/image/upload/v1756204861/logo-no-bg_hodk6e.png" // Path to your logo image in public/images/
               alt="Sunrise Papers Logo"
               style={{ height: "50px", marginRight: "10px" }} // Adjusted height
             />

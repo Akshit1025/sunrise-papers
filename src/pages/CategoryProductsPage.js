@@ -87,6 +87,7 @@ const CategoryProductsPage = ({ authReady }) => {
                 id: doc.id,
                 ...doc.data(),
               }));
+              fetchedProducts.sort((a, b) => (a.order || 0) - (b.order || 0) || a.name.localeCompare(b.name));
               setProducts(fetchedProducts);
             } else {
               setProducts([]);

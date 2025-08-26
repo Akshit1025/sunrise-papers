@@ -101,7 +101,7 @@ const App = () => {
       <div className={`preloader-container ${fadeOut ? "fade-out" : ""}`}>
         <div className="loader">
           <img
-            src="https://sunrise-papers.vercel.app/images/logo-no-shadow.png"
+            src="https://res.cloudinary.com/dzrv3ssy5/image/upload/v1756204498/My%20Brand/logo-no-shadow_rne0gz.png"
             alt="Sunrise Papers Logo"
             className="loader-logo"
           />

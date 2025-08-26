@@ -29,7 +29,7 @@ const AdminApp = () => {
           <div className="container-fluid">
             <Link className="navbar-brand h3 m-0" to="/admin">
               <img
-                src="https://sunrise-papers.vercel.app/images/logo-no-bg.png"
+                src="https://res.cloudinary.com/dzrv3ssy5/image/upload/v1756204861/logo-no-bg_hodk6e.png"
                 alt="Official logo"
               />
               Admin Panel
@@ -203,24 +203,23 @@ const AdminApp = () => {
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Routes>
       </div>
-        <footer>
-          <div className="text-center py-3 bg-light text-muted small">
-            {" "}
-            {/* Using Bootstrap classes for basic styling */}
-            &copy; {new Date().getFullYear()} Sunrise Papers. All Rights
-            Reserved.
-            <br />
-            Made by {/* Added space */}
-            <a
-              href="https://instagram.com/akshitthecoder"
-              target="_blank" // Open in a new tab
-              rel="noopener noreferrer" // Security best practice for target="_blank"
-              className="text-decoration-none text-muted" // Style the link to match text
-            >
-              Akshit Gupta
-            </a>
-          </div>
-        </footer>
+      <footer>
+        <div className="text-center py-3 bg-light text-muted small">
+          {" "}
+          {/* Using Bootstrap classes for basic styling */}
+          &copy; {new Date().getFullYear()} Sunrise Papers. All Rights Reserved.
+          <br />
+          Made by {/* Added space */}
+          <a
+            href="https://instagram.com/akshitthecoder"
+            target="_blank" // Open in a new tab
+            rel="noopener noreferrer" // Security best practice for target="_blank"
+            className="text-decoration-none text-muted" // Style the link to match text
+          >
+            Akshit Gupta
+          </a>
+        </div>
+      </footer>
     </div>
   );
 };
