@@ -416,6 +416,11 @@ const Products = () => {
 
       const finalPayloadCandidate = buildPayload(uploadedMainImageUrl, uploadedGalleryImageUrls);
 
+      const allFinalImageUrls = new Set([
+        finalPayloadCandidate.image_url,
+        ...(finalPayloadCandidate.image_gallery || []),
+      ].filter(Boolean));
+
       const imageUrlsToDelete = [];
 
       const allOriginalImageUrls = new Set([
