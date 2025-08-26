@@ -506,7 +506,7 @@ const Products = () => {
         return;
       }
 
-      await updateDoc(dic(db, "products", editingId), finalPayloadCandidate);
+      await updateDoc(doc(db, "products", editingId), finalPayloadCandidate);
 
       resetForm();
       await fetchProducts();
