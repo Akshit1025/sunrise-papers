@@ -404,7 +404,7 @@ const Products = () => {
         }
       }
 
-      let uploadedGalleryImageUrls = await uploadImages(galleryImageFiles);
+      let uploadedGalleryImageUrls = [];
       if (galleryImageFiles.length > 0) {
         uploadedGalleryImageUrls = await uploadImages(galleryImageFiles);
         if (uploadedGalleryImageUrls.length === 0 && galleryImageFiles.length > 0 && !error) {
