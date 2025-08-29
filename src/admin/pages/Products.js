@@ -12,14 +12,35 @@ import { db } from "../../firebaseConfig"; // Ensure storage is not imported her
 import RequireAdmin from "../auth/RequireAdmin"; // Assuming you have this for protection
 
 // Import Cloudinary
-import { Cloudinary } from "cloudinary-core"; // Assuming you'll use core for now
+// import { Cloudinary } from "cloudinary-core"; // Assuming you'll use core for now
 
-const cloudinaryCore = new Cloudinary({
-  cloud_name: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.REACT_APP_CLOUDINARY_API_KEY,
-  api_secret: process.env.REACT_APP_CLOUDINARY_API_SECRET, // INSECURE for frontend in production
-  secure: true, // Use HTTPS
-});
+// const cloudinaryCore = new Cloudinary({
+//   cloud_name: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
+//   api_key: process.env.REACT_APP_CLOUDINARY_API_KEY,
+//   api_secret: process.env.REACT_APP_CLOUDINARY_API_SECRET, // INSECURE for frontend in production
+//   secure: true, // Use HTTPS
+// });
+
+// --- New Helper Function for Cloudinary Signature ---
+async function generateCloudinarySignature(paramsToSign, apiSecret) {
+  const sortedKeys = Object.keys(paramsToSign).sort();
+  let stringToSign = sortedKeys
+    .map((key) => `${key}=${paramsToSign[key]}`)
+    .join("&");
+  stringToSign += apiSecret;
+
+  const encoder = new TextEncoder();
+  const data = encoder.encode(stringToSign);
+  const hashBuffer = await crypto.subtle.digest("SHA-1", data);
+
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
+  return hashHex;
+}
+// --- End Helper Function ---
 
 const slugify = (text) =>
   text
@@ -173,19 +194,19 @@ const Products = () => {
     }));
   };
 
-  const removeGallery = (index) => {
-    setForm((prev) => {
-      const gallery = prev.image_gallery.filter((_, i) => i !== index);
-      return { ...prev, image_gallery: gallery };
-    });
-  };
+  // const removeGallery = (index) => {
+  //   setForm((prev) => {
+  //     const gallery = prev.image_gallery.filter((_, i) => i !== index);
+  //     return { ...prev, image_gallery: gallery };
+  //   });
+  // };
 
   const resetForm = () => {
     setForm(initialForm);
     setMode("create");
     setEditingId(null);
     setMainImageFile(null);
-    setGalleryImageFiles([]); 
+    setGalleryImageFiles([]);
     setError("");
     setOriginalProductData(null); // Clear original data
 
@@ -198,10 +219,9 @@ const Products = () => {
     }
   };
 
-
   // --- Modified uploadImages function to use Cloudinary ---
   const uploadImages = async (files) => {
-    const imageUrls = [];
+    // const imageUrls = [];
     const uploadPromises = Array.from(files).map((file) => {
       // Using a direct upload URL to Cloudinary.
       // Replace 'YOUR_CLOUD_NAME' with your actual Cloudinary cloud name.
@@ -361,7 +381,6 @@ const Products = () => {
     }
   };
 
-
   const startEdit = (p) => {
     setMode("edit");
     setEditingId(p.id);
@@ -382,6 +401,68 @@ const Products = () => {
     setError("");
   };
 
+  const deleteFromCloudinary = async (imageUrl) => {
+    try {
+      const pathWithVersion = imageUrl.split("/upload/")[1]?.split("?")[0];
+      if (!pathWithVersion) {
+        console.warn("Could not extract path from URL:", imageUrl);
+        return;
+      }
+
+      // **START CORRECTION**
+      // Correctly parse the public_id by removing the version number if it exists
+      const pathParts = pathWithVersion.split("/");
+      if (pathParts[0].match(/^v\d+$/)) {
+        pathParts.shift(); // Remove the version part (e.g., v123456)
+      }
+      const publicIdWithExtension = pathParts.join("/");
+      // **END CORRECTION**
+
+      const publicId = publicIdWithExtension.substring(
+        0,
+        publicIdWithExtension.lastIndexOf(".")
+      );
+
+      const timestamp = new Date().getTime();
+      const paramsToSign = {
+        public_id: publicId,
+        timestamp,
+      };
+
+      const signature = await generateCloudinarySignature(
+        paramsToSign,
+        process.env.REACT_APP_CLOUDINARY_API_SECRET
+      );
+
+      const formData = new FormData();
+      formData.append("public_id", publicId);
+      formData.append("timestamp", timestamp);
+      formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY);
+      formData.append("signature", signature);
+
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/destroy`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const data = await res.json();
+      if (data.result !== "ok" && data.result !== "not found") {
+        throw new Error(
+          `Cloudinary deletion failed for ${publicId}: ${
+            data.error?.message || "Unknown error"
+          }`
+        );
+      } else {
+        console.log(`Cloudinary deletion successful for ${publicId}`);
+      }
+    } catch (e) {
+      console.error(`Error in deleteFromCloudinary for URL ${imageUrl}:`, e);
+      throw e;
+    }
+  };
+
   const handleUpdate = async (e) => {
     e.preventDefault();
     if (!editingId || !originalProductData) return;
@@ -391,7 +472,7 @@ const Products = () => {
     if (!form.category_slug.trim()) return setError("Category is required");
     setSubmitting(true);
 
-    try{
+    try {
       let uploadedMainImageUrl = "";
       if (mainImageFile) {
         const urls = await uploadImages([mainImageFile]);
@@ -407,99 +488,52 @@ const Products = () => {
       let uploadedGalleryImageUrls = [];
       if (galleryImageFiles.length > 0) {
         uploadedGalleryImageUrls = await uploadImages(galleryImageFiles);
-        if (uploadedGalleryImageUrls.length === 0 && galleryImageFiles.length > 0 && !error) {
+        if (
+          uploadedGalleryImageUrls.length === 0 &&
+          galleryImageFiles.length > 0 &&
+          !error
+        ) {
           setError("One or more new gallery image uploads failed.");
           setSubmitting(false);
           return;
         }
       }
 
-      const finalPayloadCandidate = buildPayload(uploadedMainImageUrl, uploadedGalleryImageUrls);
+      const finalPayloadCandidate = buildPayload(
+        uploadedMainImageUrl,
+        uploadedGalleryImageUrls
+      );
 
-      const allFinalImageUrls = new Set([
-        finalPayloadCandidate.image_url,
-        ...(finalPayloadCandidate.image_gallery || []),
-      ].filter(Boolean));
+      const allFinalImageUrls = new Set(
+        [
+          finalPayloadCandidate.image_url,
+          ...(finalPayloadCandidate.image_gallery || []),
+        ].filter(Boolean)
+      );
 
       const imageUrlsToDelete = [];
 
-      const allOriginalImageUrls = new Set([
-        originalProductData.image_url,
-        ...(originalProductData.image_gallery || []),
-      ].filter(Boolean));
+      const allOriginalImageUrls = new Set(
+        [
+          originalProductData.image_url,
+          ...(originalProductData.image_gallery || []),
+        ].filter(Boolean)
+      );
 
-      allOriginalImageUrls.forEach(url => {
-        if (url.startsWith("https://res.cloudinary.com/") && !allFinalImageUrls.has(url)) {
+      allOriginalImageUrls.forEach((url) => {
+        if (
+          url.startsWith("https://res.cloudinary.com/") &&
+          !allFinalImageUrls.has(url)
+        ) {
           imageUrlsToDelete.push(url);
         }
       });
 
-      for (const imageUrl of imageUrlsToDelete) {
-        try {
-          const urlParts = imageUrl.split("/");
-          const uploadIndex = urlParts.indexOf("upload");
-          if (uploadIndex === -1 || uploadIndex >= urlParts.length - 1) {
-            console.warn(
-              "Could not extract public ID from Cloudinary URL for deletion during update:",
-              imageUrl
-            );
-            continue; // Skip to the next image if public ID cannot be extracted
-          }
-          let publicIdParts = urlParts.slice(uploadIndex + 2); // Get parts after /upload/ and potentially version segment
-           if (publicIdParts.length === 0) {
-              // Handle cases without version segment
-              publicIdParts = urlParts.slice(uploadIndex + 1); // Get parts after /upload/
-           }
+      // Delete old images from Cloudinary using the new helper function
+      await Promise.all(
+        imageUrlsToDelete.map((url) => deleteFromCloudinary(url))
+      );
 
-          // Join the parts and remove the file extension
-          const publicId = publicIdParts.join("/").split(".")[0];
-
-          // Call Cloudinary API to delete (frontend deletion - INSECURE for production)
-          const timestamp = new Date().getTime();
-          // Note: api_sign_request is typically used on the backend with your API Secret.
-          // Performing this on the frontend with the secret exposed is INSECURE.
-          // Replace this with a backend call to handle deletion securely.
-          const signature = cloudinaryCore.utils.api_sign_request(
-            {
-              timestamp: timestamp,
-              public_id: publicId,
-               resource_type: "image", // Assuming all are images, add resource_type
-              // Add other parameters used in the original upload if necessary for signing
-            },
-            process.env.REACT_APP_CLOUDINARY_API_SECRET // INSECURE on frontend!
-          );
-
-          const deleteUrl = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/destroy`;
-          const deleteFormData = new FormData();
-          deleteFormData.append("public_id", publicId);
-          deleteFormData.append("timestamp", timestamp);
-          deleteFormData.append(
-            "api_key",
-            process.env.REACT_APP_CLOUDINARY_API_KEY
-          );
-          deleteFormData.append("signature", signature);
-           deleteFormData.append("resource_type", "image"); // Include resource_type
-
-          const response = await fetch(deleteUrl, {
-            method: "POST",
-            body: deleteFormData,
-          });
-
-          const data = await response.json();
-
-           if (data.result === "ok" || data.result === "not found") {
-            console.log(
-              `Cloudinary deletion result for ${publicId}:`,
-              data.result
-            );
-          } else {
-            console.error(`Cloudinary deletion failed for ${publicId}:`, data);
-            // Decide how to handle failures here - maybe log and continue?
-          }
-        } catch (e) {
-          console.error(`Error deleting image ${imageUrl} from Cloudinary during update:`, e);
-        }
-      }
       if (!finalPayloadCandidate.image_url) {
         setError("Plese provide a Main Image URL or upload a Main Image File.");
         setSubmitting(false);
@@ -510,7 +544,7 @@ const Products = () => {
 
       resetForm();
       await fetchProducts();
-    } catch (e){
+    } catch (e) {
       console.error(e);
       if (!error) {
         setError(e.message || "Failed to update product.");
@@ -518,7 +552,7 @@ const Products = () => {
     } finally {
       setSubmitting(false);
     }
-  }
+  };
 
   // --- Modified handleDeleteImage function to use Cloudinary ---
   const handleDeleteImage = async (imageUrlToDelete, productId) => {
@@ -582,68 +616,10 @@ const Products = () => {
         ...(productToDelete.image_gallery || []),
       ].filter(Boolean);
 
-      // Delete images from Cloudinary first
-      for (const imageUrl of imageUrlsToDelete) {
-        try {
-          const urlParts = imageUrl.split("/");
-          const uploadIndex = urlParts.indexOf("upload");
-          if (uploadIndex === -1 || uploadIndex >= urlParts.length - 1) {
-            console.warn(
-              "Could not extract public ID from Cloudinary URL for deletion:",
-              imageUrl
-            );
-            continue; // Skip to the next image if public ID cannot be extracted
-          }
-          let publicIdParts = urlParts.slice(uploadIndex + 2); // Get parts after /upload/ and version
-          if (publicIdParts.length === 0) {
-            // Handle cases without version
-            publicIdParts = urlParts.slice(uploadIndex + 1); // Get parts after /upload/
-          }
-          const publicId = publicIdParts.join("/").split(".")[0]; // Join parts and get the part before the extension
-
-          // Call Cloudinary API to delete the image
-          // Again, consider a backend for secure deletion in production
-          const timestamp = new Date().getTime();
-          const signature = cloudinaryCore.utils.api_sign_request(
-            {
-              timestamp: timestamp,
-              public_id: publicId,
-              // Add other parameters used in the original upload if necessary for signing
-            },
-            process.env.REACT_APP_CLOUDINARY_API_SECRET
-          );
-
-          const deleteUrl = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/destroy`;
-          const deleteFormData = new FormData();
-          deleteFormData.append("public_id", publicId);
-          deleteFormData.append("timestamp", timestamp);
-          deleteFormData.append(
-            "api_key",
-            process.env.REACT_APP_CLOUDINARY_API_KEY
-          );
-          deleteFormData.append("signature", signature);
-
-          const response = await fetch(deleteUrl, {
-            method: "POST",
-            body: deleteFormData,
-          });
-
-          const data = await response.json();
-
-          if (data.result === "ok" || data.result === "not found") {
-            console.log(
-              `Cloudinary deletion result for ${publicId}:`,
-              data.result
-            );
-          } else {
-            console.error(`Cloudinary deletion failed for ${publicId}:`, data);
-            // Continue with other images and product deletion even if one image fails
-          }
-        } catch (e) {
-          console.error(`Error deleting image ${imageUrl} from Cloudinary:`, e);
-          // Continue with other images and product deletion even if one image fails
-        }
-      }
+      // Delete images from Cloudinary first using the new helper function
+      await Promise.all(
+        imageUrlsToDelete.map((url) => deleteFromCloudinary(url))
+      );
 
       // Delete product document from Firestore
       await deleteDoc(doc(db, "products", productToDelete.id));
@@ -847,7 +823,7 @@ const Products = () => {
                             >
                               <img
                                 src={imageUrl}
-                                alt={`Product Image ${index + 1}`}
+                                alt={`Product Gallery ${index + 1}`}
                                 className="img-thumbnail"
                                 style={{
                                   width: "80px",

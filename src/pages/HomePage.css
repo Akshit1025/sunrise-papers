@@ -34,7 +34,12 @@
   padding-bottom: 80px;
   padding-top: 80px;
   /* Replaced rgba(0, 0, 0, 0.3) with rgba of --royal-dark-brown */
-  background-color: rgba(74, 44, 42, 0.3); /* Updated to royal dark brown with opacity */
+  background-color: rgba(
+    74,
+    44,
+    42,
+    0.3
+  ); /* Updated to royal dark brown with opacity */
   text-align: center;
   width: 100%;
   max-width: 800px;
@@ -91,11 +96,11 @@
 }
 
 .carousel-control-prev-icon::before {
-  content: '\276E';
+  content: "\276E";
 }
 
 .carousel-control-next-icon::before {
-  content: '\276F';
+  content: "\276F";
 }
 
 .carousel-control-prev:hover .carousel-control-prev-icon,
@@ -190,7 +195,6 @@
 /* The styles below for product-card are actually imported via @import "./pages/ProductsPage.css" in App.css */
 /* However, if specific overrides for homepage product cards were needed, they would go here. */
 /* For now, they rely on the imported ProductsPage.css and global variables. */
-
 
 /* Responsive adjustments for HomePage */
 @media (max-width: 767.98px) {

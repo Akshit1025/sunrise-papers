@@ -89,7 +89,9 @@ const ProductDetailPage = ({ authReady }) => {
           }
           setError(null);
         } else {
-          setError(`Product "${productSlug}" not found or is currently hidden.`);
+          setError(
+            `Product "${productSlug}" not found or is currently hidden.`
+          );
           setFormDefinitions({});
           setLoadingDefinitions(false);
         }
@@ -111,7 +113,7 @@ const ProductDetailPage = ({ authReady }) => {
       setLoading(true);
       setLoadingDefinitions(true);
     }
-  }, [authReady, productSlug, db]);
+  }, [authReady, productSlug]);
 
   const handleShowQuoteModal = () => setShowQuoteModal(true);
   const handleCloseQuoteModal = () => {
@@ -237,17 +239,19 @@ const ProductDetailPage = ({ authReady }) => {
                   >
                     <i className="fas fa-th-large me-2"></i> View All Categories
                   </Link>
-                  {product && product.category_slug && formDefinitions[product.category_slug] && (
-                    <div className="mt-4 text-center">
-                      <button
-                        type="button"
-                        className="btn btn-outline-dark btn-lg rounded-pill product-back-btn"
-                        onClick={handleShowQuoteModal}
-                      >
-                        Get a Quote
-                      </button>
-                    </div>
-                  )}
+                  {product &&
+                    product.category_slug &&
+                    formDefinitions[product.category_slug] && (
+                      <div className="mt-4 text-center">
+                        <button
+                          type="button"
+                          className="btn btn-outline-dark btn-lg rounded-pill product-back-btn"
+                          onClick={handleShowQuoteModal}
+                        >
+                          Get a Quote
+                        </button>
+                      </div>
+                    )}
                 </div>
               </div>
             </div>

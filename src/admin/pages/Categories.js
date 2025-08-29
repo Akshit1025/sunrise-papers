@@ -12,18 +12,42 @@ import { db } from "../../firebaseConfig"; // Assuming db is exported from here
 import RequireAdmin from "../auth/RequireAdmin"; // Assuming you have this component
 
 // Import Cloudinary
-import { Cloudinary } from "cloudinary-core"; // Assuming you'll use core for utility functions
+// import { Cloudinary } from "cloudinary-core"; // Assuming you'll use core for utility functions
 
 // --- Cloudinary Configuration (Ensure these are in your .env) ---
 // WARNING: Storing API Secret directly in frontend code is INSECURE for production.
 // For production, consider using signed uploads where signature is generated on the backend.
-const cloudinaryCore = new Cloudinary({
-  cloud_name: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.REACT_APP_CLOUDINARY_API_KEY,
-  api_secret: process.env.REACT_APP_CLOUDINARY_API_SECRET, // INSECURE for frontend in production
-  secure: true, // Use HTTPS
-});
+// const cloudinaryCore = new Cloudinary({
+//   cloud_name: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
+//   api_key: process.env.REACT_APP_CLOUDINARY_API_KEY,
+//   api_secret: process.env.REACT_APP_CLOUDINARY_API_SECRET, // INSECURE for frontend in production
+//   secure: true, // Use HTTPS
+// });
 // --- End Cloudinary Configuration ---
+
+// --- Helper function for Cloudinary Signature ---
+async function generateCloudinarySignature(paramsToSign, apiSecret) {
+  // Sort parameters alphabetically by key
+  const sortedKeys = Object.keys(paramsToSign).sort();
+  let stringToSign = sortedKeys
+    .map((key) => `${key}=${paramsToSign[key]}`)
+    .join("&");
+  stringToSign += apiSecret;
+
+  // Use the SubtleCrypto API to generate the SHA-1 hash
+  const encoder = new TextEncoder();
+  const data = encoder.encode(stringToSign);
+  const hashBuffer = await crypto.subtle.digest("SHA-1", data);
+
+  // convert ArrayBuffer to hex string
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
+  return hashHex;
+}
+// --- End Helper Function ---
 
 const slugify = (text) =>
   text
@@ -212,7 +236,7 @@ const Categories = () => {
 
   // --- Cloudinary Image Upload Function (Similar to Products.js) ---
   const uploadImages = async (files) => {
-    const imageUrls = [];
+    // const imageUrls = [];
     const uploadPromises = Array.from(files).map((file) => {
       const formData = new FormData();
       formData.append("file", file);
@@ -260,7 +284,7 @@ const Categories = () => {
 
   // --- Video Upload Function ---
   const uploadVideos = async (files) => {
-    const videoUrls = [];
+    // const videoUrls = [];
     const uploadPromises = Array.from(files).map((file) => {
       const formData = new FormData();
       formData.append("file", file);
@@ -452,7 +476,6 @@ const Categories = () => {
     }
   };
 
-
   // --- Refined buildPayload function ---
   const buildPayload = (
     uploadedMainImageUrl = "",
@@ -567,10 +590,10 @@ const Categories = () => {
 
       // buildPayload now uses the separate uploaded image URLs and video URLs
       // buildPayload already handles not including gallery/videos if hasSubProducts is true
-      const payload = buildPayload(
-        uploadedMainImageUrl ? [uploadedMainImageUrl] : [],
-        uploadedGalleryImageUrls
-      );
+      // const payload = buildPayload(
+      //   uploadedMainImageUrl ? [uploadedMainImageUrl] : [],
+      //   uploadedGalleryImageUrls
+      // );
       // Correcting buildPayload call: main image URL is passed as a single string or empty string,
       // and gallery/video URLs are passed as arrays. Let's adjust buildPayload's signature again
       // to accept a single main image URL string and arrays for gallery/videos.
@@ -641,6 +664,76 @@ const Categories = () => {
     setError(""); // Clear any previous errors when starting edit
   };
 
+  // Reusabele Deletion Function
+  const deleteFromCloudinary = async (mediaUrl) => {
+    try {
+      const pathWithVersion = mediaUrl.split("/upload/")[1]?.split("?")[0];
+      if (!pathWithVersion) {
+        console.warn("Could not extract path from URL:", mediaUrl);
+        return;
+      }
+
+      // **START CORRECTION**
+      // Correctly parse the public_id by removing the version number if it exists
+      const pathParts = pathWithVersion.split("/");
+      if (pathParts[0].match(/^v\d+$/)) {
+        pathParts.shift(); // Remove the version part (e.g., v123456)
+      }
+      const publicIdWithExtension = pathParts.join("/");
+      // **END CORRECTION**
+
+      const publicId = publicIdWithExtension.substring(
+        0,
+        publicIdWithExtension.lastIndexOf(".")
+      );
+      const resourceType = mediaUrl.includes("/video/upload/")
+        ? "video"
+        : "image";
+
+      const timestamp = new Date().getTime();
+      // The resource_type needs to be part of the signature for videos
+      const paramsToSign = { public_id: publicId, timestamp };
+      if (resourceType === "video") {
+        paramsToSign.resource_type = resourceType;
+      }
+
+      const signature = await generateCloudinarySignature(
+        paramsToSign,
+        process.env.REACT_APP_CLOUDINARY_API_SECRET
+      );
+
+      const formData = new FormData();
+      formData.append("public_id", publicId);
+      formData.append("timestamp", timestamp);
+      formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY);
+      formData.append("signature", signature);
+      // Also send resource_type for videos
+      if (resourceType === "video") {
+        formData.append("resource_type", resourceType);
+      }
+
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/${resourceType}/destroy`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const data = await res.json();
+      if (data.result !== "ok" && data.result !== "not found") {
+        throw new Error(
+          `Cloudinary deletion failed for ${publicId}: ${
+            data.error?.message || "Unknown error"
+          }`
+        );
+      } else {
+        console.log(`Cloudinary deletion successful for ${publicId}`);
+      }
+    } catch (e) {
+      console.error(`Error in deleteFromCloudinary for URL ${mediaUrl}:`, e);
+      throw e;
+    }
+  };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -702,145 +795,30 @@ const Categories = () => {
       // Note: buildPayload already incorporates uploadedVideoUrls into finalPayloadCandidate.videos
 
       // --- 3. Identify media to delete ---
-      const mediaUrlsToDelete = [];
-
-      // Collect all image and video URLs from the original data
-      const allOriginalMediaUrls = new Set(
+      const originalMedia = new Set(
         [
           originalCategoryData.image_url,
           ...(originalCategoryData.galleryImages || []),
-          ...(originalCategoryData.videos || []).map((v) => v.url), // Extract URLs from video objects
+          ...(originalCategoryData.videos || []).map((v) => v.url),
         ].filter(Boolean)
-      ); // Filter out empty/null
+      );
 
-      // Collect all image and video URLs that will be in the final saved payload
-      const allFinalMediaUrls = new Set(
+      const finalMedia = new Set(
         [
           finalPayloadCandidate.image_url,
           ...(finalPayloadCandidate.galleryImages || []),
-          ...(finalPayloadCandidate.videos || []).map((v) => v.url), // Extract URLs from video objects
+          ...(finalPayloadCandidate.videos || []).map((v) => v.url),
         ].filter(Boolean)
-      ); // Filter out empty/null
+      );
 
-      // Iterate through original URLs and add to delete list if not in final list and is a Cloudinary URL
-      allOriginalMediaUrls.forEach((url) => {
-        // Check if the URL is a Cloudinary URL and if it's NOT in the final list of URLs
-        if (
-          url.startsWith("https://res.cloudinary.com/") &&
-          !allFinalMediaUrls.has(url)
-        ) {
-          mediaUrlsToDelete.push(url);
-        }
-      });
+      const mediaToDelete = [...originalMedia].filter(
+        (url) => !finalMedia.has(url)
+      );
 
-      // --- 4. Delete identified media from Cloudinary ---
-      // This loop iterates through the identified URLsToDelete array and attempts to delete them
-      // ... (Your existing deletion loop looks mostly correct, ensure it handles both image and video resource_types) ...
-      for (const mediaUrl of mediaUrlsToDelete) {
-        try {
-          const urlParts = mediaUrl.split("/");
-          const uploadIndex = urlParts.indexOf("upload");
-          if (uploadIndex === -1 || uploadIndex >= urlParts.length - 1) {
-            console.warn(
-              "Could not extract public ID from Cloudinary URL for deletion during update:",
-              mediaUrl
-            );
-            continue; // Skip to the next media if public ID cannot be extracted
-          }
-
-          let publicIdParts = urlParts.slice(uploadIndex + 2); // Get parts after /upload/ and potentially version segment
-          if (publicIdParts.length === 0) {
-            // Handle cases without version segment
-            publicIdParts = urlParts.slice(uploadIndex + 1); // Get parts after /upload/
-          }
-          const publicIdWithExtension = publicIdParts.join("/");
-          const resourceType = mediaUrl.includes("/image/upload/")
-            ? "image"
-            : mediaUrl.includes("/video/upload/")
-            ? "video"
-            : null;
-
-          if (!resourceType) {
-            console.warn(
-              "Could not determine resource type from Cloudinary URL:",
-              mediaUrl
-            );
-            continue;
-          }
-
-          const publicId =
-            resourceType === "video"
-              ? publicIdWithExtension.substring(
-                  0,
-                  publicIdWithExtension.lastIndexOf(".")
-                )
-              : publicIdWithExtension.split(".")[0];
-
-          // Call Cloudinary API to delete (frontend deletion - INSECURE for production)
-          const timestamp = new Date().getTime();
-          // Note: api_sign_request is typically used on the backend with your API Secret.
-          // Performing this on the frontend with the secret exposed is INSECURE.
-          // Replace this with a backend call to handle deletion securely.
-          const signature = cloudinaryCore.utils.api_sign_request(
-            {
-              timestamp: timestamp,
-              public_id: publicId,
-              resource_type: resourceType, // Include resource type in signature payload
-              // Add other parameters used in the original upload if necessary for signing
-            },
-            process.env.REACT_APP_CLOUDINARY_API_SECRET // INSECURE on frontend!
-          );
-
-          const deleteUrl = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/${resourceType}/destroy`; // Use appropriate destroy endpoint
-          const deleteFormData = new FormData();
-          deleteFormData.append("public_id", publicId);
-          deleteFormData.append("timestamp", timestamp);
-          deleteFormData.append(
-            "api_key",
-            process.env.REACT_APP_CLOUDINARY_API_KEY
-          );
-          deleteFormData.append("signature", signature);
-          deleteFormData.append("resource_type", resourceType); // Include resource_type in form data
-
-          const response = await fetch(deleteUrl, {
-            method: "POST",
-            body: deleteFormData,
-          });
-
-          const data = await response.json();
-
-          if (data.result === "ok" || data.result === "not found") {
-            console.log(
-              `Cloudinary deletion result for ${publicId} (${resourceType}):`,
-              data.result
-            );
-          } else {
-            console.error(
-              `Cloudinary deletion failed for ${publicId} (${resourceType}):`,
-              data
-            );
-            // Decide how to handle failures here - maybe log and continue?
-          }
-        } catch (e) {
-          console.error(
-            `Error deleting media ${mediaUrl} from Cloudinary during update:`,
-            e
-          );
-          // Decide how to handle failures here
-        }
-      }
+      // --- 4. Delete identified media from Cloudinary using the new function ---
+      await Promise.all(mediaToDelete.map((url) => deleteFromCloudinary(url)));
 
       // --- 5. Update Firestore document ---
-      // Use the finalPayloadCandidate we determined after uploads and deletion identification
-      // Add validation for minimum images if required (e.g., main image is mandatory)
-      if (!finalPayloadCandidate.image_url) {
-        setError(
-          "Please provide a Main Image URL or upload a Main Image file."
-        );
-        setSubmitting(false);
-        return;
-      }
-
       await updateDoc(doc(db, "categories", editingId), finalPayloadCandidate);
 
       // --- 6. Reset form and refresh data ---
@@ -870,107 +848,20 @@ const Categories = () => {
       const mediaUrlsToDelete = [
         categoryToDelete.image_url,
         ...(categoryToDelete.galleryImages || []),
-        ...(categoryToDelete.videos || []).map((v) => v.url), // Extract video URLs
+        ...(categoryToDelete.videos || []).map((v) => v.url),
       ].filter(Boolean);
 
-      // Delete media from Cloudinary first
-      for (const mediaUrl of mediaUrlsToDelete) {
-        try {
-          const urlParts = mediaUrl.split("/");
-          const uploadIndex = urlParts.indexOf("upload");
-          if (uploadIndex === -1 || uploadIndex >= urlParts.length - 1) {
-            console.warn(
-              "Could not extract public ID from Cloudinary URL for deletion:",
-              mediaUrl
-            );
-            continue; // Skip to the next media if public ID cannot be extracted
-          }
-
-          let publicIdParts = urlParts.slice(uploadIndex + 2); // Get parts after /upload/ and version
-          if (publicIdParts.length === 0) {
-            // Handle cases without version
-            publicIdParts = urlParts.slice(uploadIndex + 1); // Get parts after /upload/
-          }
-          const publicIdWithExtension = publicIdParts.join("/");
-          // Determine resource type (image or video)
-          const resourceType = mediaUrl.includes("/image/upload/")
-            ? "image"
-            : mediaUrl.includes("/video/upload/")
-            ? "video"
-            : null;
-
-          if (!resourceType) {
-            console.warn(
-              "Could not determine resource type from Cloudinary URL:",
-              mediaUrl
-            );
-            continue;
-          }
-
-          // Extract public ID without extension for video
-          const publicId =
-            resourceType === "video"
-              ? publicIdWithExtension.substring(
-                  0,
-                  publicIdWithExtension.lastIndexOf(".")
-                )
-              : publicIdWithExtension.split(".")[0]; // Get the part before the extension for images
-
-          // Call Cloudinary API to delete the media (Using simplified frontend deletion - INSECURE for production)
-          const timestamp = new Date().getTime();
-          const signature = cloudinaryCore.utils.api_sign_request(
-            {
-              timestamp: timestamp,
-              public_id: publicId,
-              resource_type: resourceType, // Include resource type in signature payload
-              // Add other parameters used in the original upload if necessary for signing
-            },
-            process.env.REACT_APP_CLOUDINARY_API_SECRET
-          );
-
-          const deleteUrl = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/${resourceType}/destroy`; // Use appropriate destroy endpoint
-          const deleteFormData = new FormData();
-          deleteFormData.append("public_id", publicId);
-          deleteFormData.append("timestamp", timestamp);
-          deleteFormData.append(
-            "api_key",
-            process.env.REACT_APP_CLOUDINARY_API_KEY
-          );
-          deleteFormData.append("signature", signature);
-          deleteFormData.append("resource_type", resourceType); // Include resource_type in form data
-
-          const response = await fetch(deleteUrl, {
-            method: "POST",
-            body: deleteFormData,
-          });
-
-          const data = await response.json();
-
-          if (data.result === "ok" || data.result === "not found") {
-            console.log(
-              `Cloudinary deletion result for ${publicId} (${resourceType}):`,
-              data.result
-            );
-          } else {
-            console.error(
-              `Cloudinary deletion failed for ${publicId} (${resourceType}):`,
-              data
-            );
-            // Continue with other media and category deletion even if one fails
-          }
-        } catch (e) {
-          console.error(`Error deleting media ${mediaUrl} from Cloudinary:`, e);
-          // Continue with other media and category deletion even if one fails
-        }
-      }
+      // Delete media from Cloudinary first using the new function
+      await Promise.all(
+        mediaUrlsToDelete.map((url) => deleteFromCloudinary(url))
+      );
 
       // Delete category document from Firestore
       await deleteDoc(doc(db, "categories", categoryToDelete.id));
+
       if (editingId === categoryToDelete.id) resetForm();
       await fetchCategories();
-      alert(
-        `Category "${categoryToDelete.name}" deleted successfully. Please remember to manually delete any associated products if they exist.`
-      );
+      alert(`Category "${categoryToDelete.name}" deleted successfully.`);
     } catch (e) {
       console.error(e);
       alert(e.message || "Failed to delete category.");
@@ -1129,7 +1020,7 @@ const Categories = () => {
                           <div className="position-relative me-2 mb-2">
                             <img
                               src={form.image_url}
-                              alt="Main Category Image"
+                              alt="Main Category"
                               className="img-thumbnail"
                               style={{
                                 width: "80px",
@@ -1216,7 +1107,7 @@ const Categories = () => {
                                   >
                                     <img
                                       src={imageUrl}
-                                      alt={`Gallery Image ${index + 1}`}
+                                      alt={`Gallery ${index + 1}`}
                                       className="img-thumbnail"
                                       style={{
                                         width: "80px",

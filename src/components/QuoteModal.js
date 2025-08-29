@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./QuoteModal.css";
-import {
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 // Import db only if you still need it for fetching foodGradeProducts, otherwise remove
 import { db } from "../firebaseConfig";
 
@@ -93,7 +87,7 @@ const QuoteModal = ({
     } else {
       setFoodGradeProducts([]); // Clear products if modal closed or criteria not met
     }
-  }, [show, formDefinition, loadingDefinition, category_slug, db]); // Depend on relevant props and db
+  }, [show, formDefinition, loadingDefinition, category_slug]); // Depend on relevant props and db
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -344,7 +338,9 @@ const QuoteModal = ({
               <div>Loading form configuration...</div>
             ) : definitionError ? (
               <div className="alert alert-warning">{definitionError}</div>
-            ) : !formDefinition || !formDefinition.fields || formDefinition.fields.length === 0 ? (
+            ) : !formDefinition ||
+              !formDefinition.fields ||
+              formDefinition.fields.length === 0 ? (
               <div>No form configuration available for this category.</div>
             ) : (
               <form onSubmit={handleSubmit}>

@@ -100,7 +100,9 @@ const HomePage = () => {
         snapshot.forEach((doc) => {
           categoriesList.push({ id: doc.id, ...doc.data() });
         });
-        const visibleCategories = categoriesList.filter(c => c.isVisible === true);
+        const visibleCategories = categoriesList.filter(
+          (c) => c.isVisible === true
+        );
         // Sort categories by 'order' field, then by name if order is same/missing
         visibleCategories.sort(
           (a, b) =>
@@ -359,9 +361,7 @@ const HomePage = () => {
 
       {/* 3. Our Core Strengths Section - Use fetched content */}
       {loadingContent ? (
-        <div className="text-center py-5">
-          Loading ...
-        </div>
+        <div className="text-center py-5">Loading ...</div>
       ) : errorContent ? (
         <div className="alert alert-danger text-center message-box py-5">
           {errorContent}
@@ -417,9 +417,7 @@ const HomePage = () => {
       <section className="homepage-products-section py-5 bg-white">
         <div className="container">
           {loadingContent ? (
-            <div className="text-center py-5">
-              Loading ...
-            </div>
+            <div className="text-center py-5">Loading ...</div>
           ) : errorContent ? (
             <div className="alert alert-danger text-center message-box py-5">
               {errorContent}

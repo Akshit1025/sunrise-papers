@@ -2,52 +2,52 @@
 
 /* About Us Hero Section */
 .about-hero-section {
-    background: repeating-linear-gradient(
-        45deg,
-        var(--royal-light-beige), /* Updated */
-        var(--royal-light-beige) 10px, /* Updated */
-        #F0EAD6 10px, /* This was a light beige, keeping for subtle stripe variation */
-        #F0EAD6 20px /* This was a light beige, keeping for subtle stripe variation */
-    );
-    background-size: cover;
-    background-position: center;
-    height: 300px;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--royal-dark-brown); /* Updated */
-    text-shadow: 1px 1px 2px rgba(74, 44, 42, 0.2); /* Updated to royal dark brown rgba */
+  background: repeating-linear-gradient(
+    45deg,
+    var(--royal-light-beige),
+    /* Updated */ var(--royal-light-beige) 10px,
+    /* Updated */ #f0ead6 10px,
+    /* This was a light beige, keeping for subtle stripe variation */ #f0ead6
+      20px /* This was a light beige, keeping for subtle stripe variation */
+  );
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--royal-dark-brown); /* Updated */
+  text-shadow: 1px 1px 2px rgba(74, 44, 42, 0.2); /* Updated to royal dark brown rgba */
 }
 
 .about-hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
 }
 
 .about-hero-section .container {
-    z-index: 2;
+  z-index: 2;
 }
 
 .about-hero-title {
-    font-family: var(--font-georgia-heading);
-    font-size: 3.5em;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: var(--royal-dark-brown); /* Updated */
+  font-family: var(--font-georgia-heading);
+  font-size: 3.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--royal-dark-brown); /* Updated */
 }
 
 .about-hero-subtitle {
-    font-size: 1.5em;
-    color: var(--royal-medium-brown); /* Updated */
+  font-size: 1.5em;
+  color: var(--royal-medium-brown); /* Updated */
 }
-
 
 /* General Section Styles (applies to all main content sections) */
 .glance-at-sunrise-section,
@@ -55,48 +55,48 @@
 .company-profile-section,
 .why-us-section,
 .quality-assurance-section,
-.paper-philosophy-section { /* Added new section here */
-    padding: 80px 0; /* Default large screen padding */
+.paper-philosophy-section {
+  /* Added new section here */
+  padding: 80px 0; /* Default large screen padding */
 }
 
 .glance-at-sunrise-section,
 .company-profile-section,
 .why-us-section {
-    background-color: var(--royal-white); /* Updated */
+  background-color: var(--royal-white); /* Updated */
 }
 
 .our-team-section,
 .quality-assurance-section {
-    background-color: var(--royal-light-beige); /* Updated */
+  background-color: var(--royal-light-beige); /* Updated */
 }
-
 
 /* Specific list styles (values-list from previous version, reused here) */
 .values-list {
-    font-size: 1.05em;
-    line-height: 1.8;
+  font-size: 1.05em;
+  line-height: 1.8;
 }
 
 .values-list li {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .values-list i {
-    color: var(--royal-gold); /* Updated */
+  color: var(--royal-gold); /* Updated */
 }
 
 .company-info-list {
-    font-size: 1.05em;
-    line-height: 2;
+  font-size: 1.05em;
+  line-height: 2;
 }
 
 .company-info-list li {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 .company-info-list i {
-    color: var(--royal-gold); /* Updated */
-    width: 20px;
+  color: var(--royal-gold); /* Updated */
+  width: 20px;
 }
 
 /* Image specific sizing for smaller screens (when columns stack) */
@@ -104,98 +104,104 @@
 .our-team-section .img-fluid,
 .company-profile-section .img-fluid,
 .quality-assurance-section .img-fluid {
-    max-width: 80%;
-    display: block;
-    margin: 0 auto;
+  max-width: 80%;
+  display: block;
+  margin: 0 auto;
 }
 
 .company-profile-section .img-fluid {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 /* Quality assurance seal specific styling */
 .quality-seal-img {
-    max-width: 300px;
-    height: auto;
-    margin-top: 20px;
+  max-width: 300px;
+  height: auto;
+  margin-top: 20px;
 }
 
 /* Override Bootstrap's text-muted for the question circle icon in Why Us section */
 .why-us-section .fa-question-circle {
-    color: var(--royal-medium-brown) !important; /* Updated to a brown shade */
+  color: var(--royal-medium-brown) !important; /* Updated to a brown shade */
 }
 
 /* Leadership Quote Styling */
 .leadership-quote {
-    background-color: var(--royal-white); /* Light background for the quote */
-    border-left: 5px solid var(--royal-gold); /* Golden left border */
-    padding: 20px 25px;
-    margin: 30px 0;
-    font-style: italic;
-    color: var(--royal-dark-brown); /* Dark brown text for readability */
-    font-size: 1.2em;
-    line-height: 1.6;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(74, 44, 42, 0.08); /* Subtle shadow */
-    position: relative;
-    text-align: center; /* Center the quote text */
+  background-color: var(--royal-white); /* Light background for the quote */
+  border-left: 5px solid var(--royal-gold); /* Golden left border */
+  padding: 20px 25px;
+  margin: 30px 0;
+  font-style: italic;
+  color: var(--royal-dark-brown); /* Dark brown text for readability */
+  font-size: 1.2em;
+  line-height: 1.6;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(74, 44, 42, 0.08); /* Subtle shadow */
+  position: relative;
+  text-align: center; /* Center the quote text */
 }
 
 .leadership-quote::before {
-    content: '\201C'; /* Opening quote mark */
-    font-family: serif;
-    font-size: 4em;
-    color: var(--royal-light-gold); /* Light gold color for the large quote mark */
-    position: absolute;
-    top: 10px;
-    left: 15px;
-    opacity: 0.6;
-    line-height: 1;
-    z-index: 0;
+  content: "\201C"; /* Opening quote mark */
+  font-family: serif;
+  font-size: 4em;
+  color: var(
+    --royal-light-gold
+  ); /* Light gold color for the large quote mark */
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  opacity: 0.6;
+  line-height: 1;
+  z-index: 0;
 }
 
 .leadership-quote p {
-    position: relative; /* Ensure text is above pseudo-element */
-    z-index: 1;
-    margin-bottom: 0;
-    font-weight: 500;
+  position: relative; /* Ensure text is above pseudo-element */
+  z-index: 1;
+  margin-bottom: 0;
+  font-weight: 500;
 }
 
 .leadership-quote .blockquote-footer {
-    position: relative; /* Ensure footer is above pseudo-element */
-    z-index: 1;
-    margin-top: 15px;
-    font-size: 0.9em;
-    color: var(--royal-medium-brown); /* Medium brown for author */
-    text-align: center; /* Center the author */
+  position: relative; /* Ensure footer is above pseudo-element */
+  z-index: 1;
+  margin-top: 15px;
+  font-size: 0.9em;
+  color: var(--royal-medium-brown); /* Medium brown for author */
+  text-align: center; /* Center the author */
 }
 
 /* Redesigned: Paper Supply Philosophy Section Styling */
 .paper-philosophy-section {
-    background: radial-gradient(circle at center, var(--royal-light-beige) 0%, var(--royal-white) 100%); /* Subtle radial gradient */
-    text-align: center;
-    padding: 80px 0; /* Consistent padding */
-    border-top: 2px dashed var(--royal-light-gold); /* Dashed top border */
-    border-bottom: 2px dashed var(--royal-light-gold); /* Dashed bottom border */
-    margin: 40px 0; /* Add margin to separate it more */
+  background: radial-gradient(
+    circle at center,
+    var(--royal-light-beige) 0%,
+    var(--royal-white) 100%
+  ); /* Subtle radial gradient */
+  text-align: center;
+  padding: 80px 0; /* Consistent padding */
+  border-top: 2px dashed var(--royal-light-gold); /* Dashed top border */
+  border-bottom: 2px dashed var(--royal-light-gold); /* Dashed bottom border */
+  margin: 40px 0; /* Add margin to separate it more */
 }
 
 .paper-philosophy-section .page-title {
-    color: var(--royal-dark-brown); /* Dark brown for heading */
-    border-bottom: 3px solid var(--royal-gold); /* Thicker golden underline */
-    display: inline-block;
-    padding-bottom: 12px;
-    margin-bottom: 50px; /* More space below title */
-    font-size: 2.5em; /* Slightly larger title */
-    font-weight: bold;
+  color: var(--royal-dark-brown); /* Dark brown for heading */
+  border-bottom: 3px solid var(--royal-gold); /* Thicker golden underline */
+  display: inline-block;
+  padding-bottom: 12px;
+  margin-bottom: 50px; /* More space below title */
+  font-size: 2.5em; /* Slightly larger title */
+  font-weight: bold;
 }
 
 .paper-philosophy-section .philosophy-icon {
-    font-size: 5em; /* Larger icon */
-    color: var(--royal-gold); /* Golden color for the icon */
-    margin-bottom: 30px; /* More space below icon */
-    animation: fadeInScale 1.2s ease-out forwards; /* New animation */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for icon */
+  font-size: 5em; /* Larger icon */
+  color: var(--royal-gold); /* Golden color for the icon */
+  margin-bottom: 30px; /* More space below icon */
+  animation: fadeInScale 1.2s ease-out forwards; /* New animation */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for icon */
 }
 
 @keyframes fadeInScale {
@@ -210,159 +216,164 @@
 }
 
 .paper-philosophy-section .paragraph.lead {
-    font-size: 1.3em; /* Slightly larger lead paragraph */
-    max-width: 800px; /* Constrain width for readability */
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.8;
-    color: var(--royal-medium-brown); /* Ensure consistent text color */
+  font-size: 1.3em; /* Slightly larger lead paragraph */
+  max-width: 800px; /* Constrain width for readability */
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.8;
+  color: var(--royal-medium-brown); /* Ensure consistent text color */
 }
-
 
 /* Responsive adjustments for AboutPage */
-@media (max-width: 991.98px) { /* Tablet screens (md breakpoint) and down */
-    .about-hero-section {
-        height: 250px;
-    }
-    .about-hero-title {
-        font-size: 2.8em;
-    }
-    .about-hero-subtitle {
-        font-size: 1.2em;
-    }
+@media (max-width: 991.98px) {
+  /* Tablet screens (md breakpoint) and down */
+  .about-hero-section {
+    height: 250px;
+  }
+  .about-hero-title {
+    font-size: 2.8em;
+  }
+  .about-hero-subtitle {
+    font-size: 1.2em;
+  }
 
-    /* Adjust padding for all main content sections on tablets */
-    .glance-at-sunrise-section,
-    .our-team-section,
-    .company-profile-section,
-    .why-us-section,
-    .quality-assurance-section,
-    .paper-philosophy-section { /* Added new section here */
-        padding: 60px 0;
-    }
+  /* Adjust padding for all main content sections on tablets */
+  .glance-at-sunrise-section,
+  .our-team-section,
+  .company-profile-section,
+  .why-us-section,
+  .quality-assurance-section,
+  .paper-philosophy-section {
+    /* Added new section here */
+    padding: 60px 0;
+  }
 
-    /* Center text content for columns when they stack on tablet */
-    .glance-at-sunrise-section .col-lg-6,
-    .our-team-section .col-lg-6,
-    .company-profile-section .col-lg-6,
-    .why-us-section .col-lg-6,
-    .quality-assurance-section .col-lg-6,
-    .paper-philosophy-section .col-lg-8 { /* Added new section here */
-        text-align: center;
-    }
+  /* Center text content for columns when they stack on tablet */
+  .glance-at-sunrise-section .col-lg-6,
+  .our-team-section .col-lg-6,
+  .company-profile-section .col-lg-6,
+  .why-us-section .col-lg-6,
+  .quality-assurance-section .col-lg-6,
+  .paper-philosophy-section .col-lg-8 {
+    /* Added new section here */
+    text-align: center;
+  }
 
-    /* Specific image sizing for tablet portrait */
-    .glance-at-sunrise-section .img-fluid,
-    .our-team-section .img-fluid,
-    .company-profile-section .img-fluid,
-    .quality-assurance-section .img-fluid {
-        max-width: 60%;
-        margin-bottom: 30px;
-    }
+  /* Specific image sizing for tablet portrait */
+  .glance-at-sunrise-section .img-fluid,
+  .our-team-section .img-fluid,
+  .company-profile-section .img-fluid,
+  .quality-assurance-section .img-fluid {
+    max-width: 60%;
+    margin-bottom: 30px;
+  }
 
-    /* Adjust specific logos/seals on tablet */
-    .quality-seal-img {
-        max-width: 200px;
-        margin-bottom: 30px;
-    }
+  /* Adjust specific logos/seals on tablet */
+  .quality-seal-img {
+    max-width: 200px;
+    margin-bottom: 30px;
+  }
 
-    /* Ensure lists are left-aligned even if their parent column is centered */
-    .company-info-list,
-    .values-list {
-        text-align: left;
-        padding-left: 20px;
-        padding-right: 20px;
-    }
+  /* Ensure lists are left-aligned even if their parent column is centered */
+  .company-info-list,
+  .values-list {
+    text-align: left;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 
-    /* Center quote on smaller screens if it's not already centered */
-    .leadership-quote {
-        text-align: center;
-    }
-    .leadership-quote::before {
-        left: 50%;
-        transform: translateX(-50%);
-        top: -10px; /* Adjust position for centering */
-    }
+  /* Center quote on smaller screens if it's not already centered */
+  .leadership-quote {
+    text-align: center;
+  }
+  .leadership-quote::before {
+    left: 50%;
+    transform: translateX(-50%);
+    top: -10px; /* Adjust position for centering */
+  }
 
-    /* Paper Supply Philosophy on Tablet */
-    .paper-philosophy-section .page-title {
-        font-size: 2em;
-        margin-bottom: 30px;
-    }
-    .paper-philosophy-section .philosophy-icon {
-        font-size: 4em;
-        margin-bottom: 20px;
-    }
-    .paper-philosophy-section .paragraph.lead {
-        font-size: 1.1em;
-    }
+  /* Paper Supply Philosophy on Tablet */
+  .paper-philosophy-section .page-title {
+    font-size: 2em;
+    margin-bottom: 30px;
+  }
+  .paper-philosophy-section .philosophy-icon {
+    font-size: 4em;
+    margin-bottom: 20px;
+  }
+  .paper-philosophy-section .paragraph.lead {
+    font-size: 1.1em;
+  }
 }
 
-@media (max-width: 767.98px) { /* Mobile screens (sm breakpoint) and down */
-    .about-hero-section {
-        height: 200px;
-    }
-    .about-hero-title {
-        font-size: 2em;
-    }
-    .about-hero-subtitle {
-        font-size: 1em;
-    }
-    /* Adjust padding for all main content sections on mobile */
-    .glance-at-sunrise-section,
-    .our-team-section,
-    .company-profile-section,
-    .why-us-section,
-    .quality-assurance-section,
-    .paper-philosophy-section { /* Added new section here */
-        padding: 40px 0;
-    }
+@media (max-width: 767.98px) {
+  /* Mobile screens (sm breakpoint) and down */
+  .about-hero-section {
+    height: 200px;
+  }
+  .about-hero-title {
+    font-size: 2em;
+  }
+  .about-hero-subtitle {
+    font-size: 1em;
+  }
+  /* Adjust padding for all main content sections on mobile */
+  .glance-at-sunrise-section,
+  .our-team-section,
+  .company-profile-section,
+  .why-us-section,
+  .quality-assurance-section,
+  .paper-philosophy-section {
+    /* Added new section here */
+    padding: 40px 0;
+  }
 
-    /* Image sizing for mobile */
-    .glance-at-sunrise-section .img-fluid,
-    .our-team-section .img-fluid,
-    .company-profile-section .img-fluid,
-    .quality-assurance-section .img-fluid {
-        max-width: 90%;
-        margin-bottom: 20px;
-    }
+  /* Image sizing for mobile */
+  .glance-at-sunrise-section .img-fluid,
+  .our-team-section .img-fluid,
+  .company-profile-section .img-fluid,
+  .quality-assurance-section .img-fluid {
+    max-width: 90%;
+    margin-bottom: 20px;
+  }
 
-    .quality-seal-img {
-        max-width: 150px;
-        margin-bottom: 20px;
-    }
+  .quality-seal-img {
+    max-width: 150px;
+    margin-bottom: 20px;
+  }
 
-    /* Re-center titles that were left-aligned on desktop */
-    .our-team-section .page-title,
-    .quality-assurance-section .page-title,
-    .paper-philosophy-section .page-title { /* Added new section here */
-        text-align: center !important;
-    }
+  /* Re-center titles that were left-aligned on desktop */
+  .our-team-section .page-title,
+  .quality-assurance-section .page-title,
+  .paper-philosophy-section .page-title {
+    /* Added new section here */
+    text-align: center !important;
+  }
 
-    /* Ensure lists are still readable on mobile */
-    .company-info-list,
-    .values-list {
-        padding-left: 0;
-    }
+  /* Ensure lists are still readable on mobile */
+  .company-info-list,
+  .values-list {
+    padding-left: 0;
+  }
 
-    .leadership-quote {
-        font-size: 1.1em;
-        padding: 15px 20px;
-    }
-    .leadership-quote::before {
-        font-size: 3em; /* Smaller quote mark on mobile */
-        top: 5px;
-    }
-    /* Paper Supply Philosophy on Mobile */
-    .paper-philosophy-section .page-title {
-        font-size: 1.8em;
-        margin-bottom: 25px;
-    }
-    .paper-philosophy-section .philosophy-icon {
-        font-size: 3.5em;
-        margin-bottom: 15px;
-    }
-    .paper-philosophy-section .paragraph.lead {
-        font-size: 1em;
-    }
+  .leadership-quote {
+    font-size: 1.1em;
+    padding: 15px 20px;
+  }
+  .leadership-quote::before {
+    font-size: 3em; /* Smaller quote mark on mobile */
+    top: 5px;
+  }
+  /* Paper Supply Philosophy on Mobile */
+  .paper-philosophy-section .page-title {
+    font-size: 1.8em;
+    margin-bottom: 25px;
+  }
+  .paper-philosophy-section .philosophy-icon {
+    font-size: 3.5em;
+    margin-bottom: 15px;
+  }
+  .paper-philosophy-section .paragraph.lead {
+    font-size: 1em;
+  }
 }

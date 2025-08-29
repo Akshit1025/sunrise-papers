@@ -15,7 +15,7 @@ const Footer = () => {
     googleUrl: "https://g.co/kgs/WDyBz11",
     addressText:
       "Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka, Delhi, 110078, India",
-    mapsUrl: "https://maps.app.goo.gl/zFrzmgSPvqrrL79Z9"
+    mapsUrl: "https://maps.app.goo.gl/zFrzmgSPvqrrL79Z9",
   });
 
   useEffect(() => {

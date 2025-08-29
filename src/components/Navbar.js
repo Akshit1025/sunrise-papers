@@ -12,7 +12,7 @@ const Navbar = () => {
     phone2: "+91 98100 87126",
     linkedinUrl: "https://www.linkedin.com/in/dineshgupta-sunriise",
     whatsappUrl: "https://wa.me/919810087126",
-    googleUrl: "https://g.co/kgs/WDyBz11"
+    googleUrl: "https://g.co/kgs/WDyBz11",
   });
 
   useEffect(() => {

@@ -1463,7 +1463,7 @@ const ContentManagement = () => {
                                 <div className="mb-2">
                                   <img
                                     src={section.image_url}
-                                    alt={`${section.name} Image`}
+                                    alt={`${section.name}`}
                                     className="img-thumbnail me-2"
                                     style={{ width: "100px", height: "auto" }}
                                   />
@@ -1740,7 +1740,7 @@ const ContentManagement = () => {
                                       (s) => s.name === "aboutGlance"
                                     ).image_url
                                   }
-                                  alt="Glance Image"
+                                  alt="Glance"
                                   className="img-thumbnail"
                                   style={{ width: "100px", height: "auto" }}
                                 />
@@ -1941,7 +1941,7 @@ const ContentManagement = () => {
                                       (s) => s.name === "leadership"
                                     ).image_url
                                   }
-                                  alt="Leadership Image"
+                                  alt="Leadership"
                                   className="img-thumbnail"
                                   style={{ width: "100px", height: "auto" }}
                                 />
@@ -2000,7 +2000,7 @@ const ContentManagement = () => {
                                       (s) => s.name === "companyProfile"
                                     ).image_url
                                   }
-                                  alt="Company Profile Image"
+                                  alt="Company Profile"
                                   className="img-thumbnail"
                                   style={{ width: "100px", height: "auto" }}
                                 />
@@ -2344,7 +2344,7 @@ const ContentManagement = () => {
                                       (s) => s.name === "qualityAssurance"
                                     ).image_url
                                   }
-                                  alt="Quality Image"
+                                  alt="Quality"
                                   className="img-thumbnail"
                                   style={{ width: "100px", height: "auto" }}
                                 />

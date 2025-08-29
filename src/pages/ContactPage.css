@@ -4,10 +4,11 @@
 .contact-hero-section {
   background: repeating-linear-gradient(
     45deg,
-    var(--royal-light-beige), /* Updated */
-    var(--royal-light-beige) 10px, /* Updated */
-    #F0EAD6 10px, /* Keeping this specific light beige for subtle stripe variation */
-    #F0EAD6 20px /* Keeping this specific light beige for subtle stripe variation */
+    var(--royal-light-beige),
+    /* Updated */ var(--royal-light-beige) 10px,
+    /* Updated */ #f0ead6 10px,
+    /* Keeping this specific light beige for subtle stripe variation */ #f0ead6
+      20px /* Keeping this specific light beige for subtle stripe variation */
   );
   background-size: cover;
   background-position: center;
@@ -22,7 +23,7 @@
 }
 
 .contact-hero-section::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -48,7 +49,8 @@
   color: var(--royal-medium-brown); /* Updated */
 }
 
-.contact-form-card, .contact-info-card {
+.contact-form-card,
+.contact-info-card {
   background-color: var(--royal-white); /* Updated */
   border-radius: 10px;
   border: 1px solid var(--royal-light-gold); /* Updated */
@@ -106,7 +108,6 @@
   color: var(--royal-gold) !important; /* Updated */
 }
 
-
 /* Form Styles - Specific to Contact Page's form */
 .form .input-field,
 .form .text-area-field {
@@ -160,7 +161,8 @@
   .contact-hero-subtitle {
     font-size: 1.2em;
   }
-  .contact-form-card, .contact-info-card {
+  .contact-form-card,
+  .contact-info-card {
     padding: 25px;
   }
 

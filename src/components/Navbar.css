@@ -59,7 +59,7 @@
 }
 
 .logo-text {
-  font-family: 'Georgia', serif;
+  font-family: "Georgia", serif;
 }
 
 .main-nav-links .nav-item {
@@ -80,7 +80,7 @@
 }
 
 .main-nav-links .nav-button::before {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -102,8 +102,10 @@
 }
 
 /* Responsive Adjustments for Navbar */
-@media (max-width: 991.98px) { /* Medium devices (tablets) and down */
-  .social-icons { /* Specific to top bar social icons */
+@media (max-width: 991.98px) {
+  /* Medium devices (tablets) and down */
+  .social-icons {
+    /* Specific to top bar social icons */
     text-align: center;
     margin-top: 10px; /* Add some space on smaller screens */
   }

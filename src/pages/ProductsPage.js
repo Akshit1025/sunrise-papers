@@ -23,7 +23,10 @@ const ProductsPage = ({ authReady }) => {
       try {
         setLoading(true);
         const categoriesCollectionRef = collection(db, "categories");
-        const q = query(categoriesCollectionRef, where("isVisible", "==", true));
+        const q = query(
+          categoriesCollectionRef,
+          where("isVisible", "==", true)
+        );
         const querySnapshot = await getDocs(q);
         const fetchedCategories = querySnapshot.docs.map((doc) => ({
           id: doc.id,

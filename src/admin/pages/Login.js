@@ -87,8 +87,8 @@ const Login = () => {
                 {" "}
                 {/* Center the back link */}
                 <Link to="/" className="text-decoration-none text-white">
-                <i className="fas fa-arrow-left me-2"></i>
-                Back to Main Website
+                  <i className="fas fa-arrow-left me-2"></i>
+                  Back to Main Website
                 </Link>
                 {/* Updated text for clarity */}
               </div>

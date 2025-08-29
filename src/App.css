@@ -2,15 +2,15 @@
 
 /* --- Custom CSS Variables (Royal Brown and Golden Theme) --- */
 :root {
-  --royal-dark-brown: #4A2C2A;
-  --royal-medium-brown: #8B6B5F;
-  --royal-light-beige: #F8F5ED;
-  --royal-gold: #B8860B;
-  --royal-light-gold: #E0D3B3;
-  --royal-white: #FFFFFF;
+  --royal-dark-brown: #4a2c2a;
+  --royal-medium-brown: #8b6b5f;
+  --royal-light-beige: #f8f5ed;
+  --royal-gold: #b8860b;
+  --royal-light-gold: #e0d3b3;
+  --royal-white: #ffffff;
 
-  --font-georgia-heading: 'Georgia', serif;
-  --font-inter-body: 'Inter', serif;
+  --font-georgia-heading: "Georgia", serif;
+  --font-inter-body: "Inter", serif;
 
   --loader-size: clamp(110px, 14vw, 170px);
   --logo-scale: 0.68;
@@ -152,10 +152,7 @@ body {
   z-index: 9999;
   opacity: 1;
   visibility: visible;
-  transition:
-    opacity 1s ease,
-    transform 1s ease,
-    visibility 0s linear 1s;
+  transition: opacity 1s ease, transform 1s ease, visibility 0s linear 1s;
 }
 
 .preloader-container.fade-out {
@@ -188,7 +185,6 @@ body {
 }
 
 @keyframes logo-pulse {
-
   0%,
   60%,
   100% {
@@ -216,11 +212,17 @@ body {
   width: 0;
   height: 0;
   border-radius: 50% / 55%;
-  background: radial-gradient(circle,
-      rgba(184, 134, 11, 0.9) 0%,
-      rgba(184, 134, 11, 0.6) 50%,
-      rgba(184, 134, 11, 0) 100%);
-  -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 99%, rgba(0, 0, 0, 0) 100%);
+  background: radial-gradient(
+    circle,
+    rgba(184, 134, 11, 0.9) 0%,
+    rgba(184, 134, 11, 0.6) 50%,
+    rgba(184, 134, 11, 0) 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 1) 99%,
+    rgba(0, 0, 0, 0) 100%
+  );
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
   -webkit-mask-size: cover;
@@ -251,14 +253,13 @@ body {
   }
 
   100% {
-    width: calc(var(--loader-size) * 2.0);
+    width: calc(var(--loader-size) * 2);
     height: calc(var(--loader-size) * 1.75);
     opacity: 0;
   }
 }
 
 @keyframes gold-shimmer {
-
   0%,
   100% {
     filter: brightness(1);

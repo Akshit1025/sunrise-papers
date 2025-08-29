@@ -11,7 +11,7 @@ const defaultSettings = {
   googleUrl: "https://g.co/kgs/WDyBz11",
   addressText:
     "Unit No. 390, Vegas Mall, Plot No. 6, Sector 14, Dwarka, Delhi, 110078, India",
-  mapsUrl: "https://maps.app.goo.gl/zFrzmgSPvqrrL79Z9"
+  mapsUrl: "https://maps.app.goo.gl/zFrzmgSPvqrrL79Z9",
 };
 
 const Settings = () => {
@@ -22,23 +22,23 @@ const Settings = () => {
 
   const ref = doc(db, "settings", "site");
 
-  const fetchSettings = async () => {
-    setLoading(true);
-    try {
-      const snap = await getDoc(ref);
-      if (snap.exists()) {
-        setForm({ ...defaultSettings, ...snap.data() });
-      } else {
-        setForm(defaultSettings);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchSettings = async () => {
+      setLoading(true);
+      try {
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          setForm({ ...defaultSettings, ...snap.data() });
+        } else {
+          setForm(defaultSettings);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchSettings();
-  }, []);
+  }, [ref]);
 
   const onChange = (e) => {
     const { name, value } = e.target;

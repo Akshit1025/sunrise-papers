@@ -20,7 +20,6 @@ const Dashboard = () => {
       setError("");
 
       try {
-
         // Fetch Product Count
         const productsRef = collection(db, "products");
         const productsSnap = await getDocs(query(productsRef));

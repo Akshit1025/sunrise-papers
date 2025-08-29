@@ -2,220 +2,216 @@
 
 /* Products Hero Section (Shared for Products, Category Products, Product Detail) */
 .products-hero-section {
-    /* Using the repeating-linear-gradient background as per your requirement */
-    background: repeating-linear-gradient(45deg,
-            var(--royal-light-beige),
-            /* Updated */
-            var(--royal-light-beige) 10px,
-            /* Updated */
-            #F0EAD6 10px,
-            /* Keeping this specific light beige for subtle stripe variation */
-            #F0EAD6 20px
-            /* Keeping this specific light beige for subtle stripe variation */
-        );
-    background-size: cover;
-    /* Keep cover for background-size */
-    background-position: center;
-    /* Keep center for background-position */
-    height: 300px;
-    /* Adjust height as needed */
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--royal-dark-brown);
-    /* Updated */
-    text-shadow: 1px 1px 2px rgba(74, 44, 42, 0.2);
-    /* Updated to royal dark brown rgba */
-    z-index: 1;
-    /* Ensure content is above background effects */
+  /* Using the repeating-linear-gradient background as per your requirement */
+  background: repeating-linear-gradient(
+    45deg,
+    var(--royal-light-beige),
+    /* Updated */ var(--royal-light-beige) 10px,
+    /* Updated */ #f0ead6 10px,
+    /* Keeping this specific light beige for subtle stripe variation */ #f0ead6
+      20px /* Keeping this specific light beige for subtle stripe variation */
+  );
+  background-size: cover;
+  /* Keep cover for background-size */
+  background-position: center;
+  /* Keep center for background-position */
+  height: 300px;
+  /* Adjust height as needed */
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--royal-dark-brown);
+  /* Updated */
+  text-shadow: 1px 1px 2px rgba(74, 44, 42, 0.2);
+  /* Updated to royal dark brown rgba */
+  z-index: 1;
+  /* Ensure content is above background effects */
 }
 
 .products-hero-section::before {
-    /* Keeping the before pseudo-element. If it's intended for an overlay
+  /* Keeping the before pseudo-element. If it's intended for an overlay
        on top of the gradient, you might define its background here.
        If the gradient is the only background, and no overlay is needed,
        you could potentially remove this ::before rule.
        Assuming you want to keep it for potential future use or a subtle effect:
     */
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    /* Example: A subtle dark overlay if needed on top of the gradient */
-    /* background-color: rgba(0, 0, 0, 0.1); */
-    z-index: -1;
-    /* Place behind main content */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Example: A subtle dark overlay if needed on top of the gradient */
+  /* background-color: rgba(0, 0, 0, 0.1); */
+  z-index: -1;
+  /* Place behind main content */
 }
 
 .products-hero-section .container {
-    z-index: 2;
-    /* Ensure container content is above the background/overlay */
+  z-index: 2;
+  /* Ensure container content is above the background/overlay */
 }
 
 .products-hero-title {
-    font-family: var(--font-georgia-heading);
-    /* Apply heading font */
-    font-size: 3.5em;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: var(--royal-dark-brown);
-    /* Updated */
-    text-shadow: 1px 1px 2px rgba(74, 44, 42, 0.2);
-    /* Keep the text shadow consistent with the section */
+  font-family: var(--font-georgia-heading);
+  /* Apply heading font */
+  font-size: 3.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--royal-dark-brown);
+  /* Updated */
+  text-shadow: 1px 1px 2px rgba(74, 44, 42, 0.2);
+  /* Keep the text shadow consistent with the section */
 }
 
 .products-hero-subtitle {
-    font-family: var(--font-inter-body);
-    /* Apply body font */
-    font-size: 1.5em;
-    color: var(--royal-medium-brown);
-    /* Updated */
+  font-family: var(--font-inter-body);
+  /* Apply body font */
+  font-size: 1.5em;
+  color: var(--royal-medium-brown);
+  /* Updated */
 }
 
 /* Category & Product Card Styling (Used on Products Page and Category Products Page product list) */
 .category-card-link,
 .product-card-link {
-    display: block;
-    /* Make the entire card clickable */
-    text-decoration: none;
-    /* Remove underline from link */
+  display: block;
+  /* Make the entire card clickable */
+  text-decoration: none;
+  /* Remove underline from link */
 }
 
 .category-card,
 .product-card {
-    transition: all 0.3s ease;
-    border: 1px solid var(--royal-light-gold);
-    /* Theme border color */
-    background-color: var(--royal-white);
-    /* White background */
-    box-shadow: 0 4px 12px rgba(74, 44, 42, 0.08);
-    /* Subtle shadow using royal-dark-brown rgba */
-    border-radius: 8px;
-    /* Match theme rounded corners */
-    overflow: hidden;
-    /* Ensure image corners are rounded */
+  transition: all 0.3s ease;
+  border: 1px solid var(--royal-light-gold);
+  /* Theme border color */
+  background-color: var(--royal-white);
+  /* White background */
+  box-shadow: 0 4px 12px rgba(74, 44, 42, 0.08);
+  /* Subtle shadow using royal-dark-brown rgba */
+  border-radius: 8px;
+  /* Match theme rounded corners */
+  overflow: hidden;
+  /* Ensure image corners are rounded */
 }
 
 .category-card:hover,
 .product-card:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 8px 20px rgba(74, 44, 42, 0.2);
-    /* More prominent shadow on hover */
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(74, 44, 42, 0.2);
+  /* More prominent shadow on hover */
 }
 
 .category-card .card-img-top,
 .product-card .card-img-top {
-    /* Apply styles to the img tag within the card */
-    width: 100%;
-    height: 200px;
-    /* Fixed height for consistent card appearance */
-    object-fit: cover;
+  /* Apply styles to the img tag within the card */
+  width: 100%;
+  height: 200px;
+  /* Fixed height for consistent card appearance */
+  object-fit: cover;
 }
-
 
 .category-image,
 .product-image {
-    /* Redundant if styling card-img-top directly, but can keep for specificity if needed */
-    height: 200px;
-    /* Fixed height for consistent card appearance */
-    object-fit: cover;
-    width: 100%;
+  /* Redundant if styling card-img-top directly, but can keep for specificity if needed */
+  height: 200px;
+  /* Fixed height for consistent card appearance */
+  object-fit: cover;
+  width: 100%;
 }
 
 .category-title,
 .product-title {
-    font-family: var(--font-georgia-heading);
-    /* Apply heading font */
-    font-size: 1.3em;
-    font-weight: bold;
-    color: var(--royal-dark-brown);
-    /* Dark brown */
+  font-family: var(--font-georgia-heading);
+  /* Apply heading font */
+  font-size: 1.3em;
+  font-weight: bold;
+  color: var(--royal-dark-brown);
+  /* Dark brown */
 }
 
 .category-description,
 .product-short-description {
-    font-family: var(--font-inter-body);
-    /* Apply body font */
-    font-size: 0.95em;
-    color: var(--royal-medium-brown);
-    /* Medium brown */
+  font-family: var(--font-inter-body);
+  /* Apply body font */
+  font-size: 0.95em;
+  color: var(--royal-medium-brown);
+  /* Medium brown */
 }
-
 
 /* Product Detail Page Styling */
 .product-detail-page .container {
-    /* Adjust padding or max-width if needed for product detail page specifically */
+  /* Adjust padding or max-width if needed for product detail page specifically */
 }
 
 .product-detail-content {
-    padding-top: 20px;
-    padding-bottom: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .product-detail-image {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-    border-radius: 8px;
-    /* Consistent rounded corners for main image */
-    box-shadow: 0 4px 12px rgba(74, 44, 42, 0.1);
-    /* Subtle shadow */
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 8px;
+  /* Consistent rounded corners for main image */
+  box-shadow: 0 4px 12px rgba(74, 44, 42, 0.1);
+  /* Subtle shadow */
 }
 
 .product-detail-name {
-    font-family: var(--font-georgia-heading);
-    /* Apply heading font */
-    color: var(--royal-dark-brown);
-    /* Dark brown */
-    font-size: 2.5em;
-    /* Larger heading for product name (adjusted from 2em) */
-    margin-bottom: 15px;
+  font-family: var(--font-georgia-heading);
+  /* Apply heading font */
+  color: var(--royal-dark-brown);
+  /* Dark brown */
+  font-size: 2.5em;
+  /* Larger heading for product name (adjusted from 2em) */
+  margin-bottom: 15px;
 }
 
 .product-detail-description {
-    font-family: var(--font-inter-body);
-    /* Apply body font */
-    font-size: 1.1em;
-    /* Slightly larger text for main description */
-    line-height: 1.7;
-    color: var(--royal-medium-brown);
-    /* Medium brown */
+  font-family: var(--font-inter-body);
+  /* Apply body font */
+  font-size: 1.1em;
+  /* Slightly larger text for main description */
+  line-height: 1.7;
+  color: var(--royal-medium-brown);
+  /* Medium brown */
 }
 
 /* Styling for Features and Specifications lists (if still used on Product Detail Page) */
 .features-list,
 .specifications-list {
-    padding-left: 0;
-    list-style: none;
-    margin-top: 20px;
+  padding-left: 0;
+  list-style: none;
+  margin-top: 20px;
 }
 
 .features-list li,
 .specifications-list li {
-    font-family: var(--font-inter-body);
-    /* Apply body font */
-    margin-bottom: 8px;
-    color: var(--royal-medium-brown);
-    /* Medium brown */
-    line-height: 1.5;
+  font-family: var(--font-inter-body);
+  /* Apply body font */
+  margin-bottom: 8px;
+  color: var(--royal-medium-brown);
+  /* Medium brown */
+  line-height: 1.5;
 }
 
 .features-list i {
-    color: var(--royal-gold);
-    /* Golden for icons */
-    margin-right: 8px;
-    font-size: 1.1em;
+  color: var(--royal-gold);
+  /* Golden for icons */
+  margin-right: 8px;
+  font-size: 1.1em;
 }
 
 /* Style for the back button (or view all categories button) */
 .product-back-btn {
-    /* This button now uses .btn-outline-dark from App.css, so minimal styles needed here */
-    /* Ensure text alignment and margin is handled by the parent container */
+  /* This button now uses .btn-outline-dark from App.css, so minimal styles needed here */
+  /* Ensure text alignment and margin is handled by the parent container */
 }
 
 /* --- Category Detail Sections (for CategoryProductsPage) --- */
@@ -223,164 +219,162 @@
 
 /* Benefits and Applications Section */
 .category-benefits-applications-section {
-    border: 1px solid var(--royal-light-gold);
-    /* Consistent border */
-    box-shadow: 0 4px 12px rgba(74, 44, 42, 0.05);
-    /* Lighter shadow */
-    margin-bottom: 40px;
-    /* Space between sections */
-    padding: 40px;
-    /* Ensure consistent padding */
-    border-radius: 8px;
-    /* Consistent rounded corners */
-    background-color: var(--royal-white);
-    /* White background */
+  border: 1px solid var(--royal-light-gold);
+  /* Consistent border */
+  box-shadow: 0 4px 12px rgba(74, 44, 42, 0.05);
+  /* Lighter shadow */
+  margin-bottom: 40px;
+  /* Space between sections */
+  padding: 40px;
+  /* Ensure consistent padding */
+  border-radius: 8px;
+  /* Consistent rounded corners */
+  background-color: var(--royal-white);
+  /* White background */
 }
 
 .category-benefits-applications-section .sub-heading {
-    font-family: var(--font-georgia-heading);
-    /* Apply heading font */
-    color: var(--royal-dark-brown);
-    /* Dark brown for headings */
-    border-bottom: 2px solid var(--royal-gold);
-    /* Golden underline */
-    display: inline-block;
-    /* Border only as wide as the text */
-    padding-bottom: 8px;
-    margin-bottom: 25px;
-    /* Space below heading */
-    font-size: 1.8em;
-    /* Adjusted heading size for sections */
-    text-align: center;
-    /* Ensure heading is centered */
-    width: 100%;
-    /* Allow text-align center to work */
+  font-family: var(--font-georgia-heading);
+  /* Apply heading font */
+  color: var(--royal-dark-brown);
+  /* Dark brown for headings */
+  border-bottom: 2px solid var(--royal-gold);
+  /* Golden underline */
+  display: inline-block;
+  /* Border only as wide as the text */
+  padding-bottom: 8px;
+  margin-bottom: 25px;
+  /* Space below heading */
+  font-size: 1.8em;
+  /* Adjusted heading size for sections */
+  text-align: center;
+  /* Ensure heading is centered */
+  width: 100%;
+  /* Allow text-align center to work */
 }
 
 .combined-list {
-    /* Class for benefits/applications list */
-    padding-left: 0;
-    list-style: none;
+  /* Class for benefits/applications list */
+  padding-left: 0;
+  list-style: none;
 }
 
 .combined-list li {
-    /* Styling for list items in combined section */
-    font-family: var(--font-inter-body);
-    /* Apply body font */
-    font-size: 1.05em;
-    color: var(--royal-medium-brown);
-    margin-bottom: 10px;
-    line-height: 1.6;
-    display: flex;
-    /* Add flex display for icon alignment */
-    align-items: start;
-    /* Align items to the start */
+  /* Styling for list items in combined section */
+  font-family: var(--font-inter-body);
+  /* Apply body font */
+  font-size: 1.05em;
+  color: var(--royal-medium-brown);
+  margin-bottom: 10px;
+  line-height: 1.6;
+  display: flex;
+  /* Add flex display for icon alignment */
+  align-items: start;
+  /* Align items to the start */
 }
 
 .category-list-icon {
-    /* General icon style for combined list */
-    color: var(--royal-gold);
-    /* Golden for all list icons */
-    font-size: 1.2em;
-    flex-shrink: 0;
-    /* Prevent icon from shrinking */
-    margin-right: 15px;
-    /* Adjust space after icon */
+  /* General icon style for combined list */
+  color: var(--royal-gold);
+  /* Golden for all list icons */
+  font-size: 1.2em;
+  flex-shrink: 0;
+  /* Prevent icon from shrinking */
+  margin-right: 15px;
+  /* Adjust space after icon */
 }
-
 
 /* New: Category Gallery Section (This section might be redundant if all images are in the carousel) */
 /* Keeping the styles here in case you decide to use a separate gallery section below the carousel */
 .category-gallery-section {
-    border: 1px solid var(--royal-light-gold);
-    box-shadow: 0 4px 12px rgba(74, 44, 42, 0.05);
-    margin-bottom: 40px;
-    padding: 40px;
-    border-radius: 8px;
-    background-color: var(--royal-light-beige);
+  border: 1px solid var(--royal-light-gold);
+  box-shadow: 0 4px 12px rgba(74, 44, 42, 0.05);
+  margin-bottom: 40px;
+  padding: 40px;
+  border-radius: 8px;
+  background-color: var(--royal-light-beige);
 }
 
 .category-gallery-section .sub-heading {
-    font-family: var(--font-georgia-heading);
-    color: var(--royal-dark-brown);
-    border-bottom: 2px solid var(--royal-gold);
-    display: inline-block;
-    padding-bottom: 8px;
-    margin-bottom: 25px;
-    font-size: 1.8em;
-    text-align: center;
-    width: 100%;
+  font-family: var(--font-georgia-heading);
+  color: var(--royal-dark-brown);
+  border-bottom: 2px solid var(--royal-gold);
+  display: inline-block;
+  padding-bottom: 8px;
+  margin-bottom: 25px;
+  font-size: 1.8em;
+  text-align: center;
+  width: 100%;
 }
 
 /* Style for images within the gallery section */
 .category-gallery-section img {
-    display: block;
-    width: 100%;
-    height: 200px;
-    /* Fixed height for consistent gallery appearance */
-    object-fit: cover;
-    border-radius: 5px;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(74, 44, 42, 0.1);
+  display: block;
+  width: 100%;
+  height: 200px;
+  /* Fixed height for consistent gallery appearance */
+  object-fit: cover;
+  border-radius: 5px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(74, 44, 42, 0.1);
 }
 
 .category-gallery-section img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 10px rgba(74, 44, 42, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(74, 44, 42, 0.2);
 }
-
 
 /* New: Category Videos Section (This section might be redundant if all videos are in the carousel) */
 /* Keeping the styles here in case you decide to list videos below the carousel */
 .category-videos-section {
-    border: 1px solid var(--royal-light-gold);
-    box-shadow: 0 4px 12px rgba(74, 44, 42, 0.05);
-    margin-bottom: 40px;
-    padding: 40px;
-    border-radius: 8px;
-    background-color: var(--royal-white);
+  border: 1px solid var(--royal-light-gold);
+  box-shadow: 0 4px 12px rgba(74, 44, 42, 0.05);
+  margin-bottom: 40px;
+  padding: 40px;
+  border-radius: 8px;
+  background-color: var(--royal-white);
 }
 
 .category-videos-section .sub-heading {
-    font-family: var(--font-georgia-heading);
-    color: var(--royal-dark-brown);
-    border-bottom: 2px solid var(--royal-gold);
-    display: inline-block;
-    padding-bottom: 8px;
-    margin-bottom: 25px;
-    font-size: 1.8em;
-    text-align: center;
-    width: 100%;
+  font-family: var(--font-georgia-heading);
+  color: var(--royal-dark-brown);
+  border-bottom: 2px solid var(--royal-gold);
+  display: inline-block;
+  padding-bottom: 8px;
+  margin-bottom: 25px;
+  font-size: 1.8em;
+  text-align: center;
+  width: 100%;
 }
 
 /* Style for video embeds within the videos section */
 .category-videos-section iframe,
 .category-videos-section video {
-    display: block;
-    width: 100%;
-    height: 400px;
-    /* Fixed height for videos (adjust as needed) */
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(74, 44, 42, 0.1);
+  display: block;
+  width: 100%;
+  height: 400px;
+  /* Fixed height for videos (adjust as needed) */
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(74, 44, 42, 0.1);
 }
 
 /* Optional: Responsive embed container (Bootstrap 4 or similar) */
 /* If using Bootstrap 5, embed-responsive classes might be named differently */
 .embed-responsive {
-    position: relative;
-    display: block;
-    width: 100%;
-    padding: 0;
-    overflow: hidden;
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
 }
 
 .embed-responsive::before {
-    content: "";
-    display: block;
-    padding-top: 56.25%;
-    /* 16:9 aspect ratio */
+  content: "";
+  display: block;
+  padding-top: 56.25%;
+  /* 16:9 aspect ratio */
 }
 
 .embed-responsive .embed-responsive-item,
@@ -388,122 +382,121 @@
 .embed-responsive embed,
 .embed-responsive object,
 .embed-responsive video {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
 .embed-responsive-16by9::before {
-    padding-top: 56.25%;
+  padding-top: 56.25%;
 }
-
 
 /* Style for video captions within the videos section */
 .category-videos-section .paragraph {
-    font-family: var(--font-inter-body);
-    text-align: center;
-    margin-top: 10px;
-    font-style: italic;
-    color: var(--royal-medium-brown);
-    font-size: 0.95em;
+  font-family: var(--font-inter-body);
+  text-align: center;
+  margin-top: 10px;
+  font-style: italic;
+  color: var(--royal-medium-brown);
+  font-size: 0.95em;
 }
 
 /* --- Styles for the Two-Column Layout in Category Details (for ALL categories) --- */
 
 /* Style for the main category image within the two-column layout (when no carousel) */
 .category-detail-image {
-    max-width: 100%;
-    height: auto;
-    /* Allow height to adjust based on aspect ratio */
-    display: block;
-    /* Ensure image takes up its container */
-    margin: 0 auto;
-    /* Center the image in its column */
-    border-radius: 8px;
-    /* Consistent rounded corners */
-    box-shadow: 0 4px 12px rgba(74, 44, 42, 0.1);
-    /* Subtle shadow */
+  max-width: 100%;
+  height: auto;
+  /* Allow height to adjust based on aspect ratio */
+  display: block;
+  /* Ensure image takes up its container */
+  margin: 0 auto;
+  /* Center the image in its column */
+  border-radius: 8px;
+  /* Consistent rounded corners */
+  box-shadow: 0 4px 12px rgba(74, 44, 42, 0.1);
+  /* Subtle shadow */
 }
 
 /* Style for the Multimedia Carousel in Category Details (replaces the single image for non-product categories) */
 #categoryMediaCarousel {
-    /* Uses Bootstrap's .carousel class */
-    /* Added .rounded and .shadow-sm in JSX for consistency */
-    margin: 0 auto;
-    /* Ensure carousel is centered within its column */
-    /* Adjust max-width if needed for larger screens within the column */
-    /* max-width: 600px; */
+  /* Uses Bootstrap's .carousel class */
+  /* Added .rounded and .shadow-sm in JSX for consistency */
+  margin: 0 auto;
+  /* Ensure carousel is centered within its column */
+  /* Adjust max-width if needed for larger screens within the column */
+  /* max-width: 600px; */
 }
 
 /* Style for the carousel inner container */
 #categoryMediaCarousel .carousel-inner {
-    /* Uses Bootstrap's .carousel-inner */
-    border-radius: 8px;
-    /* Match the outer container rounded corners */
+  /* Uses Bootstrap's .carousel-inner */
+  border-radius: 8px;
+  /* Match the outer container rounded corners */
 }
 
 /* Style for carousel items (individual slides) */
 #categoryMediaCarousel .carousel-item {
-    /* Uses Bootstrap's .carousel-item */
-    height: 350px;
-    /* Set a fixed height for all slides (images and videos) */
-    /* Optional: Background color if media doesn't cover the whole item */
-    background-color: var(--royal-dark-brown);
-    /* Dark background for media area */
+  /* Uses Bootstrap's .carousel-item */
+  height: 350px;
+  /* Set a fixed height for all slides (images and videos) */
+  /* Optional: Background color if media doesn't cover the whole item */
+  background-color: var(--royal-dark-brown);
+  /* Dark background for media area */
 }
 
 .product-detail-media {
-    height: 350px;
-    object-fit: cover;
-    border-radius: 12px;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 12px;
 }
 
 /* Style for images within the carousel */
 #categoryMediaCarousel .carousel-item .category-carousel-image {
-    /* Uses Bootstrap's .d-block and .w-100 */
-    display: block;
-    /* Ensure takes up container width */
-    width: 100%;
-    height: 100%;
-    /* Fill the carousel-item height */
-    object-fit: fill;
-    /* Crop image to fit */
-    border-radius: 8px;
-    /* Match parent rounded corners */
+  /* Uses Bootstrap's .d-block and .w-100 */
+  display: block;
+  /* Ensure takes up container width */
+  width: 100%;
+  height: 100%;
+  /* Fill the carousel-item height */
+  object-fit: fill;
+  /* Crop image to fit */
+  border-radius: 8px;
+  /* Match parent rounded corners */
 }
 
 /* Style for video containers within the carousel */
 #categoryMediaCarousel .carousel-item .category-carousel-video-container {
-    /* Uses Bootstrap's .embed-responsive and .embed-responsive-16by9 */
-    width: 100%;
-    height: 100%;
-    /* Fill the carousel-item height */
+  /* Uses Bootstrap's .embed-responsive and .embed-responsive-16by9 */
+  width: 100%;
+  height: 100%;
+  /* Fill the carousel-item height */
 }
 
 /* Style for iframes/videos within the carousel */
 #categoryMediaCarousel .carousel-item .category-carousel-video-container iframe,
 #categoryMediaCarousel .carousel-item .category-carousel-video-container video {
-    /* Uses Bootstrap's .d-block and .w-100, and .embed-responsive-item */
-    display: block;
-    /* Ensure takes up container width */
-    width: 100%;
-    height: 100%;
-    /* Fill the carousel-item height */
-    border: none;
-    border-radius: 8px;
-    /* Match parent rounded corners */
+  /* Uses Bootstrap's .d-block and .w-100, and .embed-responsive-item */
+  display: block;
+  /* Ensure takes up container width */
+  width: 100%;
+  height: 100%;
+  /* Fill the carousel-item height */
+  border: none;
+  border-radius: 8px;
+  /* Match parent rounded corners */
 }
 
 /* Style for carousel controls (optional color adjustments) */
 /* Re-added as per user request */
 #categoryMediaCarousel .carousel-control-prev-icon,
 #categoryMediaCarousel .carousel-control-next-icon {
-    filter: invert(1) grayscale(100);
-    /* Example: Make them white */
+  filter: invert(1) grayscale(100);
+  /* Example: Make them white */
 }
 
 /* Style for carousel indicators (optional color adjustments) */
@@ -521,423 +514,433 @@
 }
 */
 
-
 /* Adjustments for the "What is this Category About?" content within the column */
 /* This content is now within the right column for ALL categories */
 .category-info-content {
-    /* Add any specific padding or margin if needed within the column */
-    /* Example: Add some horizontal padding within the column */
-    padding: 0 15px;
+  /* Add any specific padding or margin if needed within the column */
+  /* Example: Add some horizontal padding within the column */
+  padding: 0 15px;
 }
 
 .category-info-content .sub-heading {
-    /* Uses existing sub-heading styles */
-    /* Adjusted margin-bottom is now handled by the JSX (mb-3) */
-    text-align: left;
-    /* Align heading to the left in the column */
-    width: auto;
-    /* Allow text-align left to work */
-    border-bottom: none;
-    /* Remove the golden underline from this heading */
-    padding-bottom: 0;
-    /* Remove padding if underline is removed */
-    margin-bottom: 10px;
-    /* Adjust margin below heading in column */
-    font-size: 1.8em;
-    /* Ensure consistent heading size in column */
+  /* Uses existing sub-heading styles */
+  /* Adjusted margin-bottom is now handled by the JSX (mb-3) */
+  text-align: left;
+  /* Align heading to the left in the column */
+  width: auto;
+  /* Allow text-align left to work */
+  border-bottom: none;
+  /* Remove the golden underline from this heading */
+  padding-bottom: 0;
+  /* Remove padding if underline is removed */
+  margin-bottom: 10px;
+  /* Adjust margin below heading in column */
+  font-size: 1.8em;
+  /* Ensure consistent heading size in column */
 }
 
 .category-info-content .paragraph {
-    /* Uses existing paragraph styles */
-    text-align: left;
-    /* Ensure paragraph is left-aligned in the column */
-    font-size: 1.1em;
-    /* Ensure consistent paragraph size in column */
-    line-height: 1.7;
-    color: var(--royal-medium-brown);
+  /* Uses existing paragraph styles */
+  text-align: left;
+  /* Ensure paragraph is left-aligned in the column */
+  font-size: 1.1em;
+  /* Ensure consistent paragraph size in column */
+  line-height: 1.7;
+  color: var(--royal-medium-brown);
 }
-
 
 /* Responsive adjustments for Products Pages */
 @media (max-width: 991.98px) {
+  /* Tablet screens and down */
+  .products-hero-section {
+    height: 250px;
+  }
 
-    /* Tablet screens and down */
-    .products-hero-section {
-        height: 250px;
-    }
+  .products-hero-title {
+    font-size: 2.8em;
+  }
 
-    .products-hero-title {
-        font-size: 2.8em;
-    }
+  .products-hero-subtitle {
+    font-size: 1.2em;
+  }
 
-    .products-hero-subtitle {
-        font-size: 1.2em;
-    }
+  /* Category/Product Cards on Tablet */
+  .category-card,
+  .product-card {
+    margin-bottom: 20px;
+    /* Add some space between stacked cards */
+  }
 
-    /* Category/Product Cards on Tablet */
-    .category-card,
-    .product-card {
-        margin-bottom: 20px;
-        /* Add some space between stacked cards */
-    }
+  .product-detail-page .col-lg-6 {
+    text-align: center;
+    /* Center content in columns when stacked */
+  }
 
-    .product-detail-page .col-lg-6 {
-        text-align: center;
-        /* Center content in columns when stacked */
-    }
+  .product-detail-image {
+    max-width: 80%;
+    /* Limit image width on tablets */
+    margin-bottom: 30px;
+  }
 
-    .product-detail-image {
-        max-width: 80%;
-        /* Limit image width on tablets */
-        margin-bottom: 30px;
-    }
+  .product-detail-name {
+    font-size: 2em;
+    /* Adjust size */
+  }
 
-    .product-detail-name {
-        font-size: 2em;
-        /* Adjust size */
-    }
+  .product-detail-description {
+    font-size: 1em;
+    /* Adjust size */
+  }
 
-    .product-detail-description {
-        font-size: 1em;
-        /* Adjust size */
-    }
+  .features-list,
+  .specifications-list {
+    text-align: left;
+    /* Keep lists left-aligned within centered column */
+    max-width: 90%;
+    /* Constrain list width for readability */
+    margin-left: auto;
+    margin-right: auto;
+  }
 
-    .features-list,
-    .specifications-list {
-        text-align: left;
-        /* Keep lists left-aligned within centered column */
-        max-width: 90%;
-        /* Constrain list width for readability */
-        margin-left: auto;
-        margin-right: auto;
-    }
+  .features-list i {
+    font-size: 1em;
+    /* Adjust icon size */
+  }
 
-    .features-list i {
-        font-size: 1em;
-        /* Adjust icon size */
-    }
+  .product-back-btn {
+    width: auto;
+    /* Allow button to size based on content */
+    margin-bottom: 15px;
+    /* Add space when buttons stack */
+  }
 
-    .product-back-btn {
-        width: auto;
-        /* Allow button to size based on content */
-        margin-bottom: 15px;
-        /* Add space when buttons stack */
-    }
-
-    /* Category Detail Sections on Tablet */
-    .category-benefits-applications-section,
+  /* Category Detail Sections on Tablet */
+  .category-benefits-applications-section,
     .category-gallery-section,
     /* Still styled if you use it separately */
     .category-videos-section {
-        /* Still styled if you use it separately */
-        padding: 30px;
-        /* Adjust padding */
-        margin-bottom: 30px;
-        /* Adjust space between sections */
-    }
+    /* Still styled if you use it separately */
+    padding: 30px;
+    /* Adjust padding */
+    margin-bottom: 30px;
+    /* Adjust space between sections */
+  }
 
-    .category-benefits-applications-section .sub-heading,
-    .category-gallery-section .sub-heading,
-    .category-videos-section .sub-heading {
-        font-size: 1.6em;
-        /* Smaller headings */
-        margin-bottom: 20px;
-        text-align: center;
-        /* Center headings */
-        display: block;
-        /* Allow border to go full width if preferred */
-        width: 100%;
-        /* Ensure text-align center works */
-    }
+  .category-benefits-applications-section .sub-heading,
+  .category-gallery-section .sub-heading,
+  .category-videos-section .sub-heading {
+    font-size: 1.6em;
+    /* Smaller headings */
+    margin-bottom: 20px;
+    text-align: center;
+    /* Center headings */
+    display: block;
+    /* Allow border to go full width if preferred */
+    width: 100%;
+    /* Ensure text-align center works */
+  }
 
-    /* Category Info content within column (adjust padding) */
-    .category-info-content {
-        padding: 0 10px;
-        /* Less horizontal padding in column on tablet */
-        text-align: center;
-        /* Center text in column on tablet */
-    }
+  /* Category Info content within column (adjust padding) */
+  .category-info-content {
+    padding: 0 10px;
+    /* Less horizontal padding in column on tablet */
+    text-align: center;
+    /* Center text in column on tablet */
+  }
 
-    .category-info-content .sub-heading {
-        text-align: center;
-        /* Center heading in column on tablet */
-        font-size: 1.6em;
-        /* Adjust heading size */
-    }
+  .category-info-content .sub-heading {
+    text-align: center;
+    /* Center heading in column on tablet */
+    font-size: 1.6em;
+    /* Adjust heading size */
+  }
 
-    .category-info-content .paragraph {
-        text-align: center;
-        /* Center paragraph in column on tablet */
-        font-size: 1em;
-        /* Adjust paragraph size */
-    }
+  .category-info-content .paragraph {
+    text-align: center;
+    /* Center paragraph in column on tablet */
+    font-size: 1em;
+    /* Adjust paragraph size */
+  }
 
-    /* Style for the main category image (when no carousel) on tablet */
-    .category-detail-image {
-        max-width: 80%;
-        /* Limit image width on tablets */
-        margin-bottom: 30px;
-        /* Add bottom margin when stacked */
-    }
+  /* Style for the main category image (when no carousel) on tablet */
+  .category-detail-image {
+    max-width: 80%;
+    /* Limit image width on tablets */
+    margin-bottom: 30px;
+    /* Add bottom margin when stacked */
+  }
 
+  /* Adjust carousel height on tablet */
+  #categoryMediaCarousel .carousel-item {
+    height: 280px;
+    /* Smaller carousel height on tablet */
+  }
 
-    /* Adjust carousel height on tablet */
-    #categoryMediaCarousel .carousel-item {
-        height: 280px;
-        /* Smaller carousel height on tablet */
-    }
+  .product-detail-media {
+    height: 280px;
+    /* Adjust image height on tablet */
+  }
 
-    .product-detail-media {
-        height: 280px;
-        /* Adjust image height on tablet */
-    }
+  /* Adjust image/video height within carousel on tablet */
+  #categoryMediaCarousel .carousel-item .category-carousel-image,
+  #categoryMediaCarousel
+    .carousel-item
+    .category-carousel-video-container
+    iframe,
+  #categoryMediaCarousel
+    .carousel-item
+    .category-carousel-video-container
+    video {
+    height: 100%;
+    /* Still fill the adjusted item height */
+  }
 
-    /* Adjust image/video height within carousel on tablet */
-    #categoryMediaCarousel .carousel-item .category-carousel-image,
-    #categoryMediaCarousel .carousel-item .category-carousel-video-container iframe,
-    #categoryMediaCarousel .carousel-item .category-carousel-video-container video {
-        height: 100%;
-        /* Still fill the adjusted item height */
-    }
+  .combined-list {
+    padding-left: 0;
+    /* Remove padding for lists */
+    text-align: left;
+  }
 
+  .combined-list li {
+    font-size: 1em;
+    /* Adjust font size */
+    margin-bottom: 8px;
+  }
 
-    .combined-list {
-        padding-left: 0;
-        /* Remove padding for lists */
-        text-align: left;
-    }
+  .category-list-icon {
+    font-size: 1.1em;
+    /* Adjust icon size */
+    margin-right: 10px;
+  }
 
-    .combined-list li {
-        font-size: 1em;
-        /* Adjust font size */
-        margin-bottom: 8px;
-    }
+  /* Gallery image height adjustment (if separate gallery section is used) */
+  .category-gallery-section img {
+    height: 180px;
+    /* Adjust image height on tablet */
+  }
 
-    .category-list-icon {
-        font-size: 1.1em;
-        /* Adjust icon size */
-        margin-right: 10px;
-    }
-
-    /* Gallery image height adjustment (if separate gallery section is used) */
-    .category-gallery-section img {
-        height: 180px;
-        /* Adjust image height on tablet */
-    }
-
-    /* Videos section adjustment (if separate videos section is used) */
-    .category-videos-section iframe,
-    .category-videos-section video {
-        height: 300px;
-        /* Adjust video height on tablet */
-    }
+  /* Videos section adjustment (if separate videos section is used) */
+  .category-videos-section iframe,
+  .category-videos-section video {
+    height: 300px;
+    /* Adjust video height on tablet */
+  }
 }
 
 @media (max-width: 767.98px) {
+  /* Mobile screens and down */
+  .products-hero-section {
+    height: 200px;
+  }
 
-    /* Mobile screens and down */
-    .products-hero-section {
-        height: 200px;
-    }
+  .products-hero-title {
+    font-size: 2em;
+  }
 
-    .products-hero-title {
-        font-size: 2em;
-    }
+  .products-hero-subtitle {
+    font-size: 1em;
+  }
 
-    .products-hero-subtitle {
-        font-size: 1em;
-    }
+  /* Category/Product Cards on Mobile */
+  .category-card,
+  .product-card {
+    margin-bottom: 15px;
+    /* Adjust space */
+  }
 
-    /* Category/Product Cards on Mobile */
-    .category-card,
-    .product-card {
-        margin-bottom: 15px;
-        /* Adjust space */
-    }
+  .category-card .card-img-top,
+  .product-card .card-img-top {
+    height: 160px;
+    /* Slightly smaller images */
+  }
 
-    .category-card .card-img-top,
-    .product-card .card-img-top {
-        height: 160px;
-        /* Slightly smaller images */
-    }
+  .category-title,
+  .product-title {
+    font-size: 1.1em;
+  }
 
-    .category-title,
-    .product-title {
-        font-size: 1.1em;
-    }
+  .category-description,
+  .product-short-description {
+    font-size: 0.9em;
+  }
 
-    .category-description,
-    .product-short-description {
-        font-size: 0.9em;
-    }
+  .product-detail-image {
+    max-width: 100%;
+    /* Allow image to be full width */
+    margin-bottom: 20px;
+  }
 
-    .product-detail-image {
-        max-width: 100%;
-        /* Allow image to be full width */
-        margin-bottom: 20px;
-    }
+  .product-detail-name {
+    font-size: 1.6em;
+  }
 
-    .product-detail-name {
-        font-size: 1.6em;
-    }
+  .product-detail-description {
+    font-size: 0.95em;
+  }
 
-    .product-detail-description {
-        font-size: 0.95em;
-    }
+  .features-list,
+  .specifications-list {
+    padding-left: 0;
+    max-width: 100%;
+    /* Allow list to be full width */
+  }
 
-    .features-list,
-    .specifications-list {
-        padding-left: 0;
-        max-width: 100%;
-        /* Allow list to be full width */
-    }
+  .product-back-btn {
+    font-size: 0.85em;
+    padding: 8px 15px;
+  }
 
-    .product-back-btn {
-        font-size: 0.85em;
-        padding: 8px 15px;
-    }
-
-    /* Category Detail Sections on Mobile */
-    /* Styles for sections below the two-column layout */
-    .category-benefits-applications-section,
+  /* Category Detail Sections on Mobile */
+  /* Styles for sections below the two-column layout */
+  .category-benefits-applications-section,
     .category-gallery-section,
     /* Still styled if you use it separately */
     .category-videos-section {
-        /* Still styled if you use it separately */
-        padding: 15px;
-        /* Further reduce padding */
-        margin-bottom: 25px;
-        /* Further reduce space between sections */
-    }
+    /* Still styled if you use it separately */
+    padding: 15px;
+    /* Further reduce padding */
+    margin-bottom: 25px;
+    /* Further reduce space between sections */
+  }
 
-    .category-benefits-applications-section .sub-heading,
-    .category-gallery-section .sub-heading,
-    .category-videos-section .sub-heading {
-        font-size: 1.4em;
-        /* Even smaller headings */
-        margin-bottom: 15px;
-    }
+  .category-benefits-applications-section .sub-heading,
+  .category-gallery-section .sub-heading,
+  .category-videos-section .sub-heading {
+    font-size: 1.4em;
+    /* Even smaller headings */
+    margin-bottom: 15px;
+  }
 
-    /* Category Info content within column */
-    .category-info-content {
-        padding: 0;
-        /* Remove padding in column on mobile */
-        text-align: center;
-        /* Center text in column on mobile */
-    }
+  /* Category Info content within column */
+  .category-info-content {
+    padding: 0;
+    /* Remove padding in column on mobile */
+    text-align: center;
+    /* Center text in column on mobile */
+  }
 
-    .category-info-content .sub-heading {
-        text-align: center;
-        /* Center heading in column on mobile */
-        font-size: 1.4em;
-        /* Adjust heading size */
-    }
+  .category-info-content .sub-heading {
+    text-align: center;
+    /* Center heading in column on mobile */
+    font-size: 1.4em;
+    /* Adjust heading size */
+  }
 
-    .category-info-content .paragraph {
-        text-align: center;
-        /* Center paragraph in column on mobile */
-        font-size: 0.95em;
-        /* Adjust paragraph size */
-    }
+  .category-info-content .paragraph {
+    text-align: center;
+    /* Center paragraph in column on mobile */
+    font-size: 0.95em;
+    /* Adjust paragraph size */
+  }
 
-    /* Style for the main category image (when no carousel) on mobile */
-    .category-detail-image {
-        max-width: 100%;
-        /* Allow image to be full width */
-        margin-bottom: 20px;
-        /* Add bottom margin when stacked */
-    }
+  /* Style for the main category image (when no carousel) on mobile */
+  .category-detail-image {
+    max-width: 100%;
+    /* Allow image to be full width */
+    margin-bottom: 20px;
+    /* Add bottom margin when stacked */
+  }
 
-    /* Adjust carousel height on mobile */
-    #categoryMediaCarousel .carousel-item {
-        height: 300px;
-        /* Smaller carousel height on mobile */
-    }
+  /* Adjust carousel height on mobile */
+  #categoryMediaCarousel .carousel-item {
+    height: 300px;
+    /* Smaller carousel height on mobile */
+  }
 
-    .product-detail-media {
-        height: 300px;
-        /* Adjust image height on mobile */
-    }
+  .product-detail-media {
+    height: 300px;
+    /* Adjust image height on mobile */
+  }
 
-    /* Adjust image/video height within carousel on mobile */
-    #categoryMediaCarousel .carousel-item .category-carousel-image,
-    #categoryMediaCarousel .carousel-item .category-carousel-video-container iframe,
-    #categoryMediaCarousel .carousel-item .category-carousel-video-container video {
-        height: 100%;
-        /* Still fill the adjusted item height */
-    }
+  /* Adjust image/video height within carousel on mobile */
+  #categoryMediaCarousel .carousel-item .category-carousel-image,
+  #categoryMediaCarousel
+    .carousel-item
+    .category-carousel-video-container
+    iframe,
+  #categoryMediaCarousel
+    .carousel-item
+    .category-carousel-video-container
+    video {
+    height: 100%;
+    /* Still fill the adjusted item height */
+  }
 
+  .combined-list li {
+    font-size: 0.9em;
+    /* Further adjust font size */
+    margin-bottom: 6px;
+  }
 
-    .combined-list li {
-        font-size: 0.9em;
-        /* Further adjust font size */
-        margin-bottom: 6px;
-    }
+  .category-list-icon {
+    font-size: 1em;
+    margin-right: 8px;
+  }
 
-    .category-list-icon {
-        font-size: 1em;
-        margin-right: 8px;
-    }
+  /* Gallery image height adjustment (if separate gallery section is used) */
+  .category-gallery-section img {
+    height: 120px;
+    /* Adjust image height on mobile */
+  }
 
-    /* Gallery image height adjustment (if separate gallery section is used) */
-    .category-gallery-section img {
-        height: 120px;
-        /* Adjust image height on mobile */
-    }
-
-    /* Videos section adjustment (if separate videos section is used) */
-    .category-videos-section iframe,
-    .category-videos-section video {
-        height: 200px;
-        /* Adjust video height on mobile */
-    }
+  /* Videos section adjustment (if separate videos section is used) */
+  .category-videos-section iframe,
+  .category-videos-section video {
+    height: 200px;
+    /* Adjust video height on mobile */
+  }
 }
 
 /* Fix for headings not centering when inline-block on very small screens */
 @media (max-width: 575.98px) {
-
-    .category-benefits-applications-section .sub-heading,
+  .category-benefits-applications-section .sub-heading,
     .category-gallery-section .sub-heading,
     /* If separate gallery is used */
     .category-videos-section .sub-heading {
-        /* If separate videos section is used */
-        text-align: center;
-        /* Ensure centered on very small screens */
-        display: block;
-        /* Make it block to ensure text-align center works */
-        width: 100%;
-        /* Ensure it takes full width */
-    }
+    /* If separate videos section is used */
+    text-align: center;
+    /* Ensure centered on very small screens */
+    display: block;
+    /* Make it block to ensure text-align center works */
+    width: 100%;
+    /* Ensure it takes full width */
+  }
 
-    .category-info-content {
-        padding: 0;
-        /* Ensure no padding on very small screens */
-        text-align: center;
-        /* Center text */
-    }
+  .category-info-content {
+    padding: 0;
+    /* Ensure no padding on very small screens */
+    text-align: center;
+    /* Center text */
+  }
 
-    .category-info-content .sub-heading,
-    .category-info-content .paragraph {
-        text-align: center;
-        /* Center text */
-    }
+  .category-info-content .sub-heading,
+  .category-info-content .paragraph {
+    text-align: center;
+    /* Center text */
+  }
 
-    /* Adjust carousel height on very small screens if needed */
-    #categoryMediaCarousel .carousel-item {
-        height: 250px;
-        /* Example: Even smaller height on very small screens */
-    }
+  /* Adjust carousel height on very small screens if needed */
+  #categoryMediaCarousel .carousel-item {
+    height: 250px;
+    /* Example: Even smaller height on very small screens */
+  }
 
-    .product-detail-media {
-        height: 250px;
-        /* Example: Even smaller height on very small screens */
-    }
+  .product-detail-media {
+    height: 250px;
+    /* Example: Even smaller height on very small screens */
+  }
 
-    /* Adjust image/video height within carousel on very small screens */
-    #categoryMediaCarousel .carousel-item .category-carousel-image,
-    #categoryMediaCarousel .carousel-item .category-carousel-video-container iframe,
-    #categoryMediaCarousel .carousel-item .category-carousel-video-container video {
-        height: 100%;
-        /* Still fill the adjusted item height */
-    }
+  /* Adjust image/video height within carousel on very small screens */
+  #categoryMediaCarousel .carousel-item .category-carousel-image,
+  #categoryMediaCarousel
+    .carousel-item
+    .category-carousel-video-container
+    iframe,
+  #categoryMediaCarousel
+    .carousel-item
+    .category-carousel-video-container
+    video {
+    height: 100%;
+    /* Still fill the adjusted item height */
+  }
 }

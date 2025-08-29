@@ -3,7 +3,9 @@
 /* Main Footer Content */
 .footer {
   background-color: var(--royal-light-beige); /* Changed to light beige */
-  color: var(--royal-medium-brown); /* Changed to medium brown for default text */
+  color: var(
+    --royal-medium-brown
+  ); /* Changed to medium brown for default text */
   padding: 50px 0;
   border-radius: 0;
   box-shadow: none;
@@ -21,7 +23,7 @@
 }
 
 .footer-company-name {
-  font-family: 'Georgia', serif;
+  font-family: "Georgia", serif;
   font-size: 1.8em;
   line-height: 1;
   color: var(--royal-dark-brown); /* Changed to dark brown */
@@ -40,7 +42,6 @@
   transform: translateY(-3px) scale(1.1);
 }
 
-
 .footer-description {
   font-size: 0.9em;
   line-height: 1.6;
@@ -57,7 +58,7 @@
 }
 
 .footer-heading::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   bottom: 0;
@@ -83,7 +84,7 @@
 }
 
 .footer-link::before {
-  content: '\203A';
+  content: "\203A";
   position: absolute;
   left: -15px;
   opacity: 0;
@@ -94,7 +95,6 @@
   opacity: 1;
   left: -5px;
 }
-
 
 .footer-contact-item {
   font-size: 0.9em;
@@ -120,7 +120,9 @@
 
 /* Bottom Copyright Bar */
 .bottom-bar {
-  background-color: var(--royal-white); /* Changed to white for subtle contrast with light beige footer */
+  background-color: var(
+    --royal-white
+  ); /* Changed to white for subtle contrast with light beige footer */
   opacity: 1;
   border-top: 1px solid var(--royal-light-gold); /* Light golden border */
   color: var(--royal-medium-brown); /* Changed to medium brown */
@@ -151,7 +153,8 @@
     left: 50%;
     transform: translateX(-50%);
   }
-  .footer-links, .footer-contact-item {
+  .footer-links,
+  .footer-contact-item {
     padding-left: 0;
   }
   .footer-links li {
