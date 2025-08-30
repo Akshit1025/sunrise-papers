@@ -4,18 +4,18 @@ import React, { useState, useEffect } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig"; // Adjust path as needed
 import RequireAdmin from "../auth/RequireAdmin"; // Assuming you protect admin pages
-import { Cloudinary } from "cloudinary-core"; // Import Cloudinary
+// import { Cloudinary } from "cloudinary-core"; // Import Cloudinary
 
 // --- Cloudinary Configuration (Ensure these are in your .env) ---
 // WARNING: Storing API Secret directly in frontend code is INSECURE for production.
 // For production, consider using signed uploads where signature is generated on the backend.
 // You might already have this config elsewhere, but include it here if this is the only place for content images
-const cloudinaryCore = new Cloudinary({
-  cloud_name: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.REACT_APP_CLOUDINARY_API_KEY,
-  api_secret: process.env.REACT_APP_CLOUDINARY_API_SECRET, // INSECURE for frontend in production
-  secure: true, // Use HTTPS
-});
+// const cloudinaryCore = new Cloudinary({
+//   cloud_name: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
+//   api_key: process.env.REACT_APP_CLOUDINARY_API_KEY,
+//   api_secret: process.env.REACT_APP_CLOUDINARY_API_SECRET, // INSECURE for frontend in production
+//   secure: true, // Use HTTPS
+// });
 // --- End Cloudinary Configuration ---
 
 // --- Helper function for Cloudinary Signature ---

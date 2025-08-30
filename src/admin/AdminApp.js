@@ -147,7 +147,7 @@ const AdminApp = () => {
         </nav>
       )}
       {/* Wrap content in a container for spacing */}
-      <div className="container py-4">
+      <div className={`container ${isLoginRoute ? "" : "py-4"}`}>
         {/* The Routes component stays here */}
         <Routes>
           <Route path="login" element={<Login />} />
@@ -203,23 +203,24 @@ const AdminApp = () => {
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Routes>
       </div>
-      <footer>
-        <div className="text-center py-3 bg-light text-muted small">
-          {" "}
-          {/* Using Bootstrap classes for basic styling */}
-          &copy; {new Date().getFullYear()} Sunrise Papers. All Rights Reserved.
-          <br />
-          Made by {/* Added space */}
-          <a
-            href="https://instagram.com/akshitthecoder"
-            target="_blank" // Open in a new tab
-            rel="noopener noreferrer" // Security best practice for target="_blank"
-            className="text-decoration-none text-muted" // Style the link to match text
-          >
-            Akshit Gupta
-          </a>
-        </div>
-      </footer>
+      {!isLoginRoute && (
+        <footer>
+          <div className="text-center py-3 bg-light text-muted small">
+            &copy; {new Date().getFullYear()} Sunrise Papers. All Rights
+            Reserved.
+            <br />
+            Made by{" "}
+            <a
+              href="https://instagram.com/akshitthecoder"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-decoration-none text-muted"
+            >
+              Akshit Gupta
+            </a>
+          </div>
+        </footer>
+      )}
     </div>
   );
 };

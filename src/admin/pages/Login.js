@@ -27,19 +27,28 @@ const Login = () => {
   };
 
   return (
-    <div className="container py-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6 col-lg-5">
-          <div className="card">
-            <div className="card-body">
-              <h1 className="h3 mb-4 text-center">Admin Login</h1>
-              {error && <div className="alert alert-danger mb-3">{error}</div>}
+    <div
+      className="d-flex align-items-center justify-content-center vh-100"
+      style={{ margin: 0, padding: 0 }}
+    >
+      <div className="container">
+        <div className="row justify-content-center align-items-center">
+          <div className="col-md-5">
+            <div className="card border-0 shadow p-4 rounded-4">
+              <h3 className="text-center mb-4 fw-bold">Member Login</h3>
+
+              {error && <div className="alert alert-danger">{error}</div>}
+
               <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label className="form-label">Email</label>
+                {/* Email */}
+                <div className="input-group mb-3">
+                  <span className="input-group-text bg-light">
+                    <i className="fas fa-envelope"></i>
+                  </span>
                   <input
                     type="email"
                     className="form-control"
+                    placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     autoComplete="username"
@@ -48,11 +57,15 @@ const Login = () => {
                   />
                 </div>
 
-                <div className="mb-4">
-                  <label className="form-label">Password</label>
+                {/* Password */}
+                <div className="input-group mb-4">
+                  <span className="input-group-text bg-light">
+                    <i className="fas fa-lock"></i>
+                  </span>
                   <input
                     type="password"
                     className="form-control"
+                    placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     autoComplete="current-password"
@@ -61,36 +74,21 @@ const Login = () => {
                   />
                 </div>
 
+                {/* Submit */}
                 <button
                   type="submit"
-                  className="btn btn-dark w-100"
+                  className="btn btn-outline-dark w-100 rounded-pill fw-bold"
                   disabled={submitting}
                 >
-                  {submitting ? (
-                    <>
-                      <span
-                        className="spinner-border spinner-border-sm me-1"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                      Signing in...
-                    </>
-                  ) : (
-                    <>
-                      <i className="fas fa-sign-in-alt me-1"></i>
-                      Sign In
-                    </>
-                  )}
+                  {submitting ? "Signing in..." : "LOGIN"}
                 </button>
               </form>
-              <div className="mt-3 text-center btn btn-dark w-100">
-                {" "}
-                {/* Center the back link */}
-                <Link to="/" className="text-decoration-none text-white">
-                  <i className="fas fa-arrow-left me-2"></i>
-                  Back to Main Website
+
+              {/* Back to Website */}
+              <div className="text-center mt-4">
+                <Link to="/" className="text-decoration-none text-muted">
+                  ← Back to Main Website
                 </Link>
-                {/* Updated text for clarity */}
               </div>
             </div>
           </div>

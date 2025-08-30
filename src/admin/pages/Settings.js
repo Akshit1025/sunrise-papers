@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 
@@ -20,7 +20,7 @@ const Settings = () => {
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState("");
 
-  const ref = doc(db, "settings", "site");
+  const ref = useMemo(() => doc(db, "settings", "site"), [])
 
   useEffect(() => {
     const fetchSettings = async () => {
