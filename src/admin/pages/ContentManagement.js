@@ -18,6 +18,30 @@ const cloudinaryCore = new Cloudinary({
 });
 // --- End Cloudinary Configuration ---
 
+// --- Helper function for Cloudinary Signature ---
+async function generateCloudinarySignature(paramsToSign, apiSecret) {
+  // Sort parameters alphabetically by key
+  const sortedKeys = Object.keys(paramsToSign).sort();
+  let stringToSign = sortedKeys
+    .map((key) => `${key}=${paramsToSign[key]}`)
+    .join("&");
+  stringToSign += apiSecret;
+
+  // Use the SubtleCrypto API to generate the SHA-1 hash
+  const encoder = new TextEncoder();
+  const data = encoder.encode(stringToSign);
+  const hashBuffer = await crypto.subtle.digest("SHA-1", data);
+
+  // convert ArrayBuffer to hex string
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
+  return hashHex;
+}
+// --- End Helper Function ---
+
 // Define a default structure for the homepage content
 const defaultHomepageContent = {
   carouselItems: [
@@ -440,62 +464,69 @@ const ContentManagement = () => {
   // --- Image Deletion Function (Reusable - simplified frontend version INSECURE) ---
   // You should ideally move this to a backend function
   const deleteImage = async (imageUrl) => {
-    if (!imageUrl || !imageUrl.startsWith("https://res.cloudinary.com/"))
+    if (!imageUrl || !imageUrl.startsWith("https://res.cloudinary.com/")) {
       return;
+    }
 
     try {
-      const urlParts = imageUrl.split("/");
-      const uploadIndex = urlParts.indexOf("upload");
-      if (uploadIndex === -1 || uploadIndex >= urlParts.length - 1) {
-        console.warn(
-          "Could not extract public ID from Cloudinary URL for deletion:",
-          imageUrl
-        );
+      // Correctly parse the public_id by removing the version number
+      const pathWithVersion = imageUrl.split("/upload/")[1]?.split("?")[0];
+      if (!pathWithVersion) {
+        console.warn("Could not extract path from URL:", imageUrl);
         return;
       }
-      let publicIdParts = urlParts.slice(uploadIndex + 2); // Parts after /upload/ and version
-      if (publicIdParts.length === 0) {
-        // Case without version
-        publicIdParts = urlParts.slice(uploadIndex + 1);
+
+      const pathParts = pathWithVersion.split("/");
+      if (pathParts[0].match(/^v\d+$/)) {
+        pathParts.shift(); // Remove the version part if it exists
       }
-      const publicId = publicIdParts.join("/").split(".")[0]; // Join parts and get before extension
+      const publicIdWithExtension = pathParts.join("/");
+      const publicId = publicIdWithExtension.substring(
+        0,
+        publicIdWithExtension.lastIndexOf(".")
+      );
 
-      // Call Cloudinary API to delete (frontend - INSECURE for production)
       const timestamp = new Date().getTime();
-      const signature = cloudinaryCore.utils.api_sign_request(
+      const paramsToSign = {
+        public_id: publicId,
+        timestamp,
+      };
+
+      // Use the correct helper function to generate the signature
+      const signature = await generateCloudinarySignature(
+        paramsToSign,
+        process.env.REACT_APP_CLOUDINARY_API_SECRET
+      );
+
+      const formData = new FormData();
+      formData.append("public_id", publicId);
+      formData.append("timestamp", timestamp);
+      formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY);
+      formData.append("signature", signature);
+
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/destroy`,
         {
-          timestamp: timestamp,
-          public_id: publicId,
-          resource_type: "image",
-        },
-        process.env.REACT_APP_CLOUDINARY_API_SECRET // Requires API Secret on frontend (INSECURE)
+          method: "POST",
+          body: formData,
+        }
       );
 
-      const deleteUrl = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/destroy`;
-      const deleteFormData = new FormData();
-      deleteFormData.append("public_id", publicId);
-      deleteFormData.append("timestamp", timestamp);
-      deleteFormData.append(
-        "api_key",
-        process.env.REACT_APP_CLOUDINARY_API_KEY
-      );
-      deleteFormData.append("signature", signature);
-      deleteFormData.append("resource_type", "image");
-
-      const response = await fetch(deleteUrl, {
-        method: "POST",
-        body: deleteFormData,
-      });
-
-      const data = await response.json();
+      const data = await res.json();
 
       if (data.result === "ok" || data.result === "not found") {
-        console.log(`Cloudinary deletion result for ${publicId}:`, data.result);
+        console.log(`Cloudinary deletion successful for ${publicId}`);
       } else {
-        console.error(`Cloudinary deletion failed for ${publicId}:`, data);
+        throw new Error(
+          `Cloudinary deletion failed for ${publicId}: ${
+            data.error?.message || "Unknown error"
+          }`
+        );
       }
     } catch (e) {
       console.error(`Error deleting image ${imageUrl} from Cloudinary:`, e);
+      // Re-throw the error so any calling function knows it failed
+      throw e;
     }
   };
   // --- End Image Deletion Function ---

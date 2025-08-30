@@ -602,7 +602,8 @@ const Categories = () => {
       // Based on the Products.js pattern, let's pass uploadedMainImageUrl as a string and the others as arrays.
       const finalPayload = buildPayload(
         uploadedMainImageUrl,
-        uploadedGalleryImageUrls
+        uploadedGalleryImageUrls,
+        uploadedVideoUrls
       );
 
       // Add validation if needed (e.g., main image URL is mandatory)
@@ -790,7 +791,8 @@ const Categories = () => {
       // Pass uploaded URLs to buildPayload
       const finalPayloadCandidate = buildPayload(
         uploadedMainImageUrl,
-        uploadedGalleryImageUrls
+        uploadedGalleryImageUrls,
+        uploadedVideoUrls
       );
       // Note: buildPayload already incorporates uploadedVideoUrls into finalPayloadCandidate.videos
 
