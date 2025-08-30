@@ -542,7 +542,7 @@ const ContentManagement = () => {
       setContactImageFiles((prev) => ({ ...prev, [sectionName]: file }));
     }
     // Optional: Clear the input so the same file can be selected again
-    e.target.value = null;
+    // e.target.value = null;
   };
 
   // Handle text/input changes for homepage content
