@@ -300,18 +300,22 @@ const CategoryProductsPage = ({ authReady }) => {
                             ) : (
                               // Must be a video
                               <div className="category-carousel-video-container embed-responsive embed-responsive-16by9">
-                                <iframe
-                                  className="embed-responsive-item d-block w-100 category-carousel-video"
-                                  src={item.url}
-                                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope"
+                                <video
+                                  className="d-block w-100 category-carousel-video"
+                                  style={{
+                                    height: "400px",
+                                    objectFit: "cover",
+                                  }}
+                                  loop
+                                  autoPlay
+                                  muted
+                                  playsInline
                                   title={item.title}
-                                ></iframe>
+                                >
+                                  <source src={item.url} type="video/mp4" />
+                                  Your browser does not support the video tag.
+                                </video>
                               </div>
-                              // If using <video> tag for self-hosted:
-                              // <video controls className="d-block w-100 category-carousel-video" style={{ height: '400px', objectFit: 'cover' }}>
-                              //    <source src={item.url} type="video/mp4" />
-                              //    Your browser does not support the video tag.
-                              // </video>
                             )}
                           </div>
                         ))}
