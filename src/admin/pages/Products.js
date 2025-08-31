@@ -11,37 +11,6 @@ import {
 import { db } from "../../firebaseConfig"; // Ensure storage is not imported here
 import RequireAdmin from "../auth/RequireAdmin"; // Assuming you have this for protection
 
-// Import Cloudinary
-// import { Cloudinary } from "cloudinary-core"; // Assuming you'll use core for now
-
-// const cloudinaryCore = new Cloudinary({
-//   cloud_name: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
-//   api_key: process.env.REACT_APP_CLOUDINARY_API_KEY,
-//   api_secret: process.env.REACT_APP_CLOUDINARY_API_SECRET, // INSECURE for frontend in production
-//   secure: true, // Use HTTPS
-// });
-
-// --- New Helper Function for Cloudinary Signature ---
-async function generateCloudinarySignature(paramsToSign, apiSecret) {
-  const sortedKeys = Object.keys(paramsToSign).sort();
-  let stringToSign = sortedKeys
-    .map((key) => `${key}=${paramsToSign[key]}`)
-    .join("&");
-  stringToSign += apiSecret;
-
-  const encoder = new TextEncoder();
-  const data = encoder.encode(stringToSign);
-  const hashBuffer = await crypto.subtle.digest("SHA-1", data);
-
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-
-  return hashHex;
-}
-// --- End Helper Function ---
-
 const slugify = (text) =>
   text
     .toString()
