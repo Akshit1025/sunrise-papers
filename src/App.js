@@ -15,6 +15,7 @@ import CategoryProductsPage from "./pages/CategoryProductsPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import ContactPage from "./pages/ContactPage";
 import AdminApp from "./admin/AdminApp";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -142,6 +143,8 @@ const App = () => {
           path="/contact"
           element={<ContactPage userId={userId} authReady={authReady} />}
         />
+        {/* Catch-all for 404 Not Found */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       {!isAdminRoute && <Footer />}
     </div>

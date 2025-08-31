@@ -1,0 +1,59 @@
+/* src/pages/NotFoundPage.css */
+
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  text-align: center;
+  background-color: #f9f6f2; /* Light beige from your design */
+  padding: 40px 20px;
+  font-family: "Poppins", sans-serif; /* Assuming a similar font to your theme */
+}
+
+.not-found-title {
+  font-size: clamp(8rem, 25vw, 12rem);
+  font-weight: 700;
+  color: var(--royal-dark-brown, #4a2c2a);
+  margin: 0;
+  line-height: 1;
+}
+
+.not-found-subtitle {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: 600;
+  color: var(--royal-dark-brown, #4a2c2a);
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.not-found-text {
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
+  color: var(--royal-medium-brown, #7a5c5a);
+  margin-bottom: 30px;
+  max-width: 450px;
+}
+
+.not-found-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px; /* Space between icon and text */
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: var(--royal-dark-brown, #4a2c2a);
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.not-found-button:hover {
+  background-color: var(
+    --royal-gold,
+    #9f7847
+  ); /* Using a theme gold color for hover */
+  transform: translateY(-2px);
+}
