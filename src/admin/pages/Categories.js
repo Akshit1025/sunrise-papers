@@ -11,44 +11,6 @@ import {
 import { db } from "../../firebaseConfig"; // Assuming db is exported from here
 import RequireAdmin from "../auth/RequireAdmin"; // Assuming you have this component
 
-// Import Cloudinary
-// import { Cloudinary } from "cloudinary-core"; // Assuming you'll use core for utility functions
-
-// --- Cloudinary Configuration (Ensure these are in your .env) ---
-// WARNING: Storing API Secret directly in frontend code is INSECURE for production.
-// For production, consider using signed uploads where signature is generated on the backend.
-// const cloudinaryCore = new Cloudinary({
-//   cloud_name: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
-//   api_key: process.env.REACT_APP_CLOUDINARY_API_KEY,
-//   api_secret: process.env.REACT_APP_CLOUDINARY_API_SECRET, // INSECURE for frontend in production
-//   secure: true, // Use HTTPS
-// });
-// --- End Cloudinary Configuration ---
-
-// --- Helper function for Cloudinary Signature ---
-async function generateCloudinarySignature(paramsToSign, apiSecret) {
-  // Sort parameters alphabetically by key
-  const sortedKeys = Object.keys(paramsToSign).sort();
-  let stringToSign = sortedKeys
-    .map((key) => `${key}=${paramsToSign[key]}`)
-    .join("&");
-  stringToSign += apiSecret;
-
-  // Use the SubtleCrypto API to generate the SHA-1 hash
-  const encoder = new TextEncoder();
-  const data = encoder.encode(stringToSign);
-  const hashBuffer = await crypto.subtle.digest("SHA-1", data);
-
-  // convert ArrayBuffer to hex string
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-
-  return hashHex;
-}
-// --- End Helper Function ---
-
 const slugify = (text) =>
   text
     .toString()
@@ -234,97 +196,106 @@ const Categories = () => {
     setVideoFiles(validFiles);
   };
 
-  // --- Cloudinary Image Upload Function (Similar to Products.js) ---
+  // --- SECURE: Cloudinary Image Upload Function ---
   const uploadImages = async (files) => {
-    // const imageUrls = [];
-    const uploadPromises = Array.from(files).map((file) => {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append(
-        "upload_preset",
-        process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
-      ); // Use your Cloudinary upload preset from .env
+    const folder = "category_images";
+    const uploadPromises = Array.from(files).map(async (file) => {
+      // Step 1: Get a signature from the backend
+      const signatureResponse = await fetch("/api/generate-signature", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ folder }),
+      });
+      const { signature, timestamp } = await signatureResponse.json();
 
-      // Optional: Add a folder for better organization in Cloudinary
-      formData.append("folder", "category_images"); // Upload to a 'category_images' folder
-
-      return fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.secure_url) {
-            console.log("Uploaded to Cloudinary:", data.secure_url);
-            return data.secure_url;
-          } else {
-            console.error("Cloudinary upload failed:", data);
-            throw new Error("Cloudinary upload failed");
-          }
-        })
-        .catch((error) => {
-          console.error("Error uploading to Cloudinary:", error);
-          setError(`Image upload failed: ${error.message}`);
-          throw error; // Re-throw to be caught by Promise.all
-        });
-    });
-
-    try {
-      const results = await Promise.all(uploadPromises);
-      return results.filter(Boolean); // Filter out any failed uploads
-    } catch (error) {
-      // Errors are already logged in the individual promises
-      return []; // Return empty array on overall failure
-    }
-  };
-  // --- End Cloudinary Image Upload Function ---
-
-  // --- Video Upload Function ---
-  const uploadVideos = async (files) => {
-    // const videoUrls = [];
-    const uploadPromises = Array.from(files).map((file) => {
+      // Step 2: Use the signature to upload the file
       const formData = new FormData();
       formData.append("file", file);
       formData.append(
         "upload_preset",
         process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
       );
-      formData.append("folder", "category_videos");
-      formData.append("resource_type", "video");
+      formData.append("folder", folder);
+      formData.append("timestamp", timestamp);
+      formData.append("signature", signature);
+      formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY);
 
-      return fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/video/upload`,
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`,
         {
-          // Use /video/upload endpoint
           method: "POST",
           body: formData,
         }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.secure_url) {
-            console.log("Uploaded to Cloudinary:", data.secure_url);
-            // For videos, we store an object with url and caption
-            return { url: data.secure_url, caption: "" }; // Default empty caption
-          } else {
-            console.error("Cloudinary video upload failed:", data);
-            throw new Error("Cloudinary video upload failed");
-          }
-        })
-        .catch((error) => {
-          console.error("Error uploading video to Cloudinary:", error);
-          setError(`Video upload failed: ${error.message}`);
-          throw error;
-        });
+      );
+      const data = await response.json();
+
+      if (data.secure_url) {
+        console.log("Uploaded to Cloudinary:", data.secure_url);
+        return data.secure_url;
+      } else {
+        console.error("Cloudinary upload failed:", data);
+        throw new Error(data.error.message || "Cloudinary upload failed");
+      }
     });
 
     try {
       const results = await Promise.all(uploadPromises);
       return results.filter(Boolean);
     } catch (error) {
+      setError(`Image upload failed: ${error.message}`);
+      return [];
+    }
+  };
+
+  // --- SECURE: Video Upload Function ---
+  const uploadVideos = async (files) => {
+    const folder = "category_videos";
+    const resource_type = "video";
+
+    const uploadPromises = Array.from(files).map(async (file) => {
+      // Step 1: Get a signature for video upload
+      const signatureResponse = await fetch("/api/generate-signature", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ folder, resource_type }),
+      });
+      const { signature, timestamp } = await signatureResponse.json();
+
+      // Step 2: Use the signature to upload the video file
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append(
+        "upload_preset",
+        process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
+      );
+      formData.append("folder", folder);
+      formData.append("timestamp", timestamp);
+      formData.append("signature", signature);
+      formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY);
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/video/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const data = await response.json();
+
+      if (data.secure_url) {
+        console.log("Uploaded video to Cloudinary:", data.secure_url);
+        return { url: data.secure_url, caption: "" };
+      } else {
+        console.error("Cloudinary video upload failed:", data);
+        throw new Error(data.error.message || "Cloudinary video upload failed");
+      }
+    });
+
+    try {
+      const results = await Promise.all(uploadPromises);
+      return results.filter(Boolean);
+    } catch (error) {
+      setError(`Video upload failed: ${error.message}`);
       return [];
     }
   };
@@ -665,73 +636,60 @@ const Categories = () => {
     setError(""); // Clear any previous errors when starting edit
   };
 
-  // Reusabele Deletion Function
+  // --- SECURE: Reusable Deletion Function ---
   const deleteFromCloudinary = async (mediaUrl) => {
+    if (!mediaUrl || !mediaUrl.startsWith("https://res.cloudinary.com/")) {
+      console.warn("Invalid URL provided for deletion:", mediaUrl);
+      return;
+    }
+
     try {
+      // Extract public_id and resource_type from the URL
       const pathWithVersion = mediaUrl.split("/upload/")[1]?.split("?")[0];
       if (!pathWithVersion) {
         console.warn("Could not extract path from URL:", mediaUrl);
         return;
       }
 
-      // **START CORRECTION**
-      // Correctly parse the public_id by removing the version number if it exists
       const pathParts = pathWithVersion.split("/");
       if (pathParts[0].match(/^v\d+$/)) {
-        pathParts.shift(); // Remove the version part (e.g., v123456)
+        pathParts.shift();
       }
       const publicIdWithExtension = pathParts.join("/");
-      // **END CORRECTION**
-
-      const publicId = publicIdWithExtension.substring(
+      const public_id = publicIdWithExtension.substring(
         0,
         publicIdWithExtension.lastIndexOf(".")
       );
-      const resourceType = mediaUrl.includes("/video/upload/")
+      const resource_type = mediaUrl.includes("/video/upload/")
         ? "video"
         : "image";
 
-      const timestamp = new Date().getTime();
-      // The resource_type needs to be part of the signature for videos
-      const paramsToSign = { public_id: publicId, timestamp };
-      if (resourceType === "video") {
-        paramsToSign.resource_type = resourceType;
-      }
+      // Call the secure backend API to perform the deletion
+      const response = await fetch("/api/delete-media", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ public_id, resource_type }),
+      });
 
-      const signature = await generateCloudinarySignature(
-        paramsToSign,
-        process.env.REACT_APP_CLOUDINARY_API_SECRET
-      );
-
-      const formData = new FormData();
-      formData.append("public_id", publicId);
-      formData.append("timestamp", timestamp);
-      formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY);
-      formData.append("signature", signature);
-      // Also send resource_type for videos
-      if (resourceType === "video") {
-        formData.append("resource_type", resourceType);
-      }
-
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/${resourceType}/destroy`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      const data = await res.json();
-      if (data.result !== "ok" && data.result !== "not found") {
+      if (!response.ok) {
+        const errorData = await response.json();
         throw new Error(
-          `Cloudinary deletion failed for ${publicId}: ${
-            data.error?.message || "Unknown error"
+          `Cloudinary deletion failed for ${public_id}: ${
+            errorData.error || "Unknown error"
           }`
         );
-      } else {
-        console.log(`Cloudinary deletion successful for ${publicId}`);
       }
+
+      const data = await response.json();
+      console.log(
+        `Cloudinary deletion successful for ${public_id}:`,
+        data.message
+      );
     } catch (e) {
       console.error(`Error in deleteFromCloudinary for URL ${mediaUrl}:`, e);
+      // Re-throw so the calling function knows about the failure.
       throw e;
     }
   };
@@ -866,6 +824,7 @@ const Categories = () => {
       alert(`Category "${categoryToDelete.name}" deleted successfully.`);
     } catch (e) {
       console.error(e);
+      setError(e.message || "Failed to delete category.");
       alert(e.message || "Failed to delete category.");
     } finally {
       setSubmitting(false);
