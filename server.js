@@ -353,7 +353,7 @@ app.post("/api/send-quote", async (req, res) => {
 // This route handles any GET request that wasn't handled by the API routes.
 // It sends back the main index.html file from the React build.
 // This is crucial for single-page applications and client-side routing to work.
-app.get("*", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
