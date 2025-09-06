@@ -2,6 +2,7 @@
   "name": "sunrise-papers",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -11,6 +12,10 @@
     "classnames": "^2.5.1",
     "cloudinary": "^2.7.0",
     "cloudinary-core": "^2.14.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
     "firebase": "^11.9.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -20,7 +25,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node server.js",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
