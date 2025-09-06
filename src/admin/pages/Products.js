@@ -188,11 +188,11 @@ const Products = () => {
     }
   };
 
-  // --- Modified uploadImages function to use Cloudinary ---
+  // --- SECURE: Cloudinary Image Upload Function ---
   const uploadImages = async (files) => {
     const folder = "product_images";
     const uploadPromises = Array.from(files).map(async (file) => {
-      // Get a signature from backend
+      // Step 1: Get a signature from the backend
       const signatureResponse = await fetch("/api/generate-signature", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -200,7 +200,7 @@ const Products = () => {
       });
       const { signature, timestamp } = await signatureResponse.json();
 
-      // Use the signature to upload the file
+      // Step 2: Use the signature to upload the file
       const formData = new FormData();
       formData.append("file", file);
       formData.append(
@@ -223,19 +223,21 @@ const Products = () => {
 
       if (data.secure_url) {
         console.log("Uploaded to Cloudinary:", data.secure_url);
+        return data.secure_url;
+      } else {
+        console.error("Cloudinary upload failed:", data);
         throw new Error(data.error.message || "Cloudinary upload failed");
       }
     });
 
     try {
       const results = await Promise.all(uploadPromises);
-      return results.filter(Boolean); // Filter out any failed uploads
+      return results.filter(Boolean);
     } catch (error) {
       setError(`Image upload failed: ${error.message}`);
-      return []; // Return empty array on overall failure
+      return [];
     }
   };
-  // --- End uploadImages function ---
 
   const buildPayload = (
     uploadedMainImageUrl = "",
