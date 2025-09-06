@@ -35,6 +35,14 @@ const Login = () => {
         <div className="row justify-content-center align-items-center">
           <div className="col-md-5">
             <div className="card border-0 shadow p-4 rounded-4">
+              {/* logo */}
+              <div className="text-center">
+                <img
+                  src="https://res.cloudinary.com/dzrv3ssy5/image/upload/v1756204498/My%20Brand/logo-no-shadow_rne0gz.png"
+                  alt="company logo"
+                  style={{ maxWidth: "150px", height: "auto" }}
+                />
+              </div>
               <h3 className="text-center mb-4 fw-bold">Member Login</h3>
 
               {error && <div className="alert alert-danger">{error}</div>}

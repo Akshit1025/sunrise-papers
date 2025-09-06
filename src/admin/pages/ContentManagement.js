@@ -4,43 +4,6 @@ import React, { useState, useEffect } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig"; // Adjust path as needed
 import RequireAdmin from "../auth/RequireAdmin"; // Assuming you protect admin pages
-// import { Cloudinary } from "cloudinary-core"; // Import Cloudinary
-
-// --- Cloudinary Configuration (Ensure these are in your .env) ---
-// WARNING: Storing API Secret directly in frontend code is INSECURE for production.
-// For production, consider using signed uploads where signature is generated on the backend.
-// You might already have this config elsewhere, but include it here if this is the only place for content images
-// const cloudinaryCore = new Cloudinary({
-//   cloud_name: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
-//   api_key: process.env.REACT_APP_CLOUDINARY_API_KEY,
-//   api_secret: process.env.REACT_APP_CLOUDINARY_API_SECRET, // INSECURE for frontend in production
-//   secure: true, // Use HTTPS
-// });
-// --- End Cloudinary Configuration ---
-
-// --- Helper function for Cloudinary Signature ---
-async function generateCloudinarySignature(paramsToSign, apiSecret) {
-  // Sort parameters alphabetically by key
-  const sortedKeys = Object.keys(paramsToSign).sort();
-  let stringToSign = sortedKeys
-    .map((key) => `${key}=${paramsToSign[key]}`)
-    .join("&");
-  stringToSign += apiSecret;
-
-  // Use the SubtleCrypto API to generate the SHA-1 hash
-  const encoder = new TextEncoder();
-  const data = encoder.encode(stringToSign);
-  const hashBuffer = await crypto.subtle.digest("SHA-1", data);
-
-  // convert ArrayBuffer to hex string
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-
-  return hashHex;
-}
-// --- End Helper Function ---
 
 // Define a default structure for the homepage content
 const defaultHomepageContent = {
@@ -428,18 +391,33 @@ const ContentManagement = () => {
     fetchContent();
   }, []); // Empty dependency array means fetch only on mount
 
-  // --- Image Upload Function (Reusable) ---
+  // --- SECURE: Image Upload Function (Reusable) ---
   const uploadImage = async (file, folderName) => {
     if (!file) return null;
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append(
-      "upload_preset",
-      process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
-    );
-    formData.append("folder", `site_content_images/${folderName}`); // e.g., site_content_images/homepage, site_content_images/about
+
+    const folder = `site_content_images/${folderName}`;
 
     try {
+      // Step 1: Get a signature from the backend
+      const signatureResponse = await fetch("/api/generate-signature", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ folder }),
+      });
+      const { signature, timestamp } = await signatureResponse.json();
+
+      // Step 2: Use the signature to upload the file
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append(
+        "upload_preset",
+        process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
+      );
+      formData.append("folder", folder);
+      formData.append("timestamp", timestamp);
+      formData.append("signature", signature);
+      formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY);
+
       const response = await fetch(
         `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`,
         {
@@ -453,23 +431,22 @@ const ContentManagement = () => {
         return data.secure_url;
       } else {
         console.error("Cloudinary upload failed:", data);
-        throw new Error("Cloudinary upload failed");
+        throw new Error(data.error.message || "Cloudinary upload failed");
       }
     } catch (error) {
-      console.error("Error uploading image to Cloudinary:", error);
+      console.error(`Error uploading image to ${folder}:`, error);
       throw error; // Re-throw to be handled by the calling save function
     }
   };
 
-  // --- Image Deletion Function (Reusable - simplified frontend version INSECURE) ---
-  // You should ideally move this to a backend function
+  // --- SECURE: Image Deletion Function (Reusable) ---
   const deleteImage = async (imageUrl) => {
     if (!imageUrl || !imageUrl.startsWith("https://res.cloudinary.com/")) {
       return;
     }
 
     try {
-      // Correctly parse the public_id by removing the version number
+      // Extract public_id from the URL
       const pathWithVersion = imageUrl.split("/upload/")[1]?.split("?")[0];
       if (!pathWithVersion) {
         console.warn("Could not extract path from URL:", imageUrl);
@@ -478,58 +455,44 @@ const ContentManagement = () => {
 
       const pathParts = pathWithVersion.split("/");
       if (pathParts[0].match(/^v\d+$/)) {
-        pathParts.shift(); // Remove the version part if it exists
+        pathParts.shift();
       }
       const publicIdWithExtension = pathParts.join("/");
-      const publicId = publicIdWithExtension.substring(
+      const public_id = publicIdWithExtension.substring(
         0,
         publicIdWithExtension.lastIndexOf(".")
       );
 
-      const timestamp = new Date().getTime();
-      const paramsToSign = {
-        public_id: publicId,
-        timestamp,
-      };
+      // In this component, we only deal with images
+      const resource_type = "image";
 
-      // Use the correct helper function to generate the signature
-      const signature = await generateCloudinarySignature(
-        paramsToSign,
-        process.env.REACT_APP_CLOUDINARY_API_SECRET
-      );
+      // Call the secure backend API
+      const response = await fetch("/api/delete-media", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ public_id, resource_type }),
+      });
 
-      const formData = new FormData();
-      formData.append("public_id", publicId);
-      formData.append("timestamp", timestamp);
-      formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY);
-      formData.append("signature", signature);
-
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/destroy`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const data = await res.json();
-
-      if (data.result === "ok" || data.result === "not found") {
-        console.log(`Cloudinary deletion successful for ${publicId}`);
-      } else {
+      if (!response.ok) {
+        const errorData = await response.json();
         throw new Error(
-          `Cloudinary deletion failed for ${publicId}: ${
-            data.error?.message || "Unknown error"
+          `Cloudinary deletion failed for ${public_id}: ${
+            errorData.error?.message || "Unknown error"
           }`
         );
       }
+
+      const data = await response.json();
+      console.log(
+        `Cloudinary deletion successful for ${public_id}:`,
+        data.message
+      );
     } catch (e) {
       console.error(`Error deleting image ${imageUrl} from Cloudinary:`, e);
-      // Re-throw the error so any calling function knows it failed
+      // Re-throw so the save function can handle it
       throw e;
     }
   };
-  // --- End Image Deletion Function ---
 
   // Handle file change for a specific section/image
   const handleImageFileChange = (page, sectionName, e) => {
